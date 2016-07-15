@@ -38,6 +38,9 @@
 #define SV_AUML	KC_QUOT // ä
 #define SV_OUML	KC_SCLN // ö
 #define SV_QUOT NO_QUO2
+#define SV_SECT KC_GRV
+#define SV_HALF LSFT(SV_SECT)
+#define SV_DIAE NO_QUOT
 
 #define NO_LESS	KC_NUBS
 #define NO_MINS KC_SLSH
