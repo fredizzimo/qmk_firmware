@@ -41,6 +41,7 @@
 #define SV_SECT KC_GRV
 #define SV_HALF LSFT(SV_SECT)
 #define SV_DIAE NO_QUOT
+#define SV_ASTR LSFT(NO_APOS)
 
 #define NO_LESS	KC_NUBS
 #define NO_MINS KC_SLSH
