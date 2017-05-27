@@ -26,43 +26,43 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Keymap 0: Basic layer
 [BASE] = KEYMAP(
         // left hand
-        NAVLAYER,     KC_F1,   KC_F2, KC_F3,   KC_F4,    KC_F5, KC_F6,
-        M(EURO_PND),  KC_Q,    KC_W,  KC_E,    KC_R,     KC_T,  M(RIGHT_TAB),
-        KC_ESC,       KC_A,    KC_S,  KC_D,    KC_F,     KC_G,
-        M(QUES_EXLM), KC_Z,    KC_X,  KC_C,    KC_V,     KC_B,  KC_DEL,
-        KC_LCTRL,     KC_LEFT, KC_UP, KC_DOWN, KC_RIGHT,
+        KC_NO,        KC_F1,   KC_F2, KC_F3,   KC_F4,    KC_F5, KC_F6,
+        NAVLAYER,     KC_NO,   KC_W,  KC_E,    KC_R,     KC_T,  M(RIGHT_TAB),
+        M(EURO_PND),  KC_Q,    KC_S,  KC_D,    KC_F,     KC_G,
+        KC_ESC,       KC_A,    KC_X,  KC_C,    KC_V,     KC_B,  KC_DEL,
+        M(QUES_EXLM), KC_Z,    KC_UP, KC_DOWN, KC_RIGHT,
                                                                 KC_NO,   KC_NO,
                                                                        KC_LGUI,
-                                                  MO(SYMBOLS), KC_LSFT,  KC_MEH,
+                                                KC_LSFT,  MO(SYMBOLS),  KC_MEH,
         // right hand
         KC_F7,       KC_F8, KC_F9,   KC_F10,  KC_F11, KC_F12,       KC_NO,
-        M(LEFT_TAB), KC_Y,  KC_U,    KC_I,    KC_O,   KC_P,         SV_ARING,
-                     KC_H,  KC_J,    KC_K,    KC_L,   SV_OUML,      SV_AUML,
-        KC_BSPACE,   KC_N,  KC_M,    KC_COMM, KC_DOT, M(APOS_QUOT), KC_ENTER,
-                            KC_LEFT, KC_DOWN, KC_UP,  KC_RIGHT,     KC_NO,
+        M(LEFT_TAB), KC_Y,  KC_U,    KC_I,    KC_O,   KC_NO,        KC_NO,
+                     KC_H,  KC_J,    KC_K,    KC_L,   KC_P,         SV_ARING,
+        KC_BSPACE,   KC_N,  KC_M,    KC_COMM, KC_DOT, SV_OUML,      SV_AUML,
+                            KC_LEFT, KC_DOWN, KC_UP,  M(APOS_QUOT), KC_ENTER,
         KC_NO,    KC_NO,
         KC_MENU,
-        KC_LALT, KC_SPACE, KC_LCTRL
+        KC_LALT, KC_LCTRL, KC_SPACE
     ),
 [SYMBOLS] = KEYMAP(
         // left hand
         KC_NO,   KC_NO,   SV_DIAE, NO_GRV,  NO_ACUT, NO_CIRC, KC_NO,
-        NO_PIPE, NO_AT,   NO_LCBR, NO_RCBR, NO_DLR,  NO_CIRC, M(RIGHT_TAB),
-        NO_UNDS, KC_HASH, NO_LPRN, NO_RPRN, NO_LESS, NO_GRTR,
-        NO_AMPR, NO_BSLS, NO_LBRC, NO_RBRC, NO_GRV,  NO_ACUT, KC_DEL,
-        KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO,
+        KC_NO,   KC_NO,   NO_LCBR, NO_RCBR, NO_DLR,  NO_CIRC, M(RIGHT_TAB),
+        NO_PIPE, NO_AT,   NO_LPRN, NO_RPRN, NO_LESS, NO_GRTR,
+        NO_UNDS, KC_HASH, NO_LBRC, NO_RBRC, NO_GRV,  NO_ACUT, KC_DEL,
+        NO_AMPR, NO_BSLS, KC_NO,   KC_NO,   KC_NO,
                                                         KC_NO, RESET,
                                                                KC_NO,
-                                               KC_TRNS, KC_NO, KC_NO,
+                                               KC_NO, KC_TRNS, KC_NO,
         // right hand
         KC_NO,       KC_NO,   NO_TILD, NO_SECT, NO_HALF, NO_BULT, KC_NO,
-        M(LEFT_TAB), KC_PERC, KC_7,    KC_8,     KC_9,   NO_TILD, KC_NO,
-                     SV_ASTR, KC_4,    KC_5,     KC_6,   NO_PLUS, NO_EQL,
-        KC_BSPACE,   NO_SLSH, KC_1,    KC_2,     KC_3,   NO_MINS, KC_ENTER,
-                              KC_0,    KC_COMMA, KC_DOT, KC_NO,   KC_NO,
+        M(LEFT_TAB), KC_PERC, KC_7,    KC_8,     KC_9,   KC_NO,   KC_NO,
+                     SV_ASTR, KC_4,    KC_5,     KC_6,   NO_TILD, KC_NO,
+        KC_BSPACE,   NO_SLSH, KC_1,    KC_2,     KC_3,   NO_PLUS, NO_EQL,
+                              KC_0,    KC_COMMA, KC_DOT, NO_MINS, KC_ENTER,
         KC_NO,   KC_NO,
         KC_NO,
-        KC_LALT, KC_SPACE, KC_LCTRL
+        KC_LALT, KC_LCTRL, KC_SPACE
     ),
 };
 
