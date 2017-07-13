@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "action_layer.h"
 #include "keymap_nordic.h"
+#include "quantum_keycodes.h"
 
 enum layers {
 	BASE,
@@ -11,8 +12,8 @@ enum layers {
 #define NAVLAYER KC_NO
 #define LCTRLLAYER KC_NO
 
-enum macros {
-	LEFT_TAB,
+enum my_keycodes {
+	LEFT_TAB=SAFE_RANGE,
 	RIGHT_TAB,
 	QUES_EXLM,
 	EURO_PND,
@@ -65,10 +66,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LALT, KC_SPACE, KC_LCTRL
     ),
 };
-
-const uint16_t PROGMEM fn_actions[] = {
-};
-
 
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
@@ -123,8 +120,8 @@ void override_key(keyrecord_t* record, uint16_t normal, uint16_t shifted) {
     }
 }
 
-const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) {
-    switch(id) {
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch(keycode) {
         case LEFT_TAB:
             override_key(record, LSFT(KC_TAB), KC_NO);
             break;
