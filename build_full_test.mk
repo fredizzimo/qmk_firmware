@@ -31,3 +31,4 @@ $(TEST)_SRC += $(patsubst $(ROOTDIR)/%,%,$(wildcard $(TEST_PATH)/*.cpp))
 $(TEST)_DEFS=$(TMK_COMMON_DEFS) $(OPT_DEFS)
 $(TEST)_CONFIG=$(TEST_PATH)/config.h
 VPATH+=$(TOP_DIR)/tests/test_common
+VPATH+=$(TEST_PATH)
