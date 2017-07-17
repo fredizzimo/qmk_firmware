@@ -1,7 +1,7 @@
 #include "ergodox.h"
 #include "debug.h"
 #include "action_layer.h"
-#include "keymap_nordic.h"
+#include "keymap_sv_fi.h"
 #include "quantum_keycodes.h"
 
 enum layers {
@@ -28,18 +28,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [BASE] = KEYMAP(
         // left hand
         NAVLAYER,     KC_F1,   KC_F2, KC_F3,   KC_F4,    KC_F5, KC_F6,
-        M(EURO_PND),  KC_Q,    KC_W,  KC_E,    KC_R,     KC_T,  M(RIGHT_TAB),
-        KC_ESC,       KC_A,    KC_S,  KC_D,    KC_F,     KC_G,
-        M(QUES_EXLM), KC_Z,    KC_X,  KC_C,    KC_V,     KC_B,  KC_DEL,
+        M(EURO_PND),  SV_Q,    SV_W,  SV_E,    SV_R,     SV_T,  M(RIGHT_TAB),
+        KC_ESC,       SV_A,    SV_S,  SV_D,    SV_F,     SV_G,
+        M(QUES_EXLM), SV_Z,    SV_X,  SV_C,    SV_V,     SV_B,  KC_DEL,
         KC_LCTRL,     KC_LEFT, KC_UP, KC_DOWN, KC_RIGHT,
                                                                 KC_NO,   KC_NO,
                                                                        KC_LGUI,
                                                   MO(SYMBOLS), KC_LSFT,  KC_MEH,
         // right hand
         KC_F7,       KC_F8, KC_F9,   KC_F10,  KC_F11, KC_F12,       KC_NO,
-        M(LEFT_TAB), KC_Y,  KC_U,    KC_I,    KC_O,   KC_P,         SV_ARING,
-                     KC_H,  KC_J,    KC_K,    KC_L,   SV_OUML,      SV_AUML,
-        KC_BSPACE,   KC_N,  KC_M,    KC_COMM, KC_DOT, M(APOS_QUOT), KC_ENTER,
+        M(LEFT_TAB), SV_Y,  SV_U,    SV_I,    SV_O,   SV_P,         SV_AA,
+                     SV_H,  SV_J,    SV_K,    SV_L,   SV_OE,        SV_AE,
+        KC_BSPACE,   SV_N,  SV_M,    SV_COMM, SV_DOT, M(APOS_QUOT), KC_ENTER,
                             KC_LEFT, KC_DOWN, KC_UP,  KC_RIGHT,     KC_NO,
         KC_NO,    KC_NO,
         KC_MENU,
@@ -47,20 +47,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 [SYMBOLS] = KEYMAP(
         // left hand
-        KC_NO,   KC_NO,   SV_DIAE, NO_GRV,  NO_ACUT, NO_CIRC, KC_NO,
-        NO_PIPE, NO_AT,   NO_LCBR, NO_RCBR, NO_DLR,  NO_CIRC, M(RIGHT_TAB),
-        NO_UNDS, KC_HASH, NO_LPRN, NO_RPRN, NO_LESS, NO_GRTR,
-        NO_AMPR, NO_BSLS, NO_LBRC, NO_RBRC, NO_GRV,  NO_ACUT, KC_DEL,
+        KC_NO,   KC_NO,   SV_UMLT, SV_GRAV, SV_ACUT, SV_CIRC, KC_NO,
+        SV_PIPE, SV_AT,   SV_LCBR, SV_RCBR, SV_DLR,  SV_CIRC, M(RIGHT_TAB),
+        SV_UNDS, SV_HASH, SV_LPRN, SV_RPRN, SV_LT,   SV_GT,
+        SV_AMPR, SV_BSLS, SV_LBRC, SV_RBRC, SV_GRAV, SV_ACUT, KC_DEL,
         KC_NO,   KC_NO, KC_NO,   KC_NO,   KC_NO,
                                                         KC_NO, RESET,
                                                                KC_NO,
                                                KC_TRNS, KC_NO, KC_NO,
         // right hand
-        KC_NO,       KC_NO,   NO_TILD, NO_SECT, NO_HALF, NO_BULT, KC_NO,
-        M(LEFT_TAB), KC_PERC, KC_7,    KC_8,     KC_9,   NO_TILD, KC_NO,
-                     SV_ASTR, KC_4,    KC_5,     KC_6,   NO_PLUS, NO_EQL,
-        KC_BSPACE,   NO_SLSH, KC_1,    KC_2,     KC_3,   NO_MINS, KC_ENTER,
-                              KC_0,    KC_COMMA, KC_DOT, KC_NO,   KC_NO,
+        KC_NO,       KC_NO,   SV_TILD, SV_SECT, SV_HALF, SV_CURR, KC_NO,
+        M(LEFT_TAB), SV_PERC, SV_7,    SV_8,     SV_9,   SV_TILD, KC_NO,
+                     SV_ASTR, SV_4,    SV_5,     SV_6,   SV_PLUS, SV_EQL,
+        KC_BSPACE,   SV_SLSH, SV_1,    SV_2,     SV_3,   SV_MINS, KC_ENTER,
+                              SV_0,    SV_COMM,  SV_DOT, KC_NO,   KC_NO,
         KC_NO,   KC_NO,
         KC_NO,
         KC_LALT, KC_SPACE, KC_LCTRL
@@ -129,19 +129,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             override_key(record, KC_TAB, KC_NO);
             break;
         case QUES_EXLM:
-            override_key(record, NO_QUES, KC_EXLM);
+            override_key(record, SV_QUES, SV_EXLM);
             break;
         case EURO_PND:
-            override_key(record, NO_EURO, NO_PND);
+            override_key(record, SV_EURO, SV_PND);
             break;
         case DIAE_TILD:
-            override_key(record, SV_DIAE, NO_TILD);
+            override_key(record, SV_UMLT, SV_TILD);
             break;
         case HALF_SECT:
             override_key(record, SV_HALF, SV_SECT);
             break;
         case APOS_QUOT:
-            override_key(record, NO_APOS, SV_QUOT);
+            override_key(record, SV_APOS, SV_QUOT);
     }
     return MACRO_NONE;
 }
