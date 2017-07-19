@@ -17,7 +17,7 @@ enum my_keycodes {
 	UNAM=SAFE_RANGE, // _&|
     EUPO, // €£¤
     APQU, // '"
-    EXQU, // !?
+    QUEX, // !?
     TILD, // ~
     CIRC, // ^
     ACUT, // ´
@@ -50,7 +50,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_F7, KC_F8, KC_F9,   KC_F10,  KC_F11,  KC_F12, KC_PSCR,
         KC_NO, SV_Y,  SV_U,    SV_I,    SV_O,    SV_P,   SV_AA,
                SV_H,  SV_J,    SV_K,    SV_L,    SV_OE,  SV_AE,
-        KC_NO, SV_N,  SV_M,    SV_COMM, SV_DOT,  APQU,   EXQU,
+        KC_NO, SV_N,  SV_M,    SV_COMM, SV_DOT,  APQU,   QUEX,
                       KC_BSPC, KC_LEFT, KC_DOWN, KC_UP,  KC_RIGHT,
         KC_NO,  KC_NO,
         KC_NO,
@@ -226,10 +226,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch(keycode) {
     case EUPO:
         return override_key(record, SV_EURO, SV_PND);
+    case UNAM:
+        return override_key(record, SV_UNDS, SV_AMPR);
     case APQU:
         return override_key(record, SV_APOS, SV_QUOT);
-    case EXQU:
-        return override_key(record, SV_EXLM, SV_QUES);
+    case QUEX:
+        return override_key(record, SV_QUES, SV_EXLM);
     case TILD:
         return wake_dead_key(SV_TILD, record);
     case CIRC:
