@@ -123,9 +123,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_NO, KC_NO, KC_LALT, KC_LCTL, KC_LSFT, MO(SYM1),
         KC_NO, KC_NO, KC_NO,   KC_MENU, KC_RALT, MO(SYM2), KC_NO,
         KC_NO, KC_NO, KC_NO,   KC_NO,   KC_NO,
-                                                    KC_NO, KC_NO,
-                                                           KC_NO,
-                                           KC_NO, KC_TRNS, KC_NO,
+                                                KC_TRNS, KC_TRNS,
+                                                         KC_TRNS,
+                                       KC_TRNS, KC_TRNS, KC_TRNS,
         // right hand
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -152,9 +152,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                MO(SYM1), KC_RSFT, KC_RCTL, KC_LALT, KC_NO, KC_NO,
         KC_NO, MO(SYM2), KC_RALT, KC_MENU, KC_NO,   KC_NO, KC_NO,
                          KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
-        KC_NO, KC_NO,
-        KC_NO,
-        KC_NO, KC_TRNS, KC_NO
+        KC_TRNS, KC_TRNS,
+        KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS
     ),
 };
 
@@ -214,10 +214,10 @@ bool override_key(keyrecord_t* record, uint16_t normal, uint16_t shifted) {
 
 static bool wake_dead_key(uint16_t keycode, keyrecord_t* record) {
     if (record->event.pressed) {
-        register_code(keycode);
-        unregister_code(keycode);
-        register_code(KC_SPACE);
-        unregister_code(KC_SPACE);
+        register_code16(keycode);
+        unregister_code16(keycode);
+        register_code16(KC_SPACE);
+        unregister_code16(KC_SPACE);
     }
     return false;
 }
