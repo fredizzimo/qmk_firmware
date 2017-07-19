@@ -38,6 +38,7 @@ enum my_keycodes {
 #define RG RGUI_T
 #define AG ALGR_T
 #define AL ALT_T
+#define ME MEH_T
 #define LS1(kc) LT(LSYM1, kc)
 #define RS1(kc) LT(RSYM1, kc)
 #define LS2(kc) LT(LSYM2, kc)
@@ -50,19 +51,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [BASE] = KEYMAP(
         // left hand
         KC_MPLY, KC_F1, KC_F2,    KC_F3,     KC_F4,    KC_F5,     KC_F6,
-        KC_NO,   SV_Q,  LG(SV_W), MEH(SV_E), AG(SV_R), SV_T,      NAV,
+        KC_NO,   SV_Q,  LG(SV_W), ME(SV_E),  AG(SV_R), SV_T,      NAV,
         UNAM,    SV_A,  AL(SV_S), LC(SV_D),  LS(SV_F), LS1(SV_G),
         EUPO,    SV_Z,  SV_X,     SV_C,      SV_V,     LS2(SV_B), KC_NO,
         KC_LCTL, KC_NO, KC_NO,    KC_NO,     KC_DEL,
-                                                         KC_NO,   KC_NO,
+                                                           KC_NO, KC_NO,
                                                                   KC_NO,
-                                               KC_ESC, KC_LSFT, KC_LGUI,
+                                                KC_ESC, KC_ENT, KC_LGUI,
         // right hand
-        KC_F7, KC_F8,     KC_F9,    KC_F10,    KC_F11,     KC_F12, KC_PSCR,
-        SYM,   SV_Y,      AG(SV_U), MEH(SV_I), RGUI(SV_O), SV_P,   SV_AA,
-               RS1(SV_H), RS(SV_J), RC(SV_K),  AL(SV_L),   SV_OE,  SV_AE,
-        KC_NO, RS2(SV_N), SV_M,     SV_COMM,   SV_DOT,     APQU,   EXQU,
-                          KC_BSPC,  KC_LEFT,   KC_DOWN,    KC_UP,  KC_RIGHT,
+        KC_F7, KC_F8,     KC_F9,    KC_F10,    KC_F11,   KC_F12, KC_PSCR,
+        SYM,   SV_Y,      AG(SV_U), ME(SV_I),  RG(SV_O), SV_P,   SV_AA,
+               RS1(SV_H), RS(SV_J), RC(SV_K),  AL(SV_L), SV_OE,  SV_AE,
+        KC_NO, RS2(SV_N), SV_M,     SV_COMM,   SV_DOT,   APQU,   EXQU,
+                          KC_BSPC,  KC_LEFT,   KC_DOWN,  KC_UP,  KC_RIGHT,
         KC_NO,   KC_NO,
         KC_NO,
         KC_MENU, KC_TAB, KC_SPACE
@@ -236,11 +237,11 @@ bool override_key(keyrecord_t* record, uint16_t normal, uint16_t shifted) {
         const uint16_t target = shift_pressed ? shifted : normal;
         uint8_t keycode = target & 0xFF;
         if (keycode == KC_NO) {
-            return true;
+            return false;
         }
         press_key_with_level_mods(target);
     }
-    return true;
+    return false;
 }
 
 static bool wake_dead_key(uint16_t keycode, keyrecord_t* record) {
@@ -250,7 +251,7 @@ static bool wake_dead_key(uint16_t keycode, keyrecord_t* record) {
         register_code(KC_SPACE);
         unregister_code(KC_SPACE);
     }
-    return true;
+    return false;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -270,11 +271,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case GRAV:
         return wake_dead_key(SV_GRAV, record);
     case NAV:
-        return false;
+        return true;
     case SYM:
-        return false;
+        return true;
     }
-    return false;
+    return true;
 }
 
 // Runs constantly in the background, in a loop.
