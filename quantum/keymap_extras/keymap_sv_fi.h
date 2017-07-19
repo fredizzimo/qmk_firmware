@@ -62,7 +62,7 @@
 #define SV_K KC_K       // k
 #define SV_L KC_L       // l
 #define SV_OE KC_SCLN   // ö
-#define SV_AE KC_LBRC   // ä
+#define SV_AE KC_QUOT   // ä
 #define SV_APOS KC_NUHS // '
 
 #define SV_LT KC_LT     // <
