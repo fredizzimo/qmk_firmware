@@ -66,14 +66,14 @@
 #define SV_APOS KC_NUHS // '
 
 #define SV_LT KC_LT     // <
-#define SV_Z KC_S       // z
-#define SV_X KC_D       // x
-#define SV_C KC_F       // c
-#define SV_V KC_G       // v
-#define SV_B KC_H       // b
-#define SV_N KC_J       // n
-#define SV_M KC_K       // m
-#define SV_COMM KC_L    // ,
+#define SV_Z KC_Z       // z
+#define SV_X KC_X       // x
+#define SV_C KC_C       // c
+#define SV_V KC_V       // v
+#define SV_B KC_B       // b
+#define SV_N KC_N       // n
+#define SV_M KC_M       // m
+#define SV_COMM KC_COMMA    // ,
 #define SV_DOT KC_DOT   // .
 #define SV_MINS KC_SLSH // -
 
