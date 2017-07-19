@@ -118,11 +118,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 [LMOD] = KEYMAP(
         // left hand
-        KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO, KC_NO,
-        KC_NO, KC_NO,   KC_LGUI, KC_MEH,  MO(NAV),  KC_NO, KC_NO,
-        KC_NO, KC_LALT, KC_LCTL, KC_LSFT, MO(SYM1), KC_NO,
-        KC_NO, KC_NO,   KC_MENU, KC_RALT, MO(SYM2), KC_NO, KC_NO,
-        KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,
+        KC_NO, KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO,
+        KC_NO, KC_NO, KC_LGUI, KC_MEH,  MO(NAV), KC_NO,    KC_NO,
+        KC_NO, KC_NO, KC_LALT, KC_LCTL, KC_LSFT, MO(SYM1),
+        KC_NO, KC_NO, KC_NO,   KC_MENU, KC_RALT, MO(SYM2), KC_NO,
+        KC_NO, KC_NO, KC_NO,   KC_NO,   KC_NO,
                                                     KC_NO, KC_NO,
                                                            KC_NO,
                                            KC_NO, KC_TRNS, KC_NO,
