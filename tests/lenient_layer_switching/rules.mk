@@ -14,4 +14,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 CUSTOM_MATRIX=yes
-LENIENT_LAYER_SWITCHING=yes
+LENIENT_LAYER_SWITCHING_ENABLE=yes

@@ -44,6 +44,10 @@ int retro_tapping_counter = 0;
 #include <fauxclicky.h>
 #endif
 
+#ifdef LENIENT_LAYER_SWITCHING_ENABLE
+void process_lenient_layer(keyrecord_t* record);
+#endif
+
 void action_exec(keyevent_t event)
 {
     if (!IS_NOEVENT(event)) {
@@ -70,8 +74,6 @@ void action_exec(keyevent_t event)
     }
 #endif
 
-    keyrecord_t record = { .event = event };
-
 #if (defined(ONESHOT_TIMEOUT) && (ONESHOT_TIMEOUT > 0))
     if (has_oneshot_layer_timed_out()) {
         clear_oneshot_layer_state(ONESHOT_OTHER_KEY_PRESSED);
@@ -79,6 +81,11 @@ void action_exec(keyevent_t event)
     if (has_oneshot_mods_timed_out()) {
         clear_oneshot_mods();
     }
+#endif
+
+    keyrecord_t record = { .event = event };
+#ifdef LENIENT_LAYER_SWITCHING_ENABLE
+    process_lenient_layer(&record);
 #endif
 
 #ifndef NO_ACTION_TAPPING

@@ -193,3 +193,8 @@ QUANTUM_SRC:= \
 ifndef CUSTOM_MATRIX
     QUANTUM_SRC += $(QUANTUM_DIR)/matrix.c
 endif
+
+ifeq ($(strip $(LENIENT_LAYER_SWITCHING_ENABLE)), yes)
+    OPT_DEFS += -DLENIENT_LAYER_SWITCHING_ENABLE
+    SRC += $(QUANTUM_DIR)/process_keycode/process_lenient_layer.c
+endif
