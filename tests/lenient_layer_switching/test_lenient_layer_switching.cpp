@@ -17,6 +17,7 @@
 #include "test_common.hpp"
 using testing::_;
 using testing::AnyNumber;
+using testing::Mock;
 
 class LLSwitch : public TestFixture {};
 
@@ -24,14 +25,28 @@ TEST_F(LLSwitch, ANormalKeyIsDelayed) {
     TestDriver driver;
     EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
     press_key(0,0);
-    keyboard_task();
+    run_one_scan_loop();
+    run_one_scan_loop();
+    release_key(0,0);
+    for (int i=0; i < LLS_DELAY - 2; i++) { 
+        run_one_scan_loop();
+    }
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_A))).Times(1);
+    run_one_scan_loop();
+    Mock::VerifyAndClearExpectations(&driver);
+    // Not key up yet
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport())).Times(0);
+    run_one_scan_loop();
+    // But now
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport())).Times(1);
+    run_one_scan_loop();
 }
 
 TEST_F(LLSwitch, ALayerSwitchIsInstant) {
     TestDriver driver;
     EXPECT_CALL(driver, send_keyboard_mock(_)).Times(AnyNumber());
     press_key(1,0);
-    keyboard_task();
+    run_one_scan_loop();
     EXPECT_EQ(1 << 1, layer_state);
 }
 
