@@ -50,3 +50,16 @@ TEST_F(LLSwitch, ALayerSwitchIsInstant) {
     EXPECT_EQ(1 << 1, layer_state);
 }
 
+TEST_F(LLSwitch, PressKeyOnLayerBeforeSwitch) {
+    TestDriver driver;
+    EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
+    press_key(0,0);
+    run_one_scan_loop();
+    press_key(1,0);
+    for (int i=0; i < LLS_DELAY - 1; i++) { 
+        run_one_scan_loop();
+    }
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B))).Times(1);
+    run_one_scan_loop();
+}
+
