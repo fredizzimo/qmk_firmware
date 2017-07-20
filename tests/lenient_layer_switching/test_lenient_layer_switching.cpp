@@ -15,10 +15,23 @@
  */
 
 #include "test_common.hpp"
+using testing::_;
+using testing::AnyNumber;
 
 class LLSwitch : public TestFixture {};
 
-TEST_F(LLSwitch, DummyTest) {
+TEST_F(LLSwitch, ANormalKeyIsDelayed) {
     TestDriver driver;
+    EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
+    press_key(0,0);
+    keyboard_task();
+}
+
+TEST_F(LLSwitch, ALayerSwitchIsInstant) {
+    TestDriver driver;
+    EXPECT_CALL(driver, send_keyboard_mock(_)).Times(AnyNumber());
+    press_key(1,0);
+    keyboard_task();
+    EXPECT_EQ(1 << 1, layer_state);
 }
 

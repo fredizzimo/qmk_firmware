@@ -15,6 +15,30 @@
  */
  
 #include "action.h"
+#include "action_layer.h"
+#include "quantum_keycodes.h"
+#include "keymap.h"
+
+static bool is_layer_switch(uint16_t keycode) {
+    // Tapping is not supported
+    switch(keycode) {
+    case QK_TO...QK_TO_MAX:
+    case QK_MOMENTARY...QK_MOMENTARY_MAX:
+    case QK_TOGGLE_LAYER...QK_TOGGLE_LAYER_MAX:
+    case QK_ONE_SHOT_LAYER...QK_ONE_SHOT_LAYER_MAX:
+        return true;
+    }
+    return false;
+}
  
 void process_lenient_layer(keyrecord_t* record) {
+    keypos_t keypos=record->event.key;
+    uint16_t keycode=keymap_key_to_keycode(layer_switch_get_layer(keypos), keypos);
+    if (is_layer_switch(keycode)) {
+        
+    }
+    else {
+        record->event.key.row=255;
+        record->event.key.col=255;
+    }
 }
