@@ -34,6 +34,19 @@ enum my_keycodes {
 #define AL ALT_T
 #define ME MEH_T
 
+#define OS_LSFT OSM(KC_LSFT)
+#define OS_RSFT OSM(KC_RSFT)
+#define OS_LCTL OSM(KC_LCTL)
+#define OS_RCTL OSM(KC_RCTL)
+#define OS_LALT OSM(KC_LALT)
+#define OS_RALT OSM(KC_RALT)
+#define OS_LGUI OSM(KC_LGUI)
+#define OS_RGUI OSM(KC_RGUI)
+#define OS_MEH OSM(KC_MEH)
+#define OS_SYM1 OSL(SYM1)
+#define OS_SYM2 OSL(SYM2)
+#define MO_NAV MO(NAV)
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Keymap 0: Basic layer
 [BASE] = KEYMAP(
@@ -118,10 +131,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 [LMOD] = KEYMAP(
         // left hand
-        KC_NO, KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO,
-        KC_NO, KC_NO, KC_LGUI, KC_MEH,  MO(NAV), KC_NO,    KC_NO,
-        KC_NO, KC_NO, KC_LALT, KC_LCTL, KC_LSFT, MO(SYM1),
-        KC_NO, KC_NO, KC_NO,   KC_MENU, KC_RALT, MO(SYM2), KC_NO,
+        KC_NO, KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+        KC_NO, KC_NO, OS_LGUI, OS_MEH,  MO_NAV,  KC_NO,   KC_NO,
+        KC_NO, KC_NO, OS_LALT, OS_LCTL, OS_LSFT, OS_SYM1,
+        KC_NO, KC_NO, KC_NO,   KC_MENU, OS_RALT, OS_SYM2, KC_NO,
         KC_NO, KC_NO, KC_NO,   KC_NO,   KC_NO,
                                                 KC_TRNS, KC_TRNS,
                                                          KC_TRNS,
@@ -147,11 +160,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                               KC_TRNS,
                                             KC_TRNS, KC_TRNS, KC_TRNS,
         // right hand
-        KC_NO, KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
-        KC_NO, KC_NO,    MO(NAV), KC_MEH,  KC_RGUI, KC_NO, KC_NO,
-               MO(SYM1), KC_RSFT, KC_RCTL, KC_LALT, KC_NO, KC_NO,
-        KC_NO, MO(SYM2), KC_RALT, KC_MENU, KC_NO,   KC_NO, KC_NO,
-                         KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
+        KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
+        KC_NO, KC_NO,   MO_NAV,  OS_MEH,  OS_RGUI, KC_NO, KC_NO,
+               OS_SYM1, OS_RSFT, OS_RCTL, OS_LALT, KC_NO, KC_NO,
+        KC_NO, OS_SYM2, OS_RALT, KC_MENU, KC_NO,   KC_NO, KC_NO,
+                        KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
         KC_TRNS, KC_TRNS,
         KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS
