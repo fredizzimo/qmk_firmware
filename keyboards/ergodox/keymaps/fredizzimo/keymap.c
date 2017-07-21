@@ -9,15 +9,10 @@ enum layers {
 	SYM1,
     SYM2,
     NAV,
-    LMOD,
-    RMOD,
 };
 
 enum my_keycodes {
-	UNAM=SAFE_RANGE, // _&|
-    EUPO, // €£¤
-    APQU, // '"
-    QUEX, // !?
+    APQU=SAFE_RANGE, // '"
     TILD, // ~
     CIRC, // ^
     ACUT, // ´
@@ -34,77 +29,79 @@ enum my_keycodes {
 #define AL ALT_T
 #define ME MEH_T
 
-#define OS_LSFT OSM(KC_LSFT)
-#define OS_RSFT OSM(KC_RSFT)
-#define OS_LCTL OSM(KC_LCTL)
-#define OS_RCTL OSM(KC_RCTL)
-#define OS_LALT OSM(KC_LALT)
-#define OS_RALT OSM(KC_RALT)
-#define OS_LGUI OSM(KC_LGUI)
-#define OS_RGUI OSM(KC_RGUI)
-#define OS_MEH OSM(KC_MEH)
+#define OS_LSFT OSM(MOD_LSFT)
+#define OS_RSFT OSM(MOD_RSFT)
+#define OS_LCTL OSM(MOD_LCTL)
+#define OS_RCTL OSM(MOD_RCTL)
+#define OS_LALT OSM(MOD_LALT)
+#define OS_RALT OSM(MOD_RALT)
+#define OS_LGUI OSM(MOD_LGUI)
+#define OS_RGUI OSM(MOD_RGUI)
+#define OS_MEH OSM(MOD_MEH)
 #define OS_SYM1 OSL(SYM1)
 #define OS_SYM2 OSL(SYM2)
-#define MO_NAV MO(NAV)
+#define LA_NAV TG(NAV)
+
+#define L_TAB LSFT(KC_TAB)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Keymap 0: Basic layer
 [BASE] = KEYMAP(
         // left hand
-        KC_MPLY, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6,
-        KC_NO,   SV_Q,  SV_W,  SV_E,  SV_R,  SV_T,  KC_NO,
-        UNAM,    SV_A,  SV_S,  SV_D,  SV_F,  SV_G,
-        EUPO,    SV_Z,  SV_X,  SV_C,  SV_V,  SV_B,  KC_NO,
-        KC_LCTL, KC_NO, KC_NO, KC_NO, KC_DEL,
-                                             KC_NO, KC_NO,
-                                                    KC_NO,
-                                 MO(LMOD), KC_ESC, KC_ENT,
+        KC_MPLY, KC_F1, KC_F2, KC_F3,  KC_F4, KC_F5, KC_F6,
+        OS_MEH,  SV_Q,  SV_W,  SV_E,   SV_R,  SV_T,  KC_NO,
+        KC_ESC,  SV_A,  SV_S,  SV_D,   SV_F,  SV_G,
+        OS_LCTL, SV_Z,  SV_X,  SV_C,   SV_V,  SV_B,  KC_NO,
+        OS_LCTL, KC_NO, KC_NO, KC_MENU, KC_DEL,
+                                              KC_NO, KC_NO,
+                                                     KC_NO,
+                                  OS_LSFT, OS_SYM1, LA_NAV,
         // right hand
         KC_F7, KC_F8, KC_F9,   KC_F10,  KC_F11,  KC_F12, KC_PSCR,
         KC_NO, SV_Y,  SV_U,    SV_I,    SV_O,    SV_P,   SV_AA,
                SV_H,  SV_J,    SV_K,    SV_L,    SV_OE,  SV_AE,
-        KC_NO, SV_N,  SV_M,    SV_COMM, SV_DOT,  APQU,   QUEX,
-                      KC_BSPC, KC_LEFT, KC_DOWN, KC_UP,  KC_RIGHT,
+        KC_NO, SV_N,  SV_M,    SV_COMM, SV_DOT,  APQU,   OS_LALT,
+                      KC_BSPC, OS_LGUI, KC_NO,   KC_NO,  KC_NO,
         KC_NO,  KC_NO,
         KC_NO,
-        KC_TAB, KC_SPACE, MO(RMOD)
+        KC_ENT, OS_SYM2, KC_SPACE
     ),
 [SYM1] = KEYMAP(
         // left hand
-        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,  KC_NO, KC_NO,
-        KC_NO,   SV_AT,   SV_LCBR, SV_RCBR, SV_DLR, CIRC,  KC_NO,
-        SV_PIPE, SV_HASH, SV_LPRN, SV_RPRN, SV_LT,  SV_GT,
-        SV_CURR, SV_BSLS, SV_LBRC, SV_RBRC, GRAV,   ACUT,  KC_NO,
-        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-                                                KC_CAPS, KC_PAUSE,
-                                                          KC_TRNS,
-                                       KC_TRNS, KC_TRNS,  KC_TRNS,
+        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+        KC_TRNS, SV_PND,  SV_LCBR, SV_RCBR, SV_DLR,  CIRC,    KC_NO,
+        KC_TRNS, SV_UNDS, SV_LPRN, SV_RPRN, SV_LBRC, SV_RBRC,
+        KC_TRNS, SV_BSLS, GRAV,    ACUT,    SV_LT,   SV_GT,   KC_NO,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                                                  KC_CAPS, KC_PAUSE,
+                                                            KC_TRNS,
+                                         KC_TRNS, KC_TRNS,  KC_TRNS,
         // right hand
-        KC_NO, KC_NO,   KC_NO, KC_NO,   KC_NO,  KC_NO,   KC_NO,
-        KC_NO, SV_PERC, SV_7,  SV_8,    SV_9,   TILD,    KC_NO,
-               SV_ASTR, SV_4,  SV_5,    SV_6,   SV_PLUS, SV_EQL,
-        KC_NO, SV_SLSH, SV_1,  SV_2,    SV_3,   SV_MINS, SV_SECT,
-                        SV_0,  SV_COMM, SV_DOT, KC_NO,   KC_NO,
+        KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,  KC_NO,   KC_NO,
+        KC_NO, SV_SLSH, SV_7,    SV_8,    SV_9,   TILD,    KC_NO,
+               SV_ASTR, SV_4,    SV_5,    SV_6,   SV_PLUS, SV_EQL,
+        KC_NO, SV_0,    SV_1,    SV_2,    SV_3,   SV_MINS, KC_TRNS,
+                        KC_TRNS, SV_COMM, SV_DOT, KC_NO,   KC_NO,
         KC_SLCK, KC_INS,
         KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS
     ),
 [SYM2] = KEYMAP(
         // left hand
-        KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-        KC_NO, KC_NO,   KC_MUTE, KC_VOLD, KC_VOLU, SV_CIRC, KC_NO,
-        KC_NO, KC_MPLY, KC_MSTP, KC_MPRV, KC_MNXT, SV_GT,
-        KC_NO, KC_NO,   KC_NO,   KC_NO,   SV_GRAV, SV_ACUT, KC_NO,
-        KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,
-                                                     DEBUG, RESET,
-                                                          KC_TRNS,
-                                        KC_TRNS, KC_TRNS, KC_TRNS,
+        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+        KC_TRNS, SV_CURR, SV_HASH, SV_EURO, SV_PERC, SV_CIRC, KC_NO,
+        KC_TRNS, SV_AT,   SV_AMPR, SV_PIPE, SV_QUES, SV_EXLM,
+        KC_TRNS, KC_NO,   SV_GRAV, SV_ACUT, L_TAB,   KC_TAB, KC_NO,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                                                      DEBUG, RESET,
+                                                           KC_TRNS,
+                                         KC_TRNS, KC_TRNS, KC_TRNS,
         // right hand
-        KC_NO, KC_NO,  KC_NO, KC_NO, KC_NO, KC_NO,   KC_NO,
-        KC_NO, KC_F12, KC_F7, KC_F8, KC_F9, SV_TILD, KC_NO,
-               KC_F11, KC_F4, KC_F5, KC_F6, SV_UMLT, KC_NO,
-        KC_NO, KC_F10, KC_F1, KC_F2, KC_F3, SV_HALF, KC_NO,
-                       KC_NO, KC_NO, KC_NO, KC_NO,   KC_NO,
+        KC_NO, KC_NO,  KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,
+        KC_NO, KC_F12, KC_F7,   KC_F8,   KC_F9, SV_TILD, KC_NO,
+               KC_F11, KC_F4,   KC_F5,   KC_F6, SV_UMLT, KC_NO,
+        KC_NO, KC_F10, KC_F1,   KC_F2,   KC_F3, SV_HALF, KC_TRNS,
+                       KC_TRNS, KC_TRNS, KC_NO, KC_NO,   KC_NO,
         KC_TRNS, KC_TRNS,
         KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS
@@ -125,46 +122,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                KC_LEFT, KC_DOWN, KC_UP,   KC_RIGHT, KC_NO, KC_NO,
         KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO, KC_NO,
                         KC_NO,   KC_NO,   KC_NO,    KC_NO, KC_NO,
-        KC_TRNS, KC_TRNS,
-        KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_TRNS
-    ),
-[LMOD] = KEYMAP(
-        // left hand
-        KC_NO, KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-        KC_NO, KC_NO, OS_LGUI, OS_MEH,  MO_NAV,  KC_NO,   KC_NO,
-        KC_NO, KC_NO, OS_LALT, OS_LCTL, OS_LSFT, OS_SYM1,
-        KC_NO, KC_NO, KC_NO,   KC_MENU, OS_RALT, OS_SYM2, KC_NO,
-        KC_NO, KC_NO, KC_NO,   KC_NO,   KC_NO,
-                                                KC_TRNS, KC_TRNS,
-                                                         KC_TRNS,
-                                       KC_TRNS, KC_TRNS, KC_TRNS,
-        // right hand
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-                          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-        KC_TRNS, KC_TRNS,
-        KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_TRNS
-    ),
-[RMOD] = KEYMAP(
-        // left hand
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-                                                     KC_TRNS, KC_TRNS,
-                                                              KC_TRNS,
-                                            KC_TRNS, KC_TRNS, KC_TRNS,
-        // right hand
-        KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
-        KC_NO, KC_NO,   MO_NAV,  OS_MEH,  OS_RGUI, KC_NO, KC_NO,
-               OS_SYM1, OS_RSFT, OS_RCTL, OS_LALT, KC_NO, KC_NO,
-        KC_NO, OS_SYM2, OS_RALT, KC_MENU, KC_NO,   KC_NO, KC_NO,
-                        KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
         KC_TRNS, KC_TRNS,
         KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS
@@ -237,14 +194,8 @@ static bool wake_dead_key(uint16_t keycode, keyrecord_t* record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch(keycode) {
-    case EUPO:
-        return override_key(record, SV_EURO, SV_PND);
-    case UNAM:
-        return override_key(record, SV_UNDS, SV_AMPR);
     case APQU:
         return override_key(record, SV_APOS, SV_QUOT);
-    case QUEX:
-        return override_key(record, SV_QUES, SV_EXLM);
     case TILD:
         return wake_dead_key(SV_TILD, record);
     case CIRC:
