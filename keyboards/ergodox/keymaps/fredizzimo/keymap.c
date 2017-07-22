@@ -170,8 +170,23 @@ void press_key_with_level_mods(uint16_t key) {
 
 bool override_key(keyrecord_t* record, uint16_t normal, uint16_t shifted) {
     const uint8_t shift = MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT);
+    // Todo, should maybe also check at least the weak mods
+    uint8_t current_mods = get_mods();
     if (record->event.pressed) {
-        bool shift_pressed = keyboard_report->mods & shift;
+        // Todo share this code with send keyboard report
+#ifndef NO_ACTION_ONESHOT
+        if (get_oneshot_mods()) {
+#if (defined(ONESHOT_TIMEOUT) && (ONESHOT_TIMEOUT > 0))
+            if (has_oneshot_mods_timed_out()) {
+                dprintf("Oneshot: timeout\n");
+                clear_oneshot_mods();
+            }
+#endif
+            current_mods |= get_oneshot_mods();
+            clear_oneshot_mods();
+        }
+#endif
+        bool shift_pressed = current_mods & shift;
         const uint16_t target = shift_pressed ? shifted : normal;
         uint8_t keycode = target & 0xFF;
         if (keycode == KC_NO) {
