@@ -69,9 +69,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [SYM1] = KEYMAP(
         // left hand
         KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-        KC_TRNS, SV_PND,  SV_LCBR, SV_RCBR, SV_DLR,  CIRC,    KC_NO,
-        KC_TRNS, SV_UNDS, SV_LPRN, SV_RPRN, SV_LBRC, SV_RBRC,
-        KC_TRNS, SV_BSLS, GRAV,    ACUT,    SV_LT,   SV_GT,   KC_NO,
+        KC_TRNS, CIRC,    SV_LCBR, SV_RCBR, SV_AMPR, SV_PIPE, KC_NO,
+        KC_TRNS, SV_QUES, SV_LPRN, SV_RPRN, SV_LBRC, SV_RBRC,
+        KC_TRNS, SV_EXLM, GRAV,    SV_PERC, SV_LT,   SV_GT,   KC_NO,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                                                   KC_CAPS, KC_PAUSE,
                                                             KC_TRNS,
@@ -89,17 +89,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [SYM2] = KEYMAP(
         // left hand
         KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-        KC_TRNS, SV_CURR, SV_HASH, SV_EURO, SV_PERC, SV_CIRC, KC_NO,
-        KC_TRNS, SV_AT,   SV_AMPR, SV_PIPE, SV_QUES, SV_EXLM,
-        KC_TRNS, KC_NO,   SV_GRAV, SV_ACUT, L_TAB,   KC_TAB, KC_NO,
+        KC_TRNS, SV_CIRC, KC_NO,   SV_EURO, SV_BSLS, SV_CURR, KC_NO,
+        KC_TRNS, SV_AT,   SV_HASH, SV_DLR,  SV_UNDS, KC_NO,
+        KC_TRNS, SV_PND,  SV_GRAV, SV_ACUT, L_TAB,   KC_TAB, KC_NO,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                                                       DEBUG, RESET,
                                                            KC_TRNS,
                                          KC_TRNS, KC_TRNS, KC_TRNS,
         // right hand
         KC_NO, KC_NO,  KC_NO,   KC_NO,   KC_NO, KC_NO,   KC_NO,
-        KC_NO, KC_F12, KC_F7,   KC_F8,   KC_F9, SV_TILD, KC_NO,
-               KC_F11, KC_F4,   KC_F5,   KC_F6, SV_UMLT, KC_NO,
+        KC_NO, KC_F12, KC_F7,   KC_F8,   KC_F9, SV_TILD, SV_UMLT,
+               KC_F11, KC_F4,   KC_F5,   KC_F6, SV_UMLT, SV_SECT,
         KC_NO, KC_F10, KC_F1,   KC_F2,   KC_F3, SV_HALF, KC_TRNS,
                        KC_TRNS, KC_TRNS, KC_NO, KC_NO,   KC_NO,
         KC_TRNS, KC_TRNS,
