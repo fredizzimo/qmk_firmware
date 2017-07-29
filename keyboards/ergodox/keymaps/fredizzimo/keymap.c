@@ -204,7 +204,8 @@ static bool wake_dead_key(uint16_t keycode, keyrecord_t* record) {
         register_code16(KC_SPACE);
         unregister_code16(KC_SPACE);
     }
-    return false;
+    // Let QMK handle onshots
+    return true;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
