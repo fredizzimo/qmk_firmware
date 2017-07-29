@@ -54,31 +54,30 @@ extern backlight_config_t backlight_config;
 
 static void do_code16 (uint16_t code, void (*f) (uint8_t)) {
   switch (code) {
-  case QK_MODS ... QK_MODS_MAX:
+  case QK_MODS ... (QK_RMODS_MIN - 1):
+    if (code & QK_LCTL)
+      f(KC_LCTL);
+    if (code & QK_LSFT)
+      f(KC_LSFT);
+    if (code & QK_LALT)
+      f(KC_LALT);
+    if (code & QK_LGUI)
+      f(KC_LGUI);
+    break;
+  case QK_RMODS_MIN ... QK_MODS_MAX:
+    // Note testing for left modifiers since otherwise the high bit will match
+    if (code & QK_LCTL)
+      f(KC_RCTL);
+    if (code & QK_LSFT)
+      f(KC_RSFT);
+    if (code & QK_LALT)
+      f(KC_RALT);
+    if (code & QK_LGUI)
+      f(KC_RGUI);
     break;
   default:
     return;
   }
-
-  if (code & QK_LCTL)
-    f(KC_LCTL);
-  if (code & QK_LSFT)
-    f(KC_LSFT);
-  if (code & QK_LALT)
-    f(KC_LALT);
-  if (code & QK_LGUI)
-    f(KC_LGUI);
-
-  if (code < QK_RMODS_MIN) return;
-
-  if (code & QK_RCTL)
-    f(KC_RCTL);
-  if (code & QK_RSFT)
-    f(KC_RSFT);
-  if (code & QK_RALT)
-    f(KC_RALT);
-  if (code & QK_RGUI)
-    f(KC_RGUI);
 }
 
 static inline void qk_register_weak_mods(uint8_t kc) {
