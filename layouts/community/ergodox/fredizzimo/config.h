@@ -1,4 +1,4 @@
-#include "../../config.h"
+#include QMK_KEYBOARD_CONFIG_H
 
 #define LLS_DELAY 30
 #define LLS_QUEUE 10
