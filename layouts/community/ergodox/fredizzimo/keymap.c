@@ -50,21 +50,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
         OS_MEH,  SV_Q,  SV_W,  SV_E,   SV_R,  SV_T,  KC_NO,
         KC_ESC,  SV_A,  SV_S,  SV_D,   SV_F,  SV_G,  KC_NO,
-        OS_LCTL, SV_Z,  SV_X,  SV_C,   SV_V,  SV_B,  
-        OS_LCTL, KC_NO, KC_NO, KC_MENU, KC_DEL, KC_NO, KC_NO,
+        KC_LCTL, SV_Z,  SV_X,  SV_C,   SV_V,  SV_B,  
+        KC_LCTL, KC_NO, KC_NO, KC_MENU, KC_DEL, KC_NO, KC_NO,
         KC_NO,   KC_NO, KC_NO, KC_NO,  KC_NO,
                                               KC_NO, KC_NO,
                                                      KC_NO,
-                                  OS_LSFT, OS_SYM1, LA_NAV,
+                                  KC_LSFT, MO(SYM1), LA_NAV,
         // right hand
         KC_NO, SV_Y,  SV_U,    SV_I,    SV_O,    SV_P,   SV_AA,
         KC_NO, SV_H,  SV_J,    SV_K,    SV_L,    SV_OE,  SV_AE,
-               SV_N,  SV_M,    SV_COMM, SV_DOT,  APQU,   OS_LALT,
+               SV_N,  SV_M,    SV_COMM, SV_DOT,  APQU,   KC_LALT,
         KC_NO, KC_NO, KC_BSPC, OS_LGUI, KC_NO,   KC_NO,  KC_NO,
                       KC_NO,   KC_NO,   KC_NO,   KC_NO,  KC_NO,
         KC_NO,  KC_NO,
         KC_NO,
-        KC_ENT, OS_SYM2, KC_SPACE
+        KC_ENT, MO(SYM2), KC_SPACE
     ),
 [SYM1] = KEYMAP(
         // left hand
