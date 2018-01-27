@@ -22,3 +22,23 @@ void matrix_init_kb(void) {
 void matrix_scan_kb(void) {
 
 }
+
+void myHalt(void) {
+  palSetPad(GPIOB, 13);
+}
+
+void myEnterIdle(void) {
+  palSetPad(GPIOB, 12);
+}
+
+void myLeaveIdle(void) {
+  palClearPad(GPIOB, 12);
+}
+
+void myIdleLoop(void) {
+  //palSetPad(GPIOB, 12);
+}
+
+void myContextSwitch(void) {
+  //palSetPad(GPIOB, 12);
+}

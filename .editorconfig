@@ -8,7 +8,6 @@ indent_style = space
 indent_size = 2
 
 # We recommend you to keep these unchanged
-end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
@@ -16,3 +15,21 @@ insert_final_newline = true
 [*.md]
 trim_trailing_whitespace = false
 indent_size = 4
+
+[*.mk]
+end_of_line = lf
+
+[Makefile]
+end_of_line = lf
+
+[*.sh]
+end_of_line = lf
+
+
+# We don't have gitattributes properly for these
+# So if the user have for example core.autocrlf set to true
+# the line endings would be wrong.
+[lib/**]
+end_of_line = unset
+[lib/**.S]
+end_of_line = lf

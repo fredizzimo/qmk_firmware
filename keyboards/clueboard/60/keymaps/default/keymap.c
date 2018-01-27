@@ -17,7 +17,8 @@ enum custom_keycodes {
     S_ONEUP,
     S_COIN,
     S_SONIC,
-    S_ZELDA
+    S_ZELDA,
+    CRASH_ME
 };
 
 #ifdef AUDIO_ENABLE
@@ -30,6 +31,10 @@ enum custom_keycodes {
   float song_one_up[][2]  = SONG(ONE_UP_SOUND);
   float song_sonic_ring[][2]  = SONG(SONIC_RING);
   float song_zelda_puzzle[][2]  = SONG(ZELDA_PUZZLE);
+#else
+#undef PLAY_SONG
+#define PLAY_SONG(a)
+#define stop_all_notes()
 #endif
 
 const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -55,7 +60,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FL] = KEYMAP(
       KC_ESC, KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,  KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, _______,_______,\
       _______,   _______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,     \
-      _______,     _______,MO(_CL),_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,  _______, \
+      _______,    CRASH_ME,MO(_CL),_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,  _______, \
       _______,  _______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,  _______,   _______, \
       _______,_______,_______,                        _______,                     _______,  _______,  MO(_FL),   _______),
     [_CL] = KEYMAP(
@@ -120,6 +125,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 stop_all_notes();
                 PLAY_SONG(song_zelda_puzzle);
+            }
+            return false;
+        case CRASH_ME:
+            if (record->event.pressed) {
+                SEND_STRING("crash me");
             }
             return false;
     }

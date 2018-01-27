@@ -11,6 +11,12 @@
         "*.h": "c",
         "*.c": "c",
         "*.cpp": "cpp",
-        "*.hpp": "cpp"
+        "*.hpp": "cpp",
+        "iterator": "c",
+        "memory": "c",
+        "random": "c",
+        "xutility": "c",
+        "iosfwd": "c",
+        "xlocmon": "c"
     }
 }

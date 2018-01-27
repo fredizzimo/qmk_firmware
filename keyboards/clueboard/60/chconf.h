@@ -30,6 +30,14 @@
 
 #define _CHIBIOS_RT_CONF_
 
+#if !defined(_FROM_ASM_)
+void myEnterIdle(void);
+void myLeaveIdle(void);
+void myIdleLoop(void);
+void myHalt(void);
+void myContextSwitch(void);
+#endif
+
 /*===========================================================================*/
 /**
  * @name System timers settings
@@ -48,7 +56,7 @@
  * @details Frequency of the system timer that drives the system ticks. This
  *          setting also defines the system tick time unit.
  */
-#define CH_CFG_ST_FREQUENCY                 10000
+#define CH_CFG_ST_FREQUENCY                 1000
 
 /**
  * @brief   Time delta constant for the tick-less mode.
@@ -58,7 +66,7 @@
  *          The value one is not valid, timeouts are rounded up to
  *          this value.
  */
-#define CH_CFG_ST_TIMEDELTA                 2
+#define CH_CFG_ST_TIMEDELTA                 0
 
 /** @} */
 
@@ -104,6 +112,10 @@
  *          infinite loop.
  */
 #define CH_CFG_NO_IDLE_THREAD               FALSE
+
+/* Use __WFI in the idle thread for waiting. Does lower the power
+ * consumption. */
+#define CORTEX_ENABLE_WFI_IDLE              TRUE
 
 /** @} */
 
@@ -328,7 +340,7 @@
  *
  * @note    The default is @p FALSE.
  */
-#define CH_DBG_SYSTEM_STATE_CHECK           FALSE
+#define CH_DBG_SYSTEM_STATE_CHECK           TRUE
 
 /**
  * @brief   Debug option, parameters checks.
@@ -337,7 +349,7 @@
  *
  * @note    The default is @p FALSE.
  */
-#define CH_DBG_ENABLE_CHECKS                FALSE
+#define CH_DBG_ENABLE_CHECKS                TRUE
 
 /**
  * @brief   Debug option, consistency checks.
@@ -347,7 +359,7 @@
  *
  * @note    The default is @p FALSE.
  */
-#define CH_DBG_ENABLE_ASSERTS               FALSE
+#define CH_DBG_ENABLE_ASSERTS               TRUE
 
 /**
  * @brief   Debug option, trace buffer.
@@ -374,7 +386,9 @@
  * @note    The default failure mode is to halt the system with the global
  *          @p panic_msg variable set to @p NULL.
  */
-#define CH_DBG_ENABLE_STACK_CHECK           TRUE
+#define CH_DBG_ENABLE_STACK_CHECK           FALSE
+
+#define PORT_IDLE_THREAD_STACK_SIZE     128
 
 /**
  * @brief   Debug option, stacks initialization.
@@ -438,6 +452,7 @@
  */
 #define CH_CFG_CONTEXT_SWITCH_HOOK(ntp, otp) {                              \
   /* Context switch code here.*/                                            \
+  myContextSwitch(); \
 }
 
 /**
@@ -462,6 +477,7 @@
  */
 #define CH_CFG_IDLE_ENTER_HOOK() {                                          \
   /* Idle-enter code here.*/                                                \
+  myEnterIdle(); \
 }
 
 /**
@@ -472,6 +488,7 @@
  */
 #define CH_CFG_IDLE_LEAVE_HOOK() {                                          \
   /* Idle-leave code here.*/                                                \
+  myLeaveIdle(); \
 }
 
 /**
@@ -480,6 +497,7 @@
  */
 #define CH_CFG_IDLE_LOOP_HOOK() {                                           \
   /* Idle loop code here.*/                                                 \
+  myIdleLoop(); \
 }
 
 /**
@@ -491,6 +509,7 @@
   /* System tick event code here.*/                                         \
 }
 
+
 /**
  * @brief   System halt hook.
  * @details This hook is invoked in case to a system halting error before
@@ -498,6 +517,7 @@
  */
 #define CH_CFG_SYSTEM_HALT_HOOK(reason) {                                   \
   /* System halt code here.*/                                               \
+  myHalt(); \
 }
 
 /**

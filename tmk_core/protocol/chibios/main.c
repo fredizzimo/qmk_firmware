@@ -95,6 +95,11 @@ int main(void) {
   halInit();
   chSysInit();
 
+  palSetPadMode(GPIOB, 12,  PAL_MODE_OUTPUT_PUSHPULL);
+  palClearPad(GPIOB, 12);
+  palSetPadMode(GPIOB, 13,  PAL_MODE_OUTPUT_PUSHPULL);
+  palClearPad(GPIOB, 13);
+
   // TESTING
   // chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
 
