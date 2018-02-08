@@ -34,6 +34,14 @@ extern backlight_config_t backlight_config;
 #include "fauxclicky.h"
 #endif
 
+#ifdef API_ENABLE
+#include "api.h"
+#endif
+
+#ifdef MIDI_ENABLE
+#include "process_midi.h"
+#endif
+
 #ifdef AUDIO_ENABLE
   #ifndef GOODBYE_SONG
     #define GOODBYE_SONG SONG(GOODBYE_SOUND)
@@ -207,6 +215,10 @@ bool process_record_quantum(keyrecord_t *record) {
     //   process_action(record, action);
     //   return false;
     // }
+
+  #ifdef TAP_DANCE_ENABLE
+    preprocess_tap_dance(keycode, record);
+  #endif
 
   if (!(
   #if defined(KEY_LOCK_ENABLE)
