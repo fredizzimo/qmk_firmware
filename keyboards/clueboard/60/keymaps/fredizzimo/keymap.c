@@ -35,12 +35,13 @@ enum custom_keycodes {
 
 #define MO_FUNC MO(FUNC)
 #define MO_EXTR MO(EXTRA)
+#define SP_FUNC LT(FUNC, KC_SPC)
 #define VS_CMD OSM(MOD_LSFT | MOD_LCTL)
 
 const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = KEYMAP(
       KC_MPLY, SV_1,    SV_2,    SV_3,    SV_4,    SV_5,    SV_6,    SV_7,    SV_8,   SV_9,    SV_0,    SV_PLUS, SV_ACUT, KC_BSPC, KC_DEL,\
-      KC_TAB,  SV_Q,    SV_W,    SV_E,    SV_R,    SV_T,    SV_Y,    SV_U,    SV_I,   SV_O,    SV_P,    SV_AA,   SV_UMLT, KC_NO,  \
+      KC_TAB,  SV_Q,    SV_W,    SV_E,    SV_R,    SV_T,    SV_Y,    SV_U,    SV_I,   SV_O,    SV_P,    VS_CMD,   SV_UMLT, KC_NO,  \
       KC_ESC,  SV_A,    SV_S,    SV_D,    SV_F,    SV_G,    SV_H,    SV_J,    SV_K,   SV_L,    SV_OE,   SV_AE,   SV_APOS, KC_ENT, \
       KC_LSFT, SV_LT,   SV_Z,    SV_X,    SV_C,    SV_V,    SV_B,    SV_N,    SV_M,   SV_COMM, SV_DOT,  SV_MINS, KC_RSFT, VS_CMD, \
       KC_LCTL, KC_LGUI, KC_LALT,                        KC_SPC,                       KC_RALT, KC_APP,  MO_FUNC, KC_RCTL),
