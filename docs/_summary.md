@@ -45,6 +45,7 @@
   * [RGB Lighting](feature_rgblight.md)
   * [Space Cadet](feature_space_cadet.md)
   * [Stenography](feature_stenography.md)
+  * [Swap Hands](feature_swap_hands.md)
   * [Tap Dance](feature_tap_dance.md)
   * [Terminal](feature_terminal.md)
   * [Thermal Printer](feature_thermal_printer.md)
@@ -72,7 +73,7 @@
   * [Customizing Functionality](custom_quantum_functions.md)
   * [Documentation Best Practices](documentation_best_practices.md)
   * [Documentation Templates](documentation_templates.md)
-  * [Glossary](glossary.md)
+  * [Glossary](reference_glossary.md)
   * [Keymap Overview](keymap.md)
   * [Unit Testing](unit_testing.md)
 
@@ -86,3 +87,12 @@
 
 * Other Topics
   * [Using Eclipse with QMK](eclipse.md)
+
+* QMK API (In Progress)
+  * [Defines](api_defines.md)
+  * [Input Callback Reg](api_input_callback_reg.md)
+  * [Midi Device](api_midi_device.md)
+  * [Midi Device Setup Process](api_midi_device_setup_process.md)
+  * [Midi Util](api_midi_util.md)
+  * [Send Functions](api_send_functions.md)
+  * [Sysex Tools](api_sysex_tools.md)
