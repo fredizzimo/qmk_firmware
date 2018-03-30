@@ -22,17 +22,25 @@ using testing::InSequence;
 
 class Tapping : public TestFixture {};
 
+void press_shift_t_b() {
+  press_key(1, 0);
+}
+
+void release_shift_t_b() {
+  release_key(1, 0);
+}
+
 TEST_F(Tapping, TapA_SHFT_T_KeyReportsKey) {
     TestDriver driver;
     InSequence s;
 
-    press_key(7, 0);
+    press_shift_t_b();
     // Tapping keys does nothing on press
     EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
     run_one_scan_loop();
-    release_key(7, 0);
+    release_shift_t_b();
     // First we get the key press
-    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_P)));
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
     // Then the release
     EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     run_one_scan_loop();
@@ -42,7 +50,7 @@ TEST_F(Tapping, HoldA_SHFT_T_KeyReportsShift) {
     TestDriver driver;
     InSequence s;
 
-    press_key(7, 0);
+    press_shift_t_b();
     // Tapping keys does nothing on press
     EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
     idle_for(TAPPING_TERM);
@@ -55,34 +63,34 @@ TEST_F(Tapping, ANewTapWithinTappingTermIsBuggy) {
     TestDriver driver;
     InSequence s;
 
-    press_key(7, 0);
+    press_shift_t_b();
     // Tapping keys does nothing on press
     EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
     run_one_scan_loop();
-    release_key(7, 0);
+    release_shift_t_b();
     // First we get the key press
-    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_P)));
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
     // Then the release
     EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     run_one_scan_loop();
 
-    // This sends KC_P, even if it should do nothing
-    press_key(7, 0);
+    // This sends KC_B, even if it should do nothing
+    press_shift_t_b();
     // This test should not succed if everything works correctly
-    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_P)));
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
     run_one_scan_loop();
-    release_key(7, 0);
+    release_shift_t_b();
     EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     idle_for(TAPPING_TERM + 1);
 
     // On the other hand, nothing is sent if we are outside the tapping term
-    press_key(7, 0);
+    press_shift_t_b();
     EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
     run_one_scan_loop();
-    release_key(7, 0);
+    release_shift_t_b();
 
     // First we get the key press
-    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_P)));
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
     // Then the release
     EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     idle_for(TAPPING_TERM + 1);
@@ -90,7 +98,7 @@ TEST_F(Tapping, ANewTapWithinTappingTermIsBuggy) {
     // Now we are geting into strange territory, as the hold registers too early here
     // But the stranges part is:
     // If TAPPING_TERM + 1 above is changed to TAPPING_TERM or TAPPING_TERM + 2 it doesn't
-    press_key(7, 0);
+    press_shift_t_b();
     // Shouldn't be called here really
     EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT))).Times(1);
     idle_for(TAPPING_TERM);
