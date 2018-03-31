@@ -348,6 +348,36 @@ TEST_F(Tapping, HoldSFT_TAndTapOtherKeyAfterTappingTermButReleaseSFT_TFirst) {
     run_one_scan_loop();
 }
 
+TEST_F(Tapping, HoldSFT_TAndTapOtherKeyBeforeTappingTermButReleaseAfter) {
+
+    TestDriver driver;
+    InSequence s;
+
+    press_shift_t_b();
+    run_one_scan_loop();
+
+    press_a();
+    EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
+    run_one_scan_loop();
+    testing::Mock::VerifyAndClearExpectations(&driver);
+
+    EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
+    idle_for(TAPPING_TERM-2);
+    testing::Mock::VerifyAndClearExpectations(&driver);
+
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT, KC_A)));
+    run_one_scan_loop();
+    testing::Mock::VerifyAndClearExpectations(&driver);
+
+    release_a();
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
+    run_one_scan_loop();
+
+    release_shift_t_b();
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
+    run_one_scan_loop();
+}
 
 #if 0
 TEST_F(Tapping, ANewTapWithinTappingTermIsBuggy) {
