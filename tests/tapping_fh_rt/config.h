@@ -18,4 +18,5 @@
 
 #include "../tapping_default/config.h"
 
-#define PERMISSIVE_HOLD
+#define TAPPING_FORCE_HOLD
+#define RETRO_TAPPING
