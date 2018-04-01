@@ -970,7 +970,9 @@ TEST_F(Tapping, AKeyPressedBeforeTappingIsReleasedAtTheRightTime) {
     #elif defined(IGNORE_MOD_TAP_INTERRUPT)
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_C)));
     #else
-      //BUG: KC_D should be held here
+      // Process release event of a key pressed before tapping starts
+      // Without this unexpected repeating will occur with having fast repeating setting
+      // https://github.com/tmk/tmk_keyboard/issues/60
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
     #endif
     run_one_scan_loop();
@@ -988,22 +990,13 @@ TEST_F(Tapping, AKeyPressedBeforeTappingIsReleasedAtTheRightTime) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 
     #if !defined(PERMISSIVE_HOLD) && !defined(IGNORE_MOD_TAP_INTERRUPT)
-      //BUG: KC_D is released here, the correct version is shown below
+      //NOTE: KC_D was already released before, see the comment above
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT, KC_A)));
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT, KC_C)));
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_C)));
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
-    #if 0
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_D, KC_LSFT)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_D, KC_LSFT, KC_A)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_D, KC_LSFT)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_D, KC_LSFT, KC_C)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_D, KC_C)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_C)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
-    #endif
     #endif
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
@@ -1082,6 +1075,7 @@ TEST_F(Tapping, CtrlPressedBeforeTappingIsReleasedAtTheRightTime) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 
     #if !defined(PERMISSIVE_HOLD) && !defined(IGNORE_MOD_TAP_INTERRUPT)
+      //BUG: This call is redundant, it was already called before
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LCTL, KC_LSFT)));
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LCTL, KC_LSFT, KC_A)));
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LCTL, KC_LSFT)));
@@ -1187,10 +1181,7 @@ TEST_F(Tapping, CtrlPressedBeforeTappingAndReleasedBeforeSecondKey) {
 
 //TODO:
 // Tap then start another with a key, one test should be enough, but make sure that the timing is reset
-// Two keys in a row
-// Two keys in a row, mixed order first key released after the second key
 // Two different tap keys in a row
-// Shift before tap (should shift only the keys that should have been shifted otherwise)
 
 #if 0
 TEST_F(Tapping, ANewTapWithinTappingTermIsBuggy) {
