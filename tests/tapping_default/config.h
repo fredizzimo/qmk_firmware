@@ -17,4 +17,4 @@
 #pragma once
 
 #define MATRIX_ROWS 1
-#define MATRIX_COLS 2
+#define MATRIX_COLS 3
