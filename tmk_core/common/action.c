@@ -616,7 +616,7 @@ void process_action(keyrecord_t *record, action_t action)
                             register_code(action.swap.code);
                         } else {
                             unregister_code(action.swap.code);
-                            *record = (keyrecord_t){}; // hack: reset tap mode
+                            *record = EMPTY_KEYRECORD; // hack: reset tap mode
                         }
                     } else {
                         if (swap_held && !event.pressed) {

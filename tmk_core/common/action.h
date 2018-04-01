@@ -46,6 +46,10 @@ typedef struct {
 #endif
 } keyrecord_t;
 
+#define EMPTY_KEYRECORD (keyrecord_t) { \
+  .event = {.key = {.row = 255, .col = 255}}, \
+}
+
 /* Execute action per keyevent */
 void action_exec(keyevent_t event);
 

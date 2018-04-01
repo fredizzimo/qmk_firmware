@@ -137,8 +137,9 @@ TEST_F(Tapping, TapShiftTThenHold) {
     #ifdef TAPPING_FORCE_HOLD
       // The modifier will not be pressed until the tapping term
       EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
-      idle_for(TAPPING_TERM - 1);
+      idle_for(TAPPING_TERM);
       testing::Mock::VerifyAndClearExpectations(&driver);
+
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
       run_one_scan_loop();
     #else
@@ -160,6 +161,7 @@ TEST_F(Tapping, TapShiftTThenHold) {
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     #endif
     run_one_scan_loop();
+    testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
 TEST_F(Tapping, TapOtherKeyWhenTappingSFT_T) {
@@ -252,12 +254,7 @@ TEST_F(Tapping, ReleaseSFT_TBeforeOtherKeyTapBoth) {
         EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_A)));
         EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     #endif
-    // TAPPING_FORCE_HOLD activates earlier for some reason
-    #ifdef TAPPING_FORCE_HOLD
-      idle_for(TAPPING_TERM-4);
-    #else
-      idle_for(TAPPING_TERM-3);
-    #endif
+    idle_for(TAPPING_TERM-3);
     testing::Mock::VerifyAndClearExpectations(&driver);
 
     EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);

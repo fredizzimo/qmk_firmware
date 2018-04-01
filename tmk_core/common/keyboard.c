@@ -185,7 +185,7 @@ void keyboard_init(void) {
 
 /** \brief Keyboard task: Do keyboard routine jobs
  *
- * Do routine keyboard jobs: 
+ * Do routine keyboard jobs:
  *
  * * scan matrix
  * * handle mouse movements
@@ -234,7 +234,7 @@ void keyboard_task(void)
                         action_exec((keyevent_t){
                             .key = (keypos_t){ .row = r, .col = c },
                             .pressed = (matrix_row & ((matrix_row_t)1<<c)),
-                            .time = (timer_read() | 1) /* time should not be 0 */
+                            .time = timer_read()
                         });
                         // record a processed key
                         matrix_prev[r] ^= ((matrix_row_t)1<<c);

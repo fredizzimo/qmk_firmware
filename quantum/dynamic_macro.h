@@ -213,7 +213,7 @@ bool process_record_dynamic_macro(uint16_t keycode, keyrecord_t *record)
      * macros or one long macro and one short macro. Or even one empty
      * and one using the whole buffer.
      */
-    static keyrecord_t macro_buffer[DYNAMIC_MACRO_SIZE];
+    static keyrecord_t macro_buffer[DYNAMIC_MACRO_SIZE] {EMPTY_KEYRECORD};
 
     /* Pointer to the first buffer element after the first macro.
      * Initially points to the very beginning of the buffer since the
