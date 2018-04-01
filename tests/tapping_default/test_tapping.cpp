@@ -1179,8 +1179,69 @@ TEST_F(Tapping, CtrlPressedBeforeTappingAndReleasedBeforeSecondKey) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
+TEST_F(Tapping, TapShiftTThenHoldAndType) {
+    TestDriver driver;
+    InSequence s;
+
+    press_shift_t_b();
+    // Tapping keys does nothing on press
+    EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
+    run_one_scan_loop();
+    testing::Mock::VerifyAndClearExpectations(&driver);
+    release_shift_t_b();
+    // When the key is relased we get the tap
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
+    // Followed by the release
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
+    run_one_scan_loop();
+
+    press_shift_t_b();
+    #ifdef TAPPING_FORCE_HOLD
+      // The modifier will not be pressed until the tapping term
+      EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
+    #else
+      // Without force hold, the tap key is sent immediately
+      // NOTE: that the tap key, not the modifier is sent
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
+    #endif
+    run_one_scan_loop();
+    testing::Mock::VerifyAndClearExpectations(&driver);
+
+    press_a();
+    #if defined(TAPPING_FORCE_HOLD)
+      EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
+    #else
+      // The next key is also sent immediately without force hold
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B, KC_A)));
+    #endif
+    run_one_scan_loop();
+    testing::Mock::VerifyAndClearExpectations(&driver);
+
+    EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
+    idle_for(TAPPING_TERM - 2);
+    testing::Mock::VerifyAndClearExpectations(&driver);
+
+    #if defined(TAPPING_FORCE_HOLD)
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT, KC_A)));
+    #else
+      EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
+    #endif
+    run_one_scan_loop();
+    testing::Mock::VerifyAndClearExpectations(&driver);
+
+    release_shift_t_b();
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_A)));
+    run_one_scan_loop();
+    testing::Mock::VerifyAndClearExpectations(&driver);
+
+    release_a();
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
+    run_one_scan_loop();
+    testing::Mock::VerifyAndClearExpectations(&driver);
+}
+
 //TODO:
-// Tap then start another with a key, one test should be enough, but make sure that the timing is reset
 // Two different tap keys in a row
 
 #if 0
