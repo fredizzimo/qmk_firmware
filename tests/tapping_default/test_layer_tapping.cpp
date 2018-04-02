@@ -207,11 +207,11 @@ TEST_F(LayerTapping, TapLTThenHold) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(LayerTapping, TapOtherKeyWhenTappingSFT_T) {
+TEST_F(LayerTapping, TapOtherKeyWhenTappingLT) {
     TestDriver driver;
     InSequence s;
 
-    press_shift_t_b();
+    press_lt_1();
     EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
@@ -223,25 +223,25 @@ TEST_F(LayerTapping, TapOtherKeyWhenTappingSFT_T) {
 
     release_a();
     #ifdef PERMISSIVE_HOLD
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT, KC_A)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
+      // An extra report is sent here
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_1)));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     #endif
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
 
     #if defined(PERMISSIVE_HOLD)
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
-    #elif defined(IGNORE_MOD_TAP_INTERRUPT)
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B, KC_A)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
+      // An extra report is sent here
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     #else
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_F)));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_F, KC_A)));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_F)));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     #endif
 
-    release_shift_t_b();
+    release_lt_1();
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
 
@@ -249,12 +249,7 @@ TEST_F(LayerTapping, TapOtherKeyWhenTappingSFT_T) {
     idle_for(TAPPING_TERM - 4);
     testing::Mock::VerifyAndClearExpectations(&driver);
 
-    #if !defined(PERMISSIVE_HOLD) && !defined(IGNORE_MOD_TAP_INTERRUPT)
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT, KC_A)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
-    #endif
+    testing::Mock::VerifyAndClearExpectations(&driver);
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
 
@@ -263,34 +258,23 @@ TEST_F(LayerTapping, TapOtherKeyWhenTappingSFT_T) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(LayerTapping, ReleaseSFT_TBeforeOtherKeyTapBoth) {
+TEST_F(LayerTapping, ReleaseLTBeforeOtherKeyTapBoth) {
     TestDriver driver;
     InSequence s;
 
-    press_shift_t_b();
+    press_lt_1();
     run_one_scan_loop();
     press_a();
     run_one_scan_loop();
 
-    release_shift_t_b();
-    #ifdef IGNORE_MOD_TAP_INTERRUPT
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_A, KC_B)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_A)));
-    #else
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
-    #endif
+    release_lt_1();
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_F)));
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_A, KC_F)));
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_A)));
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
 
-    #if defined(IGNORE_MOD_TAP_INTERRUPT)
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
-    #elif defined(PERMISSIVE_HOLD)
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT, KC_A)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_A)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
-    #endif
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     release_a();
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
@@ -299,12 +283,7 @@ TEST_F(LayerTapping, ReleaseSFT_TBeforeOtherKeyTapBoth) {
     idle_for(TAPPING_TERM - 4);
     testing::Mock::VerifyAndClearExpectations(&driver);
 
-    #if !defined(IGNORE_MOD_TAP_INTERRUPT) && !defined(PERMISSIVE_HOLD)
-        EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
-        EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT, KC_A)));
-        EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_A)));
-        EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
-    #endif
+    EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
 
@@ -313,12 +292,12 @@ TEST_F(LayerTapping, ReleaseSFT_TBeforeOtherKeyTapBoth) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(LayerTapping, HoldSFT_TWhileTappingOtherKeyBeforeTappingTerm) {
+TEST_F(LayerTapping, HoldLT_TWhileTappingOtherKeyBeforeTappingTerm) {
 
     TestDriver driver;
     InSequence s;
 
-    press_shift_t_b();
+    press_lt_1();
     run_one_scan_loop();
     press_a();
     run_one_scan_loop();
@@ -326,9 +305,10 @@ TEST_F(LayerTapping, HoldSFT_TWhileTappingOtherKeyBeforeTappingTerm) {
     release_a();
 
     #ifdef PERMISSIVE_HOLD
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT, KC_A)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
+      // An extra report is sent here
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_1)));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     #endif
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
@@ -338,47 +318,56 @@ TEST_F(LayerTapping, HoldSFT_TWhileTappingOtherKeyBeforeTappingTerm) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 
     #if !defined(PERMISSIVE_HOLD)
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT, KC_A)));
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_1)));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     #endif
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
 
     EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
-    release_shift_t_b();
+    release_lt_1();
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(LayerTapping, HoldSFT_TAndTapOtherKeyAfterTappingTerm) {
+TEST_F(LayerTapping, HoldLT_TAndTapOtherKeyAfterTappingTerm) {
 
     TestDriver driver;
     InSequence s;
 
-    press_shift_t_b();
+    press_lt_1();
     run_one_scan_loop();
 
     EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
     idle_for(TAPPING_TERM - 1);
     testing::Mock::VerifyAndClearExpectations(&driver);
 
-    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
+    // Extra report here
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
 
     press_a();
-    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT, KC_A)));
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_1)));
     run_one_scan_loop();
+    testing::Mock::VerifyAndClearExpectations(&driver);
 
     release_a();
-    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
-    run_one_scan_loop();
-
-    release_shift_t_b();
     EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     run_one_scan_loop();
+    testing::Mock::VerifyAndClearExpectations(&driver);
+
+    release_lt_1();
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
+    run_one_scan_loop();
+    testing::Mock::VerifyAndClearExpectations(&driver);
 }
+
+// TODO: Port the following tests, if possible
+// They are not ported right now because layer tapping will undergo a quite heavy refactoring and change of behaviour
+
+#if 0
 
 TEST_F(LayerTapping, HoldSFT_TAndTapOtherKeyAfterTappingTermButReleaseSFT_TFirst) {
 
@@ -1451,3 +1440,5 @@ TEST_F(LayerTapping, TapFirstHoldTapSecondWhileTappingKey) {
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
+
+#endif
