@@ -72,120 +72,131 @@ namespace
   void release_ctl_t_e() {
     release_key(5, 0);
   }
+
+  void press_lt_1() {
+    press_key(6, 0);
+  }
+
+  void release_lt_1() {
+    release_key(6, 0);
+  }
 }
 
-TEST_F(LayerTapping, TapSFT_T) {
+TEST_F(LayerTapping, TapLT) {
     TestDriver driver;
     InSequence s;
 
-    press_shift_t_b();
+    press_lt_1();
     // Tapping keys does nothing on press
     EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
-    release_shift_t_b();
+    release_lt_1();
     // First we get the key press
-    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_F)));
     // Then the release
     EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     run_one_scan_loop();
 }
 
-TEST_F(LayerTapping, HoldSFT_T) {
+TEST_F(LayerTapping, HoldLT) {
     TestDriver driver;
     InSequence s;
 
-    press_shift_t_b();
-    // Tapping keys does nothing on press
+    press_lt_1();
     EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
     idle_for(TAPPING_TERM);
     testing::Mock::VerifyAndClearExpectations(&driver);
-    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
+
+    // This extra report is really not needed
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     run_one_scan_loop();
+    testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(LayerTapping, TapSFT_TTwiceInARow) {
+TEST_F(LayerTapping, TapLTTwiceInARow) {
 
     TestDriver driver;
     InSequence s;
 
-    press_shift_t_b();
+    press_lt_1();
     // Tapping keys does nothing on press
     EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
-    release_shift_t_b();
+    release_lt_1();
     // First we get the key press
-    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_F)));
     // Then the release
     EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     run_one_scan_loop();
 
-    press_shift_t_b();
+    press_lt_1();
     #ifdef TAPPING_FORCE_HOLD
       // Tapping keys does nothing on press
       EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
       run_one_scan_loop();
       testing::Mock::VerifyAndClearExpectations(&driver);
 
-      release_shift_t_b();
+      release_lt_1();
       // The tap key is sent on release
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_F)));
       // Then the release
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     #else
       // When TAPPING_FORCE_HOLD is not enabled we get the key press immediately
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport((KC_F))));
       run_one_scan_loop();
       testing::Mock::VerifyAndClearExpectations(&driver);
-      release_shift_t_b();
+      release_lt_1();
       // And release too
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     #endif
     run_one_scan_loop();
 }
 
-TEST_F(LayerTapping, TapShiftTThenHold) {
+TEST_F(LayerTapping, TapLTThenHold) {
     TestDriver driver;
     InSequence s;
 
-    press_shift_t_b();
+    press_lt_1();
     // Tapping keys does nothing on press
     EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
     run_one_scan_loop();
     testing::Mock::VerifyAndClearExpectations(&driver);
-    release_shift_t_b();
+    release_lt_1();
     // When the key is relased we get the tap
-    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
+    EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_F)));
     // Followed by the release
     EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     run_one_scan_loop();
 
-    press_shift_t_b();
+    press_lt_1();
     #ifdef TAPPING_FORCE_HOLD
       // The modifier will not be pressed until the tapping term
       EXPECT_CALL(driver, send_keyboard_mock(_)).Times(0);
       idle_for(TAPPING_TERM);
       testing::Mock::VerifyAndClearExpectations(&driver);
 
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_LSFT)));
+      // This extra report is not needed
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
       run_one_scan_loop();
     #else
       // Without force hold, the tap key is sent immediately
       // NOTE: that the tap key, not the modifier is sent
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_F)));
       run_one_scan_loop();
     #endif
 
     testing::Mock::VerifyAndClearExpectations(&driver);
     run_one_scan_loop();
-    release_shift_t_b();
+    release_lt_1();
     // The release is sent when the key is released
     EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     #if defined(TAPPING_FORCE_HOLD) && defined(RETRO_TAPPING)
       // BUG:
       // When both TAPPING_FORCE_HOLD and RETRO_TAPPING are enabled, we get an extra tap key
-      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_B)));
+      EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport(KC_F)));
       EXPECT_CALL(driver, send_keyboard_mock(KeyboardReport()));
     #endif
     run_one_scan_loop();

@@ -19,7 +19,10 @@
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = {
-        {KC_A, SFT_T(KC_B), KC_C, KC_D, KC_LCTL, CTL_T(KC_E)}
+        {KC_A, SFT_T(KC_B), KC_C, KC_D, KC_LCTL, CTL_T(KC_E), LT(1, KC_F)}
+    },
+    [1] = {
+        {KC_1, SFT_T(KC_2), KC_3, KC_4, KC_LCTL, CTL_T(KC_5), KC_TRNS}
     },
 };
 
