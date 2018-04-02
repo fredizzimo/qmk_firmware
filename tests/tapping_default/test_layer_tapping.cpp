@@ -20,9 +20,10 @@
 using testing::_;
 using testing::InSequence;
 
-namespace {
+namespace
+{
 
-  class ModTapping : public TestFixture {};
+  class LayerTapping : public TestFixture {};
 
   void press_a() {
     press_key(0, 0);
@@ -73,7 +74,7 @@ namespace {
   }
 }
 
-TEST_F(ModTapping, TapSFT_T) {
+TEST_F(LayerTapping, TapSFT_T) {
     TestDriver driver;
     InSequence s;
 
@@ -90,7 +91,7 @@ TEST_F(ModTapping, TapSFT_T) {
     run_one_scan_loop();
 }
 
-TEST_F(ModTapping, HoldSFT_T) {
+TEST_F(LayerTapping, HoldSFT_T) {
     TestDriver driver;
     InSequence s;
 
@@ -103,7 +104,7 @@ TEST_F(ModTapping, HoldSFT_T) {
     run_one_scan_loop();
 }
 
-TEST_F(ModTapping, TapSFT_TTwiceInARow) {
+TEST_F(LayerTapping, TapSFT_TTwiceInARow) {
 
     TestDriver driver;
     InSequence s;
@@ -144,7 +145,7 @@ TEST_F(ModTapping, TapSFT_TTwiceInARow) {
     run_one_scan_loop();
 }
 
-TEST_F(ModTapping, TapShiftTThenHold) {
+TEST_F(LayerTapping, TapShiftTThenHold) {
     TestDriver driver;
     InSequence s;
 
@@ -195,7 +196,7 @@ TEST_F(ModTapping, TapShiftTThenHold) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, TapOtherKeyWhenTappingSFT_T) {
+TEST_F(LayerTapping, TapOtherKeyWhenTappingSFT_T) {
     TestDriver driver;
     InSequence s;
 
@@ -251,7 +252,7 @@ TEST_F(ModTapping, TapOtherKeyWhenTappingSFT_T) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, ReleaseSFT_TBeforeOtherKeyTapBoth) {
+TEST_F(LayerTapping, ReleaseSFT_TBeforeOtherKeyTapBoth) {
     TestDriver driver;
     InSequence s;
 
@@ -301,7 +302,7 @@ TEST_F(ModTapping, ReleaseSFT_TBeforeOtherKeyTapBoth) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, HoldSFT_TWhileTappingOtherKeyBeforeTappingTerm) {
+TEST_F(LayerTapping, HoldSFT_TWhileTappingOtherKeyBeforeTappingTerm) {
 
     TestDriver driver;
     InSequence s;
@@ -339,7 +340,7 @@ TEST_F(ModTapping, HoldSFT_TWhileTappingOtherKeyBeforeTappingTerm) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, HoldSFT_TAndTapOtherKeyAfterTappingTerm) {
+TEST_F(LayerTapping, HoldSFT_TAndTapOtherKeyAfterTappingTerm) {
 
     TestDriver driver;
     InSequence s;
@@ -368,7 +369,7 @@ TEST_F(ModTapping, HoldSFT_TAndTapOtherKeyAfterTappingTerm) {
     run_one_scan_loop();
 }
 
-TEST_F(ModTapping, HoldSFT_TAndTapOtherKeyAfterTappingTermButReleaseSFT_TFirst) {
+TEST_F(LayerTapping, HoldSFT_TAndTapOtherKeyAfterTappingTermButReleaseSFT_TFirst) {
 
     TestDriver driver;
     InSequence s;
@@ -397,7 +398,7 @@ TEST_F(ModTapping, HoldSFT_TAndTapOtherKeyAfterTappingTermButReleaseSFT_TFirst) 
     run_one_scan_loop();
 }
 
-TEST_F(ModTapping, HoldSFT_TAndTapOtherKeyBeforeTappingTermButReleaseAfter) {
+TEST_F(LayerTapping, HoldSFT_TAndTapOtherKeyBeforeTappingTermButReleaseAfter) {
 
     TestDriver driver;
     InSequence s;
@@ -428,7 +429,7 @@ TEST_F(ModTapping, HoldSFT_TAndTapOtherKeyBeforeTappingTermButReleaseAfter) {
     run_one_scan_loop();
 }
 
-TEST_F(ModTapping, PressKeyBeforeHoldingSFT_T) {
+TEST_F(LayerTapping, PressKeyBeforeHoldingSFT_T) {
 
     TestDriver driver;
     InSequence s;
@@ -458,7 +459,7 @@ TEST_F(ModTapping, PressKeyBeforeHoldingSFT_T) {
     run_one_scan_loop();
 }
 
-TEST_F(ModTapping, PressKeyBeforeHoldingSFT_TReleaseAfterTappingTerm) {
+TEST_F(LayerTapping, PressKeyBeforeHoldingSFT_TReleaseAfterTappingTerm) {
 
     TestDriver driver;
     InSequence s;
@@ -488,7 +489,7 @@ TEST_F(ModTapping, PressKeyBeforeHoldingSFT_TReleaseAfterTappingTerm) {
     run_one_scan_loop();
 }
 
-TEST_F(ModTapping, TapTwoOtherKeysWhenTappingSFT_TReleaseSecondBeforeSFT_T) {
+TEST_F(LayerTapping, TapTwoOtherKeysWhenTappingSFT_TReleaseSecondBeforeSFT_T) {
     TestDriver driver;
     InSequence s;
 
@@ -561,7 +562,7 @@ TEST_F(ModTapping, TapTwoOtherKeysWhenTappingSFT_TReleaseSecondBeforeSFT_T) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, TapTwoOtherKeysWhenTappingSFT_TReleaseSecondAfterSFT_T) {
+TEST_F(LayerTapping, TapTwoOtherKeysWhenTappingSFT_TReleaseSecondAfterSFT_T) {
     TestDriver driver;
     InSequence s;
 
@@ -631,7 +632,7 @@ TEST_F(ModTapping, TapTwoOtherKeysWhenTappingSFT_TReleaseSecondAfterSFT_T) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, TapTwoOtherKeysWhenTappingSFT_TReleaseBothAfterSFT_T) {
+TEST_F(LayerTapping, TapTwoOtherKeysWhenTappingSFT_TReleaseBothAfterSFT_T) {
     TestDriver driver;
     InSequence s;
 
@@ -701,7 +702,7 @@ TEST_F(ModTapping, TapTwoOtherKeysWhenTappingSFT_TReleaseBothAfterSFT_T) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, TapTwoOtherKeysWhenTappingSFT_TReleaseFirstButNotSecondAfterSFT_T) {
+TEST_F(LayerTapping, TapTwoOtherKeysWhenTappingSFT_TReleaseFirstButNotSecondAfterSFT_T) {
     TestDriver driver;
     InSequence s;
 
@@ -770,7 +771,7 @@ TEST_F(ModTapping, TapTwoOtherKeysWhenTappingSFT_TReleaseFirstButNotSecondAfterS
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, AComplexCaseWithAFourthKey) {
+TEST_F(LayerTapping, AComplexCaseWithAFourthKey) {
     TestDriver driver;
     InSequence s;
 
@@ -858,7 +859,7 @@ TEST_F(ModTapping, AComplexCaseWithAFourthKey) {
 }
 
 
-TEST_F(ModTapping, TapCtlAndOtherKeysWhenTappingSFT_TReleaseBothAfterSFT_T) {
+TEST_F(LayerTapping, TapCtlAndOtherKeysWhenTappingSFT_TReleaseBothAfterSFT_T) {
     TestDriver driver;
     InSequence s;
 
@@ -927,7 +928,7 @@ TEST_F(ModTapping, TapCtlAndOtherKeysWhenTappingSFT_TReleaseBothAfterSFT_T) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, AKeyPressedBeforeTappingIsReleasedAtTheRightTime) {
+TEST_F(LayerTapping, AKeyPressedBeforeTappingIsReleasedAtTheRightTime) {
     TestDriver driver;
     InSequence s;
 
@@ -1017,7 +1018,7 @@ TEST_F(ModTapping, AKeyPressedBeforeTappingIsReleasedAtTheRightTime) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, CtrlPressedBeforeTappingIsReleasedAtTheRightTime) {
+TEST_F(LayerTapping, CtrlPressedBeforeTappingIsReleasedAtTheRightTime) {
     TestDriver driver;
     InSequence s;
 
@@ -1103,7 +1104,7 @@ TEST_F(ModTapping, CtrlPressedBeforeTappingIsReleasedAtTheRightTime) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, CtrlPressedBeforeTappingAndReleasedBeforeSecondKey) {
+TEST_F(LayerTapping, CtrlPressedBeforeTappingAndReleasedBeforeSecondKey) {
     TestDriver driver;
     InSequence s;
 
@@ -1190,7 +1191,7 @@ TEST_F(ModTapping, CtrlPressedBeforeTappingAndReleasedBeforeSecondKey) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, TapShiftTThenHoldAndType) {
+TEST_F(LayerTapping, TapShiftTThenHoldAndType) {
     TestDriver driver;
     InSequence s;
 
@@ -1252,7 +1253,7 @@ TEST_F(ModTapping, TapShiftTThenHoldAndType) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, TapSecondTapKeyWhileHoldingDownTheFirstOne) {
+TEST_F(LayerTapping, TapSecondTapKeyWhileHoldingDownTheFirstOne) {
     TestDriver driver;
     InSequence s;
 
@@ -1305,7 +1306,7 @@ TEST_F(ModTapping, TapSecondTapKeyWhileHoldingDownTheFirstOne) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, TapFirstTapKeyAndHoldSecondOne) {
+TEST_F(LayerTapping, TapFirstTapKeyAndHoldSecondOne) {
     TestDriver driver;
     InSequence s;
 
@@ -1356,7 +1357,7 @@ TEST_F(ModTapping, TapFirstTapKeyAndHoldSecondOne) {
     testing::Mock::VerifyAndClearExpectations(&driver);
 }
 
-TEST_F(ModTapping, TapFirstHoldTapSecondWhileTappingKey) {
+TEST_F(LayerTapping, TapFirstHoldTapSecondWhileTappingKey) {
     TestDriver driver;
     InSequence s;
 
