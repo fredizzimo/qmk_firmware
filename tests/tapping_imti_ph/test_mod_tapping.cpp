@@ -14,4 +14,4 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../tapping_default/test_tapping.cpp"
+#include "../tapping_default/test_mod_tapping.cpp"
