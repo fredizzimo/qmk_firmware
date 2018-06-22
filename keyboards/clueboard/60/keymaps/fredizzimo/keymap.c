@@ -60,6 +60,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+#ifdef AUDIO_ENABLE
         case S_BSKTC:
             if (record->event.pressed) {
                 stop_all_notes();
@@ -114,6 +115,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 PLAY_SONG(song_zelda_puzzle);
             }
             return false;
+#endif
     }
     return true;
 }
