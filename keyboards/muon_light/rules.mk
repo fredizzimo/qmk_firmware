@@ -1,5 +1,4 @@
 # project specific files
-SRC = matrix.c
 
 ## chip/board settings
 # - the next two should match the directories in
@@ -49,7 +48,7 @@ CONSOLE_ENABLE = yes  # Console for debug
 COMMAND_ENABLE = yes    # Commands for debug and configuration
 #SLEEP_LED_ENABLE = yes  # Breathing sleep LED during USB suspend
 NKRO_ENABLE = yes     # USB Nkey Rollover
-CUSTOM_MATRIX = yes # Custom matrix file
+CUSTOM_MATRIX = no # Custom matrix file
 AUDIO_ENABLE = yes
 # RGB_MATRIX_ENABLE = yes
 # ENCODER_ENABLE = yes

@@ -229,6 +229,10 @@ QUANTUM_SRC:= \
     $(QUANTUM_DIR)/keycode_config.c \
     $(QUANTUM_DIR)/process_keycode/process_leader.c
 
-ifndef CUSTOM_MATRIX
-    QUANTUM_SRC += $(QUANTUM_DIR)/matrix.c
+ifneq ($(strip $(CUSTOM_MATRIX)), yes)
+    ifeq ($(PLATFORM), AVR)
+        QUANTUM_SRC += $(QUANTUM_DIR)/matrix_avr.c
+    else
+        QUANTUM_SRC += $(QUANTUM_DIR)/matrix_arm.c
+    endif
 endif
