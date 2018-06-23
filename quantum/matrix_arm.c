@@ -4,7 +4,7 @@
 #include "hal.h"
 #include "timer.h"
 #include "wait.h"
-#include "printf.h"
+#include "print.h"
 #include "backlight.h"
 #include "matrix.h"
 #include "action.h"
@@ -12,13 +12,17 @@
 #include <string.h>
 #include "quantum.h"
 
+#if (DIODE_DIRECTION != ROW2COL) && (DIODE_DIRECTION != COL2ROW)
+#error "DIODE_DIRECTION not defined"
+#endif
+
 /*
  *     col: { A10, B2, A15, A0, A1, A2, B0, B1, C13, A6, A7, A3 }
  *     row: { B5, B10, A9, A8 }
  */
 /* matrix state(1:on, 0:off) */
 static matrix_row_t matrix[MATRIX_ROWS];
-static matrix_row_t matrix_debouncing[MATRIX_COLS];
+static matrix_row_t matrix_debouncing[MATRIX_ROWS];
 static bool debouncing = false;
 static uint16_t debouncing_time = 0;
 
@@ -42,16 +46,21 @@ void matrix_scan_kb(void) {
 }
 
 void matrix_init(void) {
-    printf("matrix init\n");
+    xprintf("matrix init\n");
     //debug_matrix = true;
 
     // actual matrix setup
-    for (int i = 0; i < MATRIX_COLS; i++) {
-      setPadMode(matrix_col_pins[i], PAL_MODE_OUTPUT_PUSHPULL);
+    for (int i = 0; i < MATRIX_ROWS; i++) {
+      setPadMode(matrix_row_pins[i], PAL_MODE_OUTPUT_PUSHPULL);
+      #if DIODE_DIRECTION == ROW2COL
+        clearPad(matrix_row_pins[i]);
+      #else
+        setPad(matrix_row_pins[i]);
+      #endif
     }
 
-    for (int i = 0; i < MATRIX_ROWS; i++) {
-      setPadMode(matrix_row_pins[i], PAL_MODE_INPUT_PULLDOWN);
+    for (int i = 0; i < MATRIX_COLS; i++) {
+      setPadMode(matrix_col_pins[i], DIODE_DIRECTION == ROW2COL ? PAL_MODE_INPUT_PULLDOWN  : PAL_MODE_INPUT_PULLUP);
     }
 
     memset(matrix, 0, MATRIX_ROWS * sizeof(matrix_row_t));
@@ -64,34 +73,38 @@ uint8_t matrix_scan(void) {
 
 
     // actual matrix
-    for (int col = 0; col < MATRIX_COLS; col++) {
+    for (int row = 0; row < MATRIX_ROWS; row++) {
         matrix_row_t data = 0;
 
-        setPad(matrix_col_pins[col]);
+        #if DIODE_DIRECTION == ROW2COL
+          setPad(matrix_row_pins[row]);
+        #else
+          clearPad(matrix_row_pins[row]);
+        #endif
 
         // need wait to settle pin state
         wait_us(20);
 
-        for (int row = 0; row < MATRIX_ROWS; row++) {
-          data |= (readPad(matrix_row_pins[row]) << row);
+        for (int col = 0; col < MATRIX_COLS; col++) {
+          data |= (readPad(matrix_col_pins[col]) << col);
         }
 
-        clearPad(matrix_col_pins[col]);
+        #if DIODE_DIRECTION == ROW2COL
+          clearPad(matrix_row_pins[row]);
+        #else
+          setPad(matrix_row_pins[row]);
+          data = ~data;
+        #endif
 
-        if (matrix_debouncing[col] != data) {
-            matrix_debouncing[col] = data;
+        if (matrix_debouncing[row] != data) {
+            matrix_debouncing[row] = data;
             debouncing = true;
             debouncing_time = timer_read();
         }
     }
 
     if (debouncing && timer_elapsed(debouncing_time) > DEBOUNCE) {
-        for (int row = 0; row < MATRIX_ROWS; row++) {
-            matrix[row] = 0;
-            for (int col = 0; col < MATRIX_COLS; col++) {
-                matrix[row] |= ((matrix_debouncing[col] & (1 << row) ? 1 : 0) << col);
-            }
-        }
+        memcpy(matrix, matrix_debouncing, sizeof(matrix));
         debouncing = false;
     }
 
@@ -109,16 +122,16 @@ matrix_row_t matrix_get_row(uint8_t row) {
 }
 
 void matrix_print(void) {
-    printf("\nr/c 01234567\n");
+    xprintf("\nr/c 01234567\n");
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
-        printf("%X0: ", row);
+        xprintf("%X0: ", row);
         matrix_row_t data = matrix_get_row(row);
         for (int col = 0; col < MATRIX_COLS; col++) {
             if (data & (1<<col))
-                printf("1");
+                xprintf("1");
             else
-                printf("0");
+                xprintf("0");
         }
-        printf("\n");
+        xprintf("\n");
     }
 }
