@@ -94,6 +94,8 @@ uint8_t matrix_scan(void) {
         #else
           setPad(matrix_row_pins[row]);
           data = ~data;
+          uint32_t mask = (1ull << MATRIX_ROWS) - 1;
+          data &= mask;
         #endif
 
         if (matrix_debouncing[row] != data) {
