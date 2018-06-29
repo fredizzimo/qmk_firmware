@@ -236,3 +236,8 @@ ifneq ($(strip $(CUSTOM_MATRIX)), yes)
         QUANTUM_SRC += $(QUANTUM_DIR)/matrix_arm.c
     endif
 endif
+
+ifeq ($(strip $(LENIENT_LAYER_SWITCHING_ENABLE)), yes)
+    OPT_DEFS += -DLENIENT_LAYER_SWITCHING_ENABLE
+    SRC += $(QUANTUM_DIR)/process_keycode/process_lenient_layer.c
+endif

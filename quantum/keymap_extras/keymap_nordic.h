@@ -33,6 +33,16 @@
 #define NO_OSLH	KC_QUOT
 #define	NO_APOS	KC_NUHS
 
+//Swedish-Finish characters
+#define SV_ARING KC_LBRC // å
+#define SV_AUML	KC_QUOT // ä
+#define SV_OUML	KC_SCLN // ö
+#define SV_QUOT NO_QUO2
+#define SV_SECT KC_GRV
+#define SV_HALF LSFT(SV_SECT)
+#define SV_DIAE NO_QUOT
+#define SV_ASTR LSFT(NO_APOS)
+
 #define NO_LESS	KC_NUBS
 #define NO_MINS KC_SLSH
 

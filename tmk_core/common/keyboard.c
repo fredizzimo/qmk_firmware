@@ -368,7 +368,7 @@ void keyboard_task(void)
                                 // The main matrix is always 0
                                 .key = (keymatrix_t){.pos = (keypos_t){ .row = r, .col = c }, .matrix = m},
                                 .pressed = (matrix_row & ((uint32_t)1u<<c)),
-                                .time = (timer_read() | 1) /* time should not be 0 */
+                                .time = timer_read()
                             });
                             // record a processed key
                             row_cache ^= (uint32_t)(1u<<c);
