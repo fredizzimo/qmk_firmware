@@ -86,7 +86,7 @@ uint8_t matrix_scan(void) {
         wait_us(20);
 
         for (int col = 0; col < MATRIX_COLS; col++) {
-          data |= (readPad(matrix_col_pins[col]) << col);
+          data |= ((uint32_t)readPad(matrix_col_pins[col]) << col);
         }
 
         #if DIODE_DIRECTION == ROW2COL
@@ -94,7 +94,7 @@ uint8_t matrix_scan(void) {
         #else
           setPad(matrix_row_pins[row]);
           data = ~data;
-          uint32_t mask = (1ull << MATRIX_ROWS) - 1;
+          uint32_t mask = (1ull << MATRIX_COLS) - 1;
           data &= mask;
         #endif
 
