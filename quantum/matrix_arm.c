@@ -16,6 +16,9 @@
 #error "DIODE_DIRECTION not defined"
 #endif
 
+#define PIN_SETTLE_DELAY_NS 1000
+// Needs to be at least 2 times the chibios tick period
+#define SCAN_DELAY_US 200
 /*
  *     col: { A10, B2, A15, A0, A1, A2, B0, B1, C13, A6, A7, A3 }
  *     row: { B5, B10, A9, A8 }
@@ -83,7 +86,7 @@ uint8_t matrix_scan(void) {
         #endif
 
         // need wait to settle pin state
-        wait_us(20);
+        polled_wait_ns(PIN_SETTLE_DELAY_NS);
 
         for (int col = 0; col < MATRIX_COLS; col++) {
           data |= ((uint32_t)readPad(matrix_col_pins[col]) << col);
@@ -111,6 +114,8 @@ uint8_t matrix_scan(void) {
     }
 
     matrix_scan_quantum();
+
+    wait_us(SCAN_DELAY_US);
 
     return 1;
 }
