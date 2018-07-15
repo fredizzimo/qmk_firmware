@@ -35,6 +35,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 extern keymap_config_t keymap_config;
 
+#ifdef MULTIMATRIX
+const uint8_t keymaps;
+#endif
+
 #include <inttypes.h>
 
 /* converts key to action */
@@ -182,6 +186,8 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
 }
 
+#ifndef MULTILAYOUT
+
 // translates key to keycode
 __attribute__ ((weak))
 uint16_t keymap_key_to_keycode(uint8_t layer, keymatrix_t key)
@@ -191,6 +197,7 @@ uint16_t keymap_key_to_keycode(uint8_t layer, keymatrix_t key)
     // and therfore it ignores the matrix field of the key
     return pgm_read_word(&keymaps[(layer)][(key.pos.row)][(key.pos.col)]);
 }
+#endif
 
 // translates function id to action
 __attribute__ ((weak))

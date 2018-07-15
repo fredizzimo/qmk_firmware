@@ -49,7 +49,12 @@ uint16_t keymap_key_to_keycode(uint8_t layer, keymatrix_t key);
 // translates function id to action
 uint16_t keymap_function_id_to_action( uint16_t function_id );
 
-extern const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS];
+#ifndef MULTIMATRIX
+extern const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS];
+#else
+// Use a dummy to prevent wrong usage
+extern const uint8_t keymaps;
+#endif
 extern const uint16_t fn_actions[];
 
 

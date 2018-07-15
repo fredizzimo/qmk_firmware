@@ -121,6 +121,8 @@ void qwiic_keyboard_message_received(I2CDriver *i2cp, uint8_t * body, uint16_t s
 
 __attribute__((optimize("O0")))
 void qwiic_keyboard_write_keymap(uint8_t * pointer) {
+#ifdef MULTILAYOUT
+#else
   for (uint8_t layer = 0; layer < QWIIC_KEYBOARD_LAYERS; layer++) {
     for (uint8_t row = 0; row < QWIIC_KEYBOARD_ROWS; row++) {
       for (uint8_t col = 0; col < QWIIC_KEYBOARD_COLS; col++) {
@@ -130,6 +132,7 @@ void qwiic_keyboard_write_keymap(uint8_t * pointer) {
       }
     }
   }
+#endif
 }
 
 void qwiic_keyboard_read_keymap(uint8_t * pointer) {
@@ -151,12 +154,16 @@ bool is_keyboard_master(void) {
 
 // overwrite the built-in function
 uint16_t keymap_key_to_keycode(uint8_t layer, keymatrix_t key) {
+#ifdef MULTILAYOUT
+  return KC_NO;
+#else
   if (key.matrix == 0) {
     // Read entire word (16bits)
     return pgm_read_word(&keymaps[(layer)][(key.pos.row)][(key.pos.col)]);
   } else {
     return qwiic_keyboard_keymap[(layer)][(key.pos.row)][(key.pos.col)];
   }
+#endif
 }
 
 uint8_t multimatrix_get_num_matrices(void) {
