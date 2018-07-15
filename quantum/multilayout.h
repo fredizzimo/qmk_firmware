@@ -1,5 +1,7 @@
 #pragma once
 
+#include "unique_id.h"
+
 #ifndef MULTILAYOUT
 #error "MULTILAYOUT not defined"
 #endif
@@ -47,6 +49,35 @@
 #define MULTILAYOUT_MATRIX(name, type) \
   uint16_t name[type##_ROWS][type##_COLS];
 
+#define MULTILAYOUT_CONFIGURATION(name, type) \
+  multilayout_module_configuration_t name;
+
+#define MULTILAYOUT_STATUS(name, type) \
+  multilayout_module_status_t name;
+
 typedef struct {
   MULTILAYOUT_FOREACH(MATRIX)
-} MultiLayout;
+} multilayout_t;
+
+typedef struct {
+  unique_id_t id;
+} multilayout_module_configuration_t;
+
+typedef struct {
+  unique_id_t id;
+  bool connected;
+} multilayout_module_status_t;
+
+typedef struct {
+  MULTILAYOUT_FOREACH(CONFIGURATION)
+} multilayout_configuration_t;
+
+typedef struct {
+  MULTILAYOUT_FOREACH(STATUS)
+} multilayout_status_t;
+
+extern multilayout_configuration_t multilayout_configuration;
+extern multilayout_status_t mulitlayout_status;
+
+#define MULTILAYOUT_MASTER_ID {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+#define MULTILAYOUT_SLAVE_ID {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1}

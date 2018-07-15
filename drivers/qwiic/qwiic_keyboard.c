@@ -22,6 +22,9 @@
 #include <string.h>
 #include "usb_main.h"
 #include "usb_driver.h"
+#ifdef MULTILAYOUT
+#include "multilayout.h"
+#endif
 
 #define QWIIC_KEYBOARD_LAYERS 16
 #define QWIIC_KEYBOARD_ROWS 8
@@ -46,6 +49,10 @@ static twi2c_message_received qwiic_keyboard_message_received_ptr = qwiic_keyboa
 
 static uint16_t qwiic_keyboard_keymap[QWIIC_KEYBOARD_LAYERS][QWIIC_KEYBOARD_ROWS][QWIIC_KEYBOARD_COLS] = {{{0}}};
 static uint8_t qwiic_keyboard_listening_address = QWIIC_KEYBOARD_LISTENING_ADDRESS_START;
+
+#ifdef MULTILAYOUT
+multilayout_status_t multilayout_status;
+#endif
 
 void qwiic_keyboard_init(void) {
   twi2c_init();
