@@ -1,0 +1,27 @@
+#pragma once
+
+#define ortho_4x6_ROWS 4
+#define ortho_4x6_COLS 6
+
+#define MULTILAYOUT_MATRIX2(name, type) \
+  uint16_t name[type##_ROWS][type##_COLS];
+
+#define MULTILAYOUT_MATRIX(args) MULTILAYOUT_MATRIX2(args)
+
+typedef struct {
+#ifdef MULTILAYOUT1
+  MULTILAYOUT_MATRIX(MULTILAYOUT1)
+#endif
+#ifdef MULTILAYOUT2
+  MULTILAYOUT_MATRIX(MULTILAYOUT2)
+#endif
+#ifdef MULTILAYOUT3
+  MULTILAYOUT_MATRIX(MULTILAYOUT3)
+#endif
+#ifdef MULTILAYOUT4
+  MULTILAYOUT_MATRIX(MULTILAYOUT4)
+#endif
+#ifdef MULTILAYOUT5
+  MULTILAYOUT_MATRIX(MULTILAYOUT5)
+#endif
+} MultiLayout;
