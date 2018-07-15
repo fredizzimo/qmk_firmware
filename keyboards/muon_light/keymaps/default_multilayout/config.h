@@ -40,7 +40,6 @@
 // Most tactile encoders have detents every 4 stages
 #define ENCODER_RESOLUTION 4
 
-#define MULTILAYOUT1 left, ortho_4x6
-#define MULTILAYOUT2 right, ortho_4x6
+#define MULTILAYOUT left, ortho_4x6, right, ortho_4x6
 
 #endif
