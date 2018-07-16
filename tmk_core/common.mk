@@ -19,6 +19,7 @@ TMK_COMMON_SRC +=	$(COMMON_DIR)/host.c \
 	$(COMMON_DIR)/util.c \
 	$(COMMON_DIR)/eeconfig.c \
 	$(COMMON_DIR)/report.c \
+	$(COMMON_DIR)/unique_id.c \
 	$(PLATFORM_COMMON_DIR)/suspend.c \
 	$(PLATFORM_COMMON_DIR)/timer.c \
 	$(PLATFORM_COMMON_DIR)/bootloader.c \
