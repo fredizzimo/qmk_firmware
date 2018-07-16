@@ -52,6 +52,26 @@ static uint8_t qwiic_keyboard_listening_address = QWIIC_KEYBOARD_LISTENING_ADDRE
 
 #ifdef MULTILAYOUT
 multilayout_status_t multilayout_status;
+static bool should_refresh_multilayout = false;
+static unique_id_t master_id = MULTILAYOUT_MASTER_ID;
+
+#define MULTILAYOUT_CHECK(name, type) \
+  check_multilayout(&multilayout_configuration.name, &multilayout_status.name);
+
+static void check_multilayout(multilayout_module_configuration_t* config, multilayout_module_status_t* status) {
+  if (status->connected == false) {
+    if (qwiic_keyboard_master) {
+      if (are_unique_ids_same(config->id, master_id) || are_unique_ids_same(config->id, get_unique_id())) {
+        status->connected = true;
+      }
+    }
+  }
+}
+
+static void refresh_multilayout(void) {
+  MULTILAYOUT_FOREACH(CHECK)
+  should_refresh_multilayout = false;
+}
 #endif
 
 void qwiic_keyboard_init(void) {
@@ -69,10 +89,15 @@ void qwiic_keyboard_set_master(void) {
 uint8_t command[1] = { 0x00 };
 
 void qwiic_keyboard_task(void) {
-  if (USB_DRIVER.state == USB_ACTIVE)
+  if (USB_DRIVER.state == USB_ACTIVE && qwiic_keyboard_master == false) {
     qwiic_keyboard_master = true;
-  else
+#ifdef MULTILAYOUT
+    should_refresh_multilayout = true;
+#endif
+  }
+  else {
     qwiic_keyboard_master = false;
+  }
   if (qwiic_keyboard_master) {
     if (qwiic_keyboard_connected) {
       // send empty message, expecting matrix info
@@ -95,6 +120,11 @@ void qwiic_keyboard_task(void) {
       }
     }
   }
+#ifdef MULTILAYOUT
+  if (should_refresh_multilayout) {
+    refresh_multilayout();
+  }
+#endif
 }
 
 float song_one_up[][2]  = SONG(ONE_UP_SOUND);
