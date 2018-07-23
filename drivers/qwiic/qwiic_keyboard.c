@@ -29,6 +29,7 @@
 #define QWIIC_KEYBOARD_LAYERS 16
 #define QWIIC_KEYBOARD_ROWS 8
 #define QWIIC_KEYBOARD_COLS 8
+#define QWIIC_KEYBOARD_MAX_CONNECTED 8
 
 #define qwiic_matrix_t uint8_t
 
@@ -50,26 +51,67 @@ static twi2c_message_received qwiic_keyboard_message_received_ptr = qwiic_keyboa
 static uint16_t qwiic_keyboard_keymap[QWIIC_KEYBOARD_LAYERS][QWIIC_KEYBOARD_ROWS][QWIIC_KEYBOARD_COLS] = {{{0}}};
 static uint8_t qwiic_keyboard_listening_address = QWIIC_KEYBOARD_LISTENING_ADDRESS_START;
 
+typedef struct {
+  unique_id_t hardware_id;
+  unique_id_t manual_id;
+  bool used_in_multilayout;
+} connected_keyboard_t;
+
+// Note: this array include the master as the first entry
+static connected_keyboard_t connected_keyboards[QWIIC_KEYBOARD_MAX_CONNECTED + 1];
+static uint8_t num_connected_keyboards;
+
 #ifdef MULTILAYOUT
 multilayout_status_t multilayout_status;
 static bool should_refresh_multilayout = false;
-static unique_id_t master_id = MULTILAYOUT_MASTER_ID;
 
-#define MULTILAYOUT_CHECK(name, type) \
-  check_multilayout(&multilayout_configuration.name, &multilayout_status.name);
+static void clear_multilayout(void) {
+  for (uint8_t i = 0; i < NUM_MULTILAYOUT_CONFIGURATIONS; i++) {
+    multilayout_module_status_t* status = &multilayout_status.statuses[i];
+    status->connected = false;
+  }
 
-static void check_multilayout(multilayout_module_configuration_t* config, multilayout_module_status_t* status) {
-  if (status->connected == false) {
-    if (qwiic_keyboard_master) {
-      if (are_unique_ids_same(config->id, master_id) || are_unique_ids_same(config->id, get_unique_id())) {
-        status->connected = true;
-      }
-    }
+  for (uint8_t i = 0; i < num_connected_keyboards; i++) {
+    connected_keyboards[i].used_in_multilayout = false;
   }
 }
 
+static void use_multilayout(connected_keyboard_t* keyboard, multilayout_module_status_t* status) {
+  status->connected = true;
+  status->keyboard_index = keyboard - connected_keyboards;
+  keyboard->used_in_multilayout = true;
+}
+
 static void refresh_multilayout(void) {
-  MULTILAYOUT_FOREACH(CHECK)
+  clear_multilayout();
+  // First pass, assign ids that match, in a first match, first served fashion
+  for (uint8_t i = 0; i < NUM_MULTILAYOUT_CONFIGURATIONS; i++) {
+    multilayout_module_status_t* status = &multilayout_status.statuses[i];
+    multilayout_module_configuration_t* config = &multilayout_configuration.configurations[i];
+    if (status->connected == false) {
+      for (uint8_t j = 0; j < num_connected_keyboards; j++) {
+        connected_keyboard_t* keyboard = &connected_keyboards[j];
+        if (keyboard->used_in_multilayout == false) {
+          if (are_unique_ids_same(config->id, keyboard->hardware_id) ||
+              are_unique_ids_same(config->id, keyboard->manual_id)) {
+                use_multilayout(keyboard, status);
+          }
+        }
+      }
+    }
+  }
+  // Then try to assign the rest
+  for (uint8_t j = 0; j < num_connected_keyboards; j++) {
+    connected_keyboard_t* keyboard = &connected_keyboards[j];
+    if (keyboard->used_in_multilayout == false) {
+      for (uint8_t i = 0; i < NUM_MULTILAYOUT_CONFIGURATIONS; i++) {
+        multilayout_module_status_t* status = &multilayout_status.statuses[i];
+        if (status->connected == false) {
+          use_multilayout(keyboard, status);
+        }
+      }
+    }
+  }
   should_refresh_multilayout = false;
 }
 #endif
@@ -91,6 +133,10 @@ uint8_t command[1] = { 0x00 };
 void qwiic_keyboard_task(void) {
   if (USB_DRIVER.state == USB_ACTIVE && qwiic_keyboard_master == false) {
     qwiic_keyboard_master = true;
+    num_connected_keyboards = 1;
+    assign_unique_id(connected_keyboards[0].hardware_id, get_hardware_unique_id());
+    assign_unique_id(connected_keyboards[0].manual_id, get_manual_unique_id());
+    connected_keyboards[0].used_in_multilayout = false;
 #ifdef MULTILAYOUT
     should_refresh_multilayout = true;
 #endif

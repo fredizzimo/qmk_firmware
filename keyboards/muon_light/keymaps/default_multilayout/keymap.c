@@ -231,8 +231,6 @@ const multilayout_t PROGMEM layout[] = {
 };
 
 multilayout_configuration_t multilayout_configuration = {
-  .left = {.id = MULTILAYOUT_MASTER_ID},
-  .right = {.id = MULTILAYOUT_SLAVE_ID},
 };
 
 #ifdef AUDIO_ENABLE

@@ -64,20 +64,34 @@ typedef struct {
 } multilayout_module_configuration_t;
 
 typedef struct {
-  unique_id_t id;
+  uint8_t keyboard_index;
   bool connected;
 } multilayout_module_status_t;
 
 typedef struct {
-  MULTILAYOUT_FOREACH(CONFIGURATION)
+  union {
+    struct {
+      MULTILAYOUT_FOREACH(CONFIGURATION)
+    };
+    multilayout_module_configuration_t configurations[0];
+  };
 } multilayout_configuration_t;
 
 typedef struct {
-  MULTILAYOUT_FOREACH(STATUS)
+  union {
+    struct {
+      MULTILAYOUT_FOREACH(STATUS)
+    };
+    multilayout_module_status_t statuses[0];
+  };
 } multilayout_status_t;
 
 extern multilayout_configuration_t multilayout_configuration;
-extern multilayout_status_t mulitlayout_status;
+extern multilayout_status_t multilayout_status;
 
-#define MULTILAYOUT_MASTER_ID {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-#define MULTILAYOUT_SLAVE_ID {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1}
+static inline uint8_t get_num_multilayouts(void) {
+  return sizeof(multilayout_configuration_t) / sizeof(multilayout_module_configuration_t);
+}
+
+#define NUM_MULTILAYOUT_CONFIGURATIONS \
+  (sizeof(multilayout_configuration_t) / sizeof(multilayout_module_configuration_t))
