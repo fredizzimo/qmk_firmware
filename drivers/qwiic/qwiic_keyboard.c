@@ -55,6 +55,7 @@ typedef struct {
   unique_id_t hardware_id;
   unique_id_t manual_id;
   bool used_in_multilayout;
+  uint8_t multilayout_index;
 } connected_keyboard_t;
 
 // Note: this array include the master as the first entry
@@ -80,6 +81,7 @@ static void use_multilayout(connected_keyboard_t* keyboard, multilayout_module_s
   status->connected = true;
   status->keyboard_index = keyboard - connected_keyboards;
   keyboard->used_in_multilayout = true;
+  keyboard->multilayout_index = status - multilayout_status.statuses;
 }
 
 static void refresh_multilayout(void) {
@@ -114,6 +116,25 @@ static void refresh_multilayout(void) {
   }
   should_refresh_multilayout = false;
 }
+
+typedef struct {
+  uint8_t num_columns;
+  uint8_t num_rows;
+  uint16_t matrix_offset;
+} multilayout_info_t;
+
+#define MULTILAYOUT_INITIALIZE_INFO(name, type) { \
+    .num_columns = type##_COLS, \
+    .num_rows = type##_ROWS, \
+    .matrix_offset = offsetof(multilayout_t, name) \
+  },
+
+#define MULTILAYOUT_MATRIX(name, type) \
+  uint16_t name[type##_ROWS][type##_COLS];
+
+static const multilayout_info_t multilayout_info[] = {
+  MULTILAYOUT_FOREACH(INITIALIZE_INFO)
+};
 #endif
 
 void qwiic_keyboard_init(void) {
@@ -238,7 +259,16 @@ bool is_keyboard_master(void) {
 // overwrite the built-in function
 uint16_t keymap_key_to_keycode(uint8_t layer, keymatrix_t key) {
 #ifdef MULTILAYOUT
-  return KC_NO;
+  if (connected_keyboards[key.matrix].used_in_multilayout) {
+    uint8_t index = connected_keyboards[key.matrix].multilayout_index;
+    const multilayout_info_t* info = multilayout_info + index;
+    uint16_t key_index = key.pos.row * info->num_columns + key.pos.col;
+    key_index += info->matrix_offset;
+    return pgm_read_word(&layout[layer].keys[key_index]);
+  }
+  else {
+    return qwiic_keyboard_keymap[(layer)][(key.pos.row)][(key.pos.col)];
+  }
 #else
   if (key.matrix == 0) {
     // Read entire word (16bits)

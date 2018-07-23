@@ -56,7 +56,12 @@
   multilayout_module_status_t name;
 
 typedef struct {
-  MULTILAYOUT_FOREACH(MATRIX)
+  union {
+    struct {
+      MULTILAYOUT_FOREACH(MATRIX)
+    };
+    uint16_t keys[0];
+  };
 } multilayout_t;
 
 typedef struct {
@@ -88,6 +93,7 @@ typedef struct {
 
 extern multilayout_configuration_t multilayout_configuration;
 extern multilayout_status_t multilayout_status;
+extern const multilayout_t PROGMEM layout[];
 
 static inline uint8_t get_num_multilayouts(void) {
   return sizeof(multilayout_configuration_t) / sizeof(multilayout_module_configuration_t);
