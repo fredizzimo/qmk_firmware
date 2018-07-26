@@ -292,7 +292,7 @@ uint8_t multimatrix_get_num_rows(uint8_t matrix) {
 }
 
 uint32_t multimatrix_get_row(uint8_t matrix, uint8_t row) {
-return qwiic_keyboard_matrix_message[row];
+  return qwiic_keyboard_matrix_message[row];
 }
 
 uint32_t multimatrix_get_row_cache(uint8_t matrix, uint8_t row) {
