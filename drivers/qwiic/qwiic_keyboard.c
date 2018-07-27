@@ -60,7 +60,7 @@ typedef struct {
 
 // Note: this array include the master as the first entry
 static connected_keyboard_t connected_keyboards[QWIIC_KEYBOARD_MAX_CONNECTED + 1];
-static uint8_t num_connected_keyboards;
+static uint8_t num_connected_keyboards=0;
 
 #ifdef MULTILAYOUT
 multilayout_status_t multilayout_status;
@@ -85,6 +85,7 @@ static void use_multilayout(connected_keyboard_t* keyboard, multilayout_module_s
 }
 
 static void refresh_multilayout(void) {
+  xprintf("Refreshing multilayout\n");
   clear_multilayout();
   // First pass, assign ids that match, in a first match, first served fashion
   for (uint8_t i = 0; i < NUM_MULTILAYOUT_CONFIGURATIONS; i++) {
@@ -96,7 +97,9 @@ static void refresh_multilayout(void) {
         if (keyboard->used_in_multilayout == false) {
           if (are_unique_ids_same(config->id, keyboard->hardware_id) ||
               are_unique_ids_same(config->id, keyboard->manual_id)) {
+                xprintf("Multilayout %d connected to matrix %d due to id match\n", i, j);
                 use_multilayout(keyboard, status);
+                break;
           }
         }
       }
@@ -110,6 +113,8 @@ static void refresh_multilayout(void) {
         multilayout_module_status_t* status = &multilayout_status.statuses[i];
         if (status->connected == false) {
           use_multilayout(keyboard, status);
+          xprintf("Multilayout %d connected to matrix %d due fill\n", i, j);
+          break;
         }
       }
     }
@@ -126,7 +131,7 @@ typedef struct {
 #define MULTILAYOUT_INITIALIZE_INFO(name, type) { \
     .num_columns = type##_COLS, \
     .num_rows = type##_ROWS, \
-    .matrix_offset = offsetof(multilayout_t, name) \
+    .matrix_offset = offsetof(multilayout_t, name) / sizeof(((multilayout_t*)(0))->name[0][0]) \
   },
 
 #define MULTILAYOUT_MATRIX(name, type) \
@@ -152,15 +157,17 @@ void qwiic_keyboard_set_master(void) {
 uint8_t command[1] = { 0x00 };
 
 void qwiic_keyboard_task(void) {
-  if (USB_DRIVER.state == USB_ACTIVE && qwiic_keyboard_master == false) {
-    qwiic_keyboard_master = true;
-    num_connected_keyboards = 1;
-    assign_unique_id(connected_keyboards[0].hardware_id, get_hardware_unique_id());
-    assign_unique_id(connected_keyboards[0].manual_id, get_manual_unique_id());
-    connected_keyboards[0].used_in_multilayout = false;
-#ifdef MULTILAYOUT
-    should_refresh_multilayout = true;
-#endif
+  if (USB_DRIVER.state == USB_ACTIVE) {
+    if  (qwiic_keyboard_master == false) {
+      qwiic_keyboard_master = true;
+      num_connected_keyboards = 1;
+      assign_unique_id(connected_keyboards[0].hardware_id, get_hardware_unique_id());
+      assign_unique_id(connected_keyboards[0].manual_id, get_manual_unique_id());
+      connected_keyboards[0].used_in_multilayout = false;
+  #ifdef MULTILAYOUT
+      should_refresh_multilayout = true;
+  #endif
+    }
   }
   else {
     qwiic_keyboard_master = false;
@@ -182,8 +189,11 @@ void qwiic_keyboard_task(void) {
         qwiic_keyboard_handshake_message, QWIIC_KEYBOARD_HANDSHAKE_MESSAGE_SIZE
       )) {
         qwiic_keyboard_connected = true;
+        num_connected_keyboards++;
         // load keymap into memory
         qwiic_keyboard_read_keymap(qwiic_keyboard_handshake_message);
+        should_refresh_multilayout = true;
+        xprintf("qwiic keyboard connected\n");
       }
     }
   }
@@ -258,15 +268,19 @@ bool is_keyboard_master(void) {
 
 // overwrite the built-in function
 uint16_t keymap_key_to_keycode(uint8_t layer, keymatrix_t key) {
+  xprintf("Keymap_to_keycode matrix %d, row %d, col %d\n", key.matrix, key.pos.row, key.pos.col);
 #ifdef MULTILAYOUT
   if (connected_keyboards[key.matrix].used_in_multilayout) {
     uint8_t index = connected_keyboards[key.matrix].multilayout_index;
+    xprintf("Using multilayout %d\n", index);
     const multilayout_info_t* info = multilayout_info + index;
     uint16_t key_index = key.pos.row * info->num_columns + key.pos.col;
     key_index += info->matrix_offset;
+    xprintf("Key index %d\n", key_index);
     return pgm_read_word(&layout[layer].keys[key_index]);
   }
   else {
+    xprintf("Using remote keymap\n");
     return qwiic_keyboard_keymap[(layer)][(key.pos.row)][(key.pos.col)];
   }
 #else
