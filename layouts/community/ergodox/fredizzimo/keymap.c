@@ -6,8 +6,11 @@
 
 enum layers {
     BASE,
+    SWAP,
     NUM,
-    SYM,
+    SYM1,
+    SYM2,
+    SYM3,
     MEDIA,
     FKEYS,
     NAV,
@@ -19,10 +22,7 @@ enum my_keycodes {
     CIRC, // ^
     ACUT, // ´
     GRAV, // `
-    UNDS_APOS, // _'
-    LBRA_EUR, // [€
-    SH_DEBUG,
-    SH_FLASH,
+    BSPC_ENT,
 };
 
 #define LS LSFT_T
@@ -51,6 +51,8 @@ enum my_keycodes {
 
 #define L_TAB LSFT(KC_TAB)
 #define CTRL_BSPC LCTL(KC_BSPC)
+#define SFT_ENT LSFT(KC_ENT)
+
 
 
 #define ESC_SHIFT MT(MOD_LSFT, KC_ESC)
@@ -71,123 +73,183 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Keymap 0: Basic layer
 [BASE] = KEYMAP(
         // left hand
-        KC_NO,      KC_NO,      KC_DEL,     KC_ENTER,   KC_BSPC,    KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      CTRL_BSPC,  KC_BSPACE,  KC_DEL,     KC_NO,      KC_NO,
         KC_TAB,     SV_Q,       SV_W,       SV_E,       SV_R,       SV_T,       KC_NO,
         KC_ESC,     SV_A,       SV_S,       SV_D,       SV_F,       SV_G,
-        KC_LSHIFT,  SV_Z,       SV_X,       SV_C,       SV_V,       SV_B,       KC_NO,
-        KC_LCTL,    KC_LWIN,    KC_CAPS,    KC_LALT,    MO(NAV),
-                                                                    SH_DEBUG,   SH_FLASH,
-                                                                                KC_SLCK,
-                                                        KC_SPACE,   KC_LCTRL,   KC_NO,
+        KC_NO,      SV_Z,       SV_X,       SV_C,       SV_V,       SV_B,       KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      MO(NAV),
+                                                                    KC_NO,      KC_NO,
+                                                                                KC_NO,
+                                                        KC_SPACE,   MO(SWAP),   KC_NO,
         // right hand
         KC_NO,      KC_NO,      CTRL_BSPC,  KC_BSPC,    KC_DEL,     KC_NO,      KC_NO,
-        KC_NO,      SV_Y,       SV_U,       SV_I,       SV_O,       SV_P,       SV_AA,
-                    SV_H,       SV_J,       SV_K,       SV_L,       SV_OE,      KC_NO,
-        KC_NO,      SV_N,       SV_M,       SV_COMM,    SV_DOT,     UNDS_APOS,  KC_NO,
-                    MO(SYM),    KC_LALT,    KC_MENU,    KC_LWIN,    KC_RCTL,
-        SH_DEBUG,   SH_FLASH,
-        KC_PAUSE,
-        MO(FKEYS),  MO(NUM),    KC_LSHIFT
+        KC_NO,      SV_Y,       SV_U,       SV_I,       SV_O,       SV_P,       MO(FKEYS),
+                    SV_H,       SV_J,       SV_K,       SV_L,       MO(NUM),    MO(SYM3),
+        KC_NO,      SV_N,       SV_M,       SV_COMM,    SV_DOT,     MO(SYM1),   MO(SYM2),
+                    MO(NAV),    KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,
+        KC_NO,
+        KC_NO,      MO(SWAP),   KC_LSHIFT
+    ),
+[SWAP] = KEYMAP(
+        // left hand
+        KC_NO,      KC_NO,      SFT_ENT,    KC_ENT,     KC_NO,      KC_NO,      KC_NO,
+        KC_TAB,     SV_Q,       SV_W,       SV_E,       SV_R,       SV_T,       KC_NO,
+        KC_ESC,     SV_A,       SV_S,       SV_D,       SV_F,       SV_G,
+        KC_NO,      SV_Z,       SV_X,       SV_C,       SV_V,       SV_B,       KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      MO(NAV),
+                                                                    KC_NO,      KC_NO,
+                                                                                KC_NO,
+                                                        KC_SPACE,   MO(SWAP),   KC_NO,
+        // right hand
+        KC_NO,      KC_NO,      KC_NO,      KC_ENT,     SFT_ENT,    KC_NO,      KC_NO,
+        KC_NO,      SV_Y,       SV_U,       SV_I,       SV_O,       SV_P,       MO(FKEYS),
+                    SV_H,       SV_J,       SV_K,       SV_L,       MO(NUM),    MO(SYM3),
+        KC_NO,      SV_N,       SV_M,       SV_COMM,    SV_DOT,     MO(SYM1),   MO(SYM2),
+                    MO(NAV),    KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,
+        KC_NO,
+        KC_NO,      MO(SWAP),   KC_LSHIFT
     ),
 [NUM] = KEYMAP(
         // left hand
-        KC_NO,      KC_NO,      KC_DEL,     KC_ENTER,   KC_BSPC,    KC_NO,      KC_NO,
-        KC_TAB,     SV_SLSH,    SV_7,       SV_8,       SV_9,       SV_MINS,    KC_NO,
+        KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
+        KC_TAB,     SV_DOT,     SV_7,       SV_8,       SV_9,       SV_MINS,    KC_NO,
         KC_ESC,     SV_0,       SV_4,       SV_5,       SV_6,       SV_PLUS,
-        KC_LSFT,    SV_ASTR,    SV_1,       SV_2,       SV_3,       SV_DOT,     KC_NO,
-        KC_LCTL,    KC_LWIN,    KC_CAPS,    KC_LALT,    MO(NAV),
-                                                                    SH_DEBUG,   SH_FLASH,
-                                                                                KC_SLCK,
-                                                        KC_SPACE,   KC_LCTRL,   KC_NO,
+        KC_NO,      SV_SLSH,    SV_1,       SV_2,       SV_3,       SV_ASTR,    KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                                                                    KC_NO,      KC_NO,
+                                                                                KC_NO,
+                                                        KC_SPACE,   KC_NO,      KC_NO,
         // right hand
-        KC_NO,      KC_NO,      CTRL_BSPC,  KC_BSPC,    KC_DEL,     KC_NO,      KC_NO,
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-                    SV_EQL,     SV_PERC,    CIRC,       TILD,       SV_HALF,    KC_NO,
-        KC_NO,      KC_NO,      KC_NO,      SV_COMM,    SV_DOT,     KC_NO,      KC_NO,
-                    MO(SYM),    KC_LALT,    KC_MENU,    KC_LWIN,    KC_RCTL,
-        SH_DEBUG,   SH_FLASH,
-        KC_PAUSE,
-        MO(FKEYS),  KC_TRNS,   KC_LSHIFT
+        KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,
+        KC_NO,
+        KC_NO,      KC_NO,      KC_LSHIFT
     ),
-[SYM] = KEYMAP(
+[SYM1] = KEYMAP(
         // left hand
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_TAB,     SV_BSLS,    SV_LT,      LBRA_EUR,   SV_RBRC,    SV_GT,      KC_NO,
-        KC_ESC,     SV_AT,      SV_QUES,    SV_LPRN,    SV_RPRN,    SV_EXLM,
-        KC_LSFT,    SV_QUOT,    SV_PIPE,    SV_LCBR,    SV_RCBR,    SV_AMPR,    KC_NO,
-        KC_LCTL,    KC_LWIN,    KC_CAPS,    KC_LALT,    MO(NAV),
-                                                                    SH_DEBUG,   SH_FLASH,
-                                                                                KC_SLCK,
-                                                        KC_SPACE,   KC_LCTRL,   KC_NO,
+        KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
+        KC_TAB,     SV_SECT,    SV_LT,      SV_LBRC,    SV_RBRC,    SV_GT,      KC_NO,
+        KC_ESC,     SV_EQL,     SV_PIPE,    SV_LPRN,    SV_RPRN,    SV_AMPR,
+        KC_NO,      SV_PERC,    CIRC,       SV_LCBR,    SV_RCBR,    TILD,       KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                                                                    KC_NO,      KC_NO,
+                                                                                KC_NO,
+                                                        KC_SPACE,   KC_NO,      KC_NO,
         // right hand
-        KC_NO,      KC_NO,      CTRL_BSPC,  KC_BSPC,    KC_DEL,     KC_NO,      KC_NO,
-        KC_NO,      SV_PND,     SV_DLR,     SV_EURO,    SV_UMLT,    SV_ACUT,    KC_NO,
-                    KC_NO,      SV_HASH,    SV_CIRC,    SV_TILD,    ACUT,       KC_NO,
-        KC_NO,      SV_SECT,    SV_MU,      SV_CURR,    KC_NO,      SV_GRAV,    KC_NO,
-                    MO(SYM),    KC_LALT,    KC_MENU,    KC_LWIN,    KC_RCTL,
-        SH_DEBUG,   SH_FLASH,
-        KC_PAUSE,
-        MO(FKEYS),  MO(NUM),    KC_LSHIFT
+        KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,
+        KC_NO,
+        KC_NO,      KC_NO,      KC_LSHIFT
+    ),
+[SYM2] = KEYMAP(
+        // left hand
+        KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
+        KC_TAB,     SV_CURR,    SV_PND,     SV_EURO,    SV_DLR,     SV_UNDS,    KC_NO,
+        KC_ESC,     SV_AT,      SV_QUES,    SV_APOS,    SV_QUOT,    SV_EXLM,
+        KC_NO,      SV_BSLS,    SV_HALF,    GRAV,       SV_MU,      SV_HASH,    KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                                                                    KC_NO,      KC_NO,
+                                                                                KC_NO,
+                                                        KC_SPACE,   KC_NO,      KC_NO,
+        // right hand
+        KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,
+        KC_NO,
+        KC_NO,      KC_NO,      KC_LSHIFT
+    ),
+[SYM3] = KEYMAP(
+        // left hand
+        KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
+        KC_TAB,     KC_NO,      LSFT(SV_AA),LSFT(SV_AE),LSFT(SV_OE),KC_NO,      KC_NO,
+        KC_ESC,     KC_NO,      SV_AA,      SV_AE,      SV_OE,      KC_NO,
+        KC_NO,      KC_NO,      SV_CIRC,    SV_GRAV,    SV_ACUT,    SV_TILD,    KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                                                                    KC_NO,      KC_NO,
+                                                                                KC_NO,
+                                                        KC_SPACE,   KC_NO,      KC_NO,
+        // right hand
+        KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,
+        KC_NO,
+        KC_NO,      KC_NO,      KC_LSHIFT
     ),
 [MEDIA] = KEYMAP(
         // left hand
-        KC_NO,      KC_NO,      KC_DEL,     KC_ENTER,   KC_BSPC,    KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
         KC_TAB,     SV_Q,       SV_W,       SV_E,       SV_R,       SV_T,       KC_NO,
         ESC_SHIFT,  SV_A,       SV_S,       SV_D,       SV_F,       SV_G,
         DEL_CTRL,   SV_Z,       SV_X,       SV_C,       SV_V,       SV_B,       KC_NO,
-        KC_LCTL,    KC_LWIN,    KC_CAPS,    KC_LALT,    MO(NAV),
-                                                                    SH_DEBUG,   SH_FLASH,
-                                                                                KC_SLCK,
-                                                        KC_SPACE,   KC_LCTRL,   KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                                                                    KC_NO,      KC_NO,
+                                                                                KC_NO,
+                                                        KC_SPACE,   KC_NO,      KC_NO,
         // right hand
-        KC_NO,      KC_NO,      CTRL_BSPC,  KC_BSPC,    KC_DEL,     KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
         KC_NO,      SV_Y,       SV_U,       SV_I,       SV_O,       SV_P,       KC_NO,
                     SV_H,       SV_J,       SV_K,       SV_L,       SV_OE,      KC_NO,
         KC_NO,      SV_N,       SV_M,       SV_COMM,    SV_DOT,     SV_MINS,    BS_CTRL,
-                    MO(SYM),    KC_LALT,    KC_MENU,    KC_LWIN,    KC_RCTL,
-        SH_DEBUG,   SH_FLASH,
-        KC_PAUSE,
-        MO(FKEYS),  MO(NUM),    KC_LSHIFT
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,
+        KC_NO,
+        KC_NO,      KC_NO,      KC_LSHIFT
     ),
 [FKEYS] = KEYMAP(
         // left hand
-        KC_NO,      KC_NO,      KC_DEL,     KC_ENTER,   KC_BSPC,    KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
         KC_TAB,     KC_NO,      KC_F7,      KC_F8,      KC_F9,      KC_F12,     KC_NO,
         KC_ESC,     KC_F10,     KC_F4,      KC_F5,      KC_F6,      KC_F11,
         KC_LSFT,    KC_NO,      KC_F1,      KC_F2,      KC_F3,      KC_NO,      KC_NO,
-        KC_LCTL,    KC_LWIN,    KC_CAPS,    KC_LALT,    MO(NAV),
-                                                                    SH_DEBUG,   SH_FLASH,
-                                                                                KC_SLCK,
-                                                        KC_SPACE,   KC_LCTRL,   KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                                                                    KC_NO,      KC_NO,
+                                                                                KC_NO,
+                                                        KC_SPACE,   KC_NO,      KC_NO,
         // right hand
         KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-                    MO(SYM),    KC_LALT,    KC_MENU,    KC_LWIN,    KC_RCTL,
-        SH_DEBUG,   SH_FLASH,
-        KC_PAUSE,
-        KC_TRNS,    MO(NUM),    KC_LSHIFT
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,
+        KC_NO,
+        KC_NO,      KC_NO,      KC_LSHIFT
     ),
 [NAV] = KEYMAP(
         // left hand
-        KC_NO,      KC_NO,      KC_DEL,     KC_ENTER,   KC_BSPC,    KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
         KC_TAB,     KC_PSCR,    KC_HOME,    KC_PGUP,    KC_PGDOWN,  KC_END,     KC_NO,
         KC_ESC,     KC_INS,     KC_LEFT,    KC_UP,      KC_DOWN,    KC_RIGHT,
-        KC_LSHIFT,  KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_LCTL,    KC_LWIN,    KC_CAPS,    KC_LALT,    KC_TRNS,
-                                                                    SH_DEBUG,   SH_FLASH,
-                                                                                KC_SLCK,
-                                                        KC_SPACE,   KC_LCTRL,   KC_NO,
+        KC_LSHIFT,  OS_LGUI,    OS_LALT,    OS_LCTL,    OS_LSFT,    KC_MENU,    KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      MO(NAV),
+                                                                    RESET,      DEBUG,
+                                                                                KC_NO,
+                                                        KC_SPACE,   KC_NO,      KC_NO,
         // right hand
-        KC_NO,      KC_NO,      CTRL_BSPC,  KC_BSPC,    KC_DEL,     KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
         KC_NO,      KC_HOME,    KC_PGDOWN,  KC_PGUP,    KC_END,     KC_PSCREEN, KC_NO,
                     KC_LEFT,    KC_DOWN,    KC_UP,      KC_RIGHT,   KC_INS,     KC_NO,
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-                    MO(SYM),    KC_LALT,    KC_MENU,    KC_LWIN,    KC_RCTL,
-        SH_DEBUG,   SH_FLASH,
+        KC_NO,      KC_NO,      OS_RSFT,    OS_RCTL,    OS_LALT,    OS_LGUI,    KC_NO,
+                    MO(NAV),    KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        DEBUG,      RESET,
         KC_PAUSE,
-        MO(FKEYS),  MO(NUM),    KC_LSHIFT
+        KC_NO,      KC_NO,      KC_LSHIFT
     ),
 };
 
@@ -283,16 +345,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return wake_dead_key(SV_ACUT, record);
     case GRAV:
         return wake_dead_key(SV_GRAV, record);
-    case UNDS_APOS:
-        return override_key(record, SV_UNDS, SV_APOS);
-    case LBRA_EUR:
-        return override_key(record, SV_LBRC, SV_EURO);
-    case SH_DEBUG:
-        debug_enable = true;
-        return false;
-    case SH_FLASH:
-        reset_keyboard();
-        return false;
     }
     return true;
 }
