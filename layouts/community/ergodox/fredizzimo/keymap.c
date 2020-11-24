@@ -19,6 +19,7 @@ enum my_keycodes {
     ACUT, // ´
     GRAV, // `
     UNDS_QUES, // _?
+    EQ_DLR, // =$
     BSPC_ENT,
 };
 
@@ -78,9 +79,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                         KC_SPACE,   MO(NAV),    KC_NO,
         // right hand
         KC_NO,      KC_NO,      CTRL_BSPC,  KC_BSPC,    KC_DEL,     KC_NO,      KC_NO,
-        KC_NO,      SV_Y,       SV_U,       SV_I,       SV_O,       SV_P,       SV_AE,
-                    SV_H,       SV_J,       SV_K,       SV_L,       SV_OE,      SV_AA,
-        KC_NO,      SV_N,       SV_M,       SV_COMM,    SV_DOT,     UNDS_QUES,  APQU,
+        KC_NO,      SV_Y,       SV_U,       SV_I,       SV_O,       SV_P,       SV_AA,
+                    SV_H,       SV_J,       SV_K,       SV_L,       SV_OE,      SV_AE,
+        KC_NO,      SV_N,       SV_M,       SV_COMM,    SV_DOT,     UNDS_QUES,  EQ_DLR,
                     VS_CMD,     KC_LALT,    KC_LGUI,    KC_RCTL,    KC_NO,
         KC_NO,      KC_NO,
         KC_NO,
@@ -90,17 +91,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
         KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
         KC_TAB,     SV_EXLM,    SV_LT,      SV_LBRC,    SV_RBRC,    SV_GT,      KC_NO,
-        SV_HASH,    SV_AT,      SV_PIPE,    SV_LPRN,    SV_RPRN,    SV_AMPR,
-        KC_ENT,     SV_PERC,    CIRC,       SV_LCBR,    SV_RCBR,    TILD,       KC_NO,
+        SV_HASH,    SV_AT,      SV_APOS,    SV_LPRN,    SV_RPRN,    SV_QUOT,
+        KC_ENT,     SV_PERC,    SV_PIPE,    SV_LCBR,    SV_RCBR,    SV_AMPR,    KC_NO,
         KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
                                                                     KC_NO,      KC_NO,
                                                                                 KC_NO,
                                                         KC_TRNS,    KC_TRNS,    KC_TRNS,
         // right hand
         KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
-        KC_NO,      SV_SLSH,    SV_7,       SV_8,       SV_9,       SV_BSLS,    GRAV,
-                    SV_PLUS,    SV_4,       SV_5,       SV_6,       SV_0,       SV_EQL,
-        KC_NO,      SV_ASTR,    SV_1,       SV_2,       SV_3,       SV_MINS,    SV_DLR,
+        KC_NO,      SV_SLSH,    SV_7,       SV_8,       SV_9,       SV_BSLS,    TILD,
+                    SV_PLUS,    SV_4,       SV_5,       SV_6,       SV_0,       GRAV,
+        KC_NO,      SV_ASTR,    SV_1,       SV_2,       SV_3,       SV_MINS,    CIRC,
                     KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
         KC_NO,      KC_NO,
         KC_NO,
@@ -262,6 +263,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return wake_dead_key(SV_GRAV, record);
     case UNDS_QUES:
         return override_key(record, SV_UNDS, SV_QUES);
+    case EQ_DLR:
+        return override_key(record, SV_EQL, SV_DLR);
     }
     return true;
 }
