@@ -61,10 +61,10 @@ enum custom_keycodes {
 bool TOG_STATUS = false;
 int RGB_current_mode;
 
-#define KC_X0 MT(MOD_LCTL, KC_ESC)  // Hold for Left Ctrl, Tap for ESC
+#define KC_X0 MT(MOD_LCTL, KC_ESC)  // Hold for Left Ctrl, Tap for GraveESC
 #define KC_X1 MT(MOD_RSFT, KC_ENT)  // Hold for Right Shift, Tap for Enter
 #define KC_X2 MT(MOD_RSFT, LGUI(KC_ENT))  // Send Command Enter
-#define KC_X3 MT(KC_LGUI, KC_SPC)  // Hold for Left GUI, Tap for Space
+#define KC_X3 MT(MOD_LGUI, KC_SPC)  // Hold for Left GUI, Tap for Space
 #define KC_EMOJ TT(_EMOJI)  // Hold for Emoji Layer, or tap 5 times.
 #define KC_QS LGUI(KC_SPC)  // Send Command + Space (for QuickSilver).
 #define KC_TABR LGUI(KC_RCBR)  // Send Command + } (for tab changing).
@@ -82,7 +82,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * |------+------+------+------+------+------|------+------+------+------+------+------|
    * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Enter |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
-   * |Emoji |Adjust| Ctrl  | Alt  |Lower | Cmd  |Space |Raise | Left | Down |  Up  |Right |
+   * |Emoji | Ctrl | Alt  |Lower | Cmd  |Space+|Space |Raise | Left | Down |  Up  |Right |
    * `-----------------------------------------------------------------------------------'
    */
   [_QWERTY] = KEYMAP( \
@@ -130,15 +130,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   /* Emoji Layer
    *
-   *                ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┐
-   *                │HYPR0│     │ ;-) │     │     │ :-P │     │     │:'-( │FLIP │     │     │
-   *                ├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
-   *                │HYPR1│  👆 │SHRUG│     │ :-( │     │ <3  │ :-) │     │LLAP │     │     │
-   *                ├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
-   *                │HYPR2│     │     │     | :-\ │     │     │ :-D │ SHIT│     │     │     │
-   *                ├─────┼─────┼─────┼─────┼─────┼─────┴─────┼─────┼─────┼─────┼─────┼─────┤
-   *                │     │     │     │     │Brig-│   Sleep   │Brig+│ 👈  │ 👎  |  👍 │ 👉 │
-   *                └─────┴─────┴─────┴─────┴─────┴───────────┴─────┴─────┴─────┴─────┴─────┘
+   * ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┐
+   * │HYPR0│     │ ;-) │     │     │ :-P │     │     │:'-( │FLIP │     │     │
+   * ├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
+   * │HYPR1│  👆 │SHRUG│     │ :-( │     │ <3  │ :-) │     │LLAP │     │     │
+   * ├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
+   * │HYPR2│     │     │     | :-\ │     │     │ :-D │ SHIT│     │     │     │
+   * ├─────┼─────┼─────┼─────┼─────┼─────┴─────┼─────┼─────┼─────┼─────┼─────┤
+   * │     │     │     │     │Brig-│   Sleep   │Brig+│ 👈  │ 👎  |  👍 │ 👉 │
+   * └─────┴─────┴─────┴─────┴─────┴───────────┴─────┴─────┴─────┴─────┴─────┘
    */
   [_EMOJI] = KEYMAP ( \
     HYPR_0,  _______, WINK,    _______, _______,  TOUNGE,  _______, _______, CRY,     FLIP,    _______, _______, \
@@ -151,20 +151,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   /* Lower
    * ,-----------------------------------------------------------------------------------.
-   * |      |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  | Bksp |
+   * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  | Bksp |
    * |------+------+------+------+------+-------------+------+------+------+------+------|
-   * |   ~  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   _  |   +  |     |    \  |  |   |
+   * |      |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   _  |   +  |   {  |   }  |  |   |
    * |------+------+------+------+------+------|------+------+------+------+------+------|
    * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |ISO ~ |ISO | |      |      |Enter |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
-   * |      |      |      |      |      |             |      | Tab- | Vol- | Vol+ | Tab+ |
+   * |      |      |      |      |      |             |      | Tab- |      |      | Tab+ |
    * `-----------------------------------------------------------------------------------'
    */
   [_LOWER] = KEYMAP( \
     KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC, \
     KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE, \
     KC_LSFT, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,S(KC_NUHS),S(KC_NUBS),_______, _______, _______, \
-    _______, _______, _______, _______, _______, KC_QS,   KC_QS, _______, KC_TABL, THMBDN,  THMBUP, KC_TABR \
+    _______, _______, _______, _______, _______, KC_QS,   KC_QS, _______, KC_TABL, _______,  _______, KC_TABR \
   ),
 
   /* Raise
@@ -197,30 +197,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * `-----------------------------------------------------------------------------------'
    */
   [_ADJUST] =  KEYMAP( \
-    _______, RESET,   _______, KC_MRWD, KC_MPLY, KC_MFFD, KC_PSCR, _______, _______, _______, _______, KC_DEL, \
+    _______, RESET,   _______, _______, _______, _______, KC_PSCR, _______, _______, _______, _______, KC_DEL, \
     _______, _______, _______, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  COLEMAK, DVORAK,  _______, _______, \
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ \
   )
-};
-
-const uint16_t PROGMEM fn_actions[] = {
-
-};
-
-const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
-{
-  // MACRODOWN only works in this function
-      switch(id) {
-        case 0:
-          if (record->event.pressed) {
-            register_code(KC_RSFT);
-          } else {
-            unregister_code(KC_RSFT);
-          }
-        break;
-      }
-    return MACRO_NONE;
 };
 
 #ifdef AUDIO_ENABLE
@@ -234,20 +215,12 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
   float plover_gb_song[][2]  = SONG(PLOVER_GOODBYE_SOUND);
 #endif
 
-void matrix_init_user(void) {
-
-}
-
-void matrix_scan_user(void) {
-
-}
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case QWERTY:
       if (record->event.pressed) {
         #ifdef AUDIO_ENABLE
-          PLAY_NOTE_ARRAY(tone_qwerty, false, 0);
+          PLAY_SONG(tone_qwerty);
         #endif
       }
       return false;
@@ -255,7 +228,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case COLEMAK:
       if (record->event.pressed) {
         #ifdef AUDIO_ENABLE
-          PLAY_NOTE_ARRAY(tone_colemak, false, 0);
+          PLAY_SONG(tone_colemak);
         #endif
       }
       return false;
@@ -263,7 +236,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case DVORAK:
       if (record->event.pressed) {
         #ifdef AUDIO_ENABLE
-          PLAY_NOTE_ARRAY(tone_dvorak, false, 0);
+          PLAY_SONG(tone_dvorak);
         #endif
       }
       return false;

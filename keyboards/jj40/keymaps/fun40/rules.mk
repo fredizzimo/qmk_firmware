@@ -1,6 +1,6 @@
 
 
-BOOTMAGIC_ENABLE = yes       # Virtual DIP switch configuration(+1000)
+BOOTMAGIC_ENABLE = full       # Virtual DIP switch configuration(+1000)
 MOUSEKEY_ENABLE = no       # Mouse keys(+4700)
 EXTRAKEY_ENABLE = yes       # Audio control and System control(+450)
 CONSOLE_ENABLE = no         # Console for debug(+400)
@@ -19,6 +19,3 @@ DISABLE_WS2812 = yes
 
 SLEEP_LED_ENABLE = no    # Breathing sleep LED during USB suspend
 
-ifndef QUANTUM_DIR
-	include ../../../../Makefile
-endif

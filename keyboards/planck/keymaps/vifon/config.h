@@ -7,9 +7,6 @@
  * MIDI options
  */
 
-/* Prevent use of disabled MIDI features in the keymap */
-//#define MIDI_ENABLE_STRICT 1
-
 /* enable basic MIDI features:
    - MIDI notes can be sent when in Music mode is on
 */
@@ -25,9 +22,6 @@
 
 /* override number of MIDI tone keycodes (each octave adds 12 keycodes and allocates 12 bytes) */
 //#define MIDI_TONE_KEYCODE_OCTAVES 2
-
-/* prevent the modifiers from being stuck, sacrificing some memory */
-#define PREVENT_STUCK_MODIFIERS
 
 /* A larger buffer for the dynamic macros as this keymap is not taking
  * up that much memory.

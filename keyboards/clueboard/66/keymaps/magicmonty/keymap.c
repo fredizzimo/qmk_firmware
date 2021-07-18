@@ -1,7 +1,4 @@
-#include "66.h"
-
-// Helpful defines
-#define xxxxxxx KC_NO
+#include QMK_KEYBOARD_H
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
@@ -90,19 +87,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #if defined(MIDI_ENABLE) && defined(MIDI_ADVANCED)
   /* Keymap _MI: MIDI layer (Advanced)*/
   [_MI] = LAYOUT(
-    TO_BASE,MI_VEL_1,MI_VEL_2,MI_VEL_3,MI_VEL_4,MI_VEL_5,MI_VEL_6,MI_VEL_7,MI_VEL_8,MI_VEL_9,MI_VEL_10,  MI_CHD,   MI_CHU, xxxxxxx, xxxxxxx,          xxxxxxx,
-    xxxxxxx, xxxxxxx,   MI_Cs,   MI_Ds, xxxxxxx,   MI_Fs,   MI_Gs,   MI_As, xxxxxxx, MI_Cs_1,  MI_Ds_1, xxxxxxx,  MI_Fs_1, xxxxxxx,                   xxxxxxx,
-     MI_MOD,    MI_C,    MI_D,    MI_E,    MI_F,    MI_G,    MI_A,    MI_B,  MI_C_1,  MI_D_1,   MI_E_1,  MI_F_1,   MI_G_1, xxxxxxx,
-     MI_SUS, xxxxxxx, MI_OCTD, MI_OCTU,MI_MODSD,MI_MODSU, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, MI_TRNSD,MI_TRNSU,MI_TRNS_0,  MI_SUS,          xxxxxxx,
-    xxxxxxx, xxxxxxx, xxxxxxx,xxxxxxx,                 MI_ALLOFF, MI_ALLOFF,                   xxxxxxx, xxxxxxx,  xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx),
+    TO_BASE,MI_VEL_1,MI_VEL_2,MI_VEL_3,MI_VEL_4,MI_VEL_5,MI_VEL_6,MI_VEL_7,MI_VEL_8,MI_VEL_9,MI_VEL_10,  MI_CHD,   MI_CHU, XXXXXXX, XXXXXXX,          XXXXXXX,
+    XXXXXXX, XXXXXXX,   MI_Cs,   MI_Ds, XXXXXXX,   MI_Fs,   MI_Gs,   MI_As, XXXXXXX, MI_Cs_1,  MI_Ds_1, XXXXXXX,  MI_Fs_1, XXXXXXX,                   XXXXXXX,
+     MI_MOD,    MI_C,    MI_D,    MI_E,    MI_F,    MI_G,    MI_A,    MI_B,  MI_C_1,  MI_D_1,   MI_E_1,  MI_F_1,   MI_G_1, XXXXXXX,
+     MI_SUS, XXXXXXX, MI_OCTD, MI_OCTU,MI_MODSD,MI_MODSU, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, MI_TRNSD,MI_TRNSU,MI_TRNS_0,  MI_SUS,          XXXXXXX,
+    XXXXXXX, XXXXXXX, XXXXXXX,XXXXXXX,                 MI_ALLOFF, MI_ALLOFF,                   XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX),
 #elif defined(MIDI_ENABLE) && defined(MIDI_BASIC)
   /* Keymap _MI: MIDI layer (Basic)*/
   [_MI] = LAYOUT(
-    TO_BASE, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx,  xxxxxxx, xxxxxxx,  xxxxxxx, xxxxxxx, xxxxxxx,          xxxxxxx,
-    xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx,  xxxxxxx, xxxxxxx,  xxxxxxx, xxxxxxx,                   xxxxxxx,
-    xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx,  xxxxxxx, xxxxxxx,  xxxxxxx, xxxxxxx,
-    xxxxxxx, xxxxxxx,   MI_ON,  MI_OFF, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx,  xxxxxxx, xxxxxxx,  xxxxxxx, xxxxxxx,          xxxxxxx,
-    xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx,                   xxxxxxx, xxxxxxx,                    xxxxxxx, xxxxxxx,  xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx),
+    TO_BASE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX,                   XXXXXXX,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX,
+    XXXXXXX, XXXXXXX,   MI_ON,  MI_OFF, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX,          XXXXXXX,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX,                    XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX),
 #endif
 };
 
@@ -137,23 +134,23 @@ enum layer_id {
 void clueboard_set_led(uint8_t id, uint8_t val) {
   switch (id) {
     case LAYER_BASE:
-      rgblight_sethsv_noeeprom(190, 255, val);
+      rgblight_sethsv_noeeprom(135, 255, val);
       break;
     case LAYER_FUNCTION:
-      rgblight_sethsv_noeeprom(46, 255, val);
+      rgblight_sethsv_noeeprom(32, 255, val);
       break;
     case LAYER_MEDIA:
-      rgblight_sethsv_noeeprom(86, 255, val);
+      rgblight_sethsv_noeeprom(60, 255, val);
       break;
     case LAYER_CONTROL:
-      rgblight_sethsv_noeeprom(346, 255, val);
+      rgblight_sethsv_noeeprom(245, 255, val);
       break;
     case LAYER_MOUSE:
-      rgblight_sethsv_noeeprom(206, 255, val);
+      rgblight_sethsv_noeeprom(146, 255, val);
       break;
 #if defined(MIDI_ENABLE)
     case LAYER_MIDI:
-      rgblight_sethsv_noeeprom(316, 255, val);
+      rgblight_sethsv_noeeprom(224, 255, val);
       break;
 #endif
   }
@@ -161,15 +158,15 @@ void clueboard_set_led(uint8_t id, uint8_t val) {
 
 const uint16_t oct_hues[10] = {
   0,
-  30,
+  20,
+  40,
   60,
-  90,
+  80,
+  100,
   120,
-  150,
-  180,
-  210,
-  240,
-  300
+  140,
+  160,
+  180
 };
 
 #define MAX_OCT  9
