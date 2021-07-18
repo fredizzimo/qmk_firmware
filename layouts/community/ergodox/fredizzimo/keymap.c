@@ -312,12 +312,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         reset_state();
       }
       break;
-    case KC_BSPACE:
-    case KC_DEL:
-    case KC_ESC:
-    case KC_SPACE:
-    case KC_ENTER:
-      reset_state();
     }
     return true;
 }
