@@ -21,10 +21,6 @@ enum my_keycodes {
     UNDS_QUES, // _?
     EQ_DLR, // =$
     BSPC_ENT,
-    SHIFT,
-    SYMBOLS,
-    NAVIGATE,
-    DEFAULT
 };
 
 #define LS LSFT_T
@@ -77,10 +73,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,     SV_Q,       SV_W,       SV_E,       SV_R,       SV_T,       KC_NO,
         KC_ESC,     SV_A,       SV_S,       SV_D,       SV_F,       SV_G,
         KC_ENT,     SV_Z,       SV_X,       SV_C,       SV_V,       SV_B,       KC_NO,
-        KC_LSFT,    KC_LCTL,    KC_LGUI,    KC_LALT,    MO(FUNC),
+        KC_MENU,    KC_LCTL,    KC_LGUI,    KC_LALT,    MO(FUNC),
                                                                     KC_NO,      KC_NO,
                                                                                 KC_NO,
-                                                        KC_SPACE,   DEFAULT,    NAVIGATE,
+                                                        KC_SPACE,   MO(NAV),    KC_NO,
         // right hand
         KC_NO,      KC_NO,      CTRL_BSPC,  KC_BSPC,    KC_DEL,     KC_NO,      KC_NO,
         KC_NO,      SV_Y,       SV_U,       SV_I,       SV_O,       SV_P,       SV_AA,
@@ -89,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                     VS_CMD,     KC_LALT,    KC_LGUI,    KC_RCTL,    KC_NO,
         KC_NO,      KC_NO,
         KC_NO,
-        KC_NO,      SYMBOLS,    SHIFT
+        KC_NO,      MO(SYM),    KC_LSHIFT
     ),
 [SYM] = KEYMAP(
         // left hand
@@ -253,14 +249,6 @@ static bool wake_dead_key(uint16_t keycode, keyrecord_t* record) {
     return true;
 }
 
-//static bool shifted = false;
-
-void reset_state(void) {
-    layer_off(SYM);
-    layer_off(NAV);
-    unregister_code16(KC_RSFT);
-}
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch(keycode) {
     case APQU:
@@ -277,41 +265,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return override_key(record, SV_UNDS, SV_QUES);
     case EQ_DLR:
         return override_key(record, SV_EQL, SV_DLR);
-    case SHIFT:
-      if (record->event.pressed) {
-        reset_state();
-        register_code16(KC_RSFT);
-        /*
-        shifted = !shifted;
-        uint32_t mods = get_mods();
-        mods &= ~MOD_BIT(KC_LSHIFT);
-        mods |= shifted ? MOD_BIT(KC_LSHIFT) : 0;
-        set_mods(mods);
-        if (shifted) {
-            register_code16(KC_RSFT);
-        } else {
-            unregister_code16(KC_RSFT);
-        }
-        */
-      }
-      break;
-    case SYMBOLS:
-      if (record->event.pressed) {
-        reset_state();
-        layer_on(SYM);
-      }
-      break;
-    case NAVIGATE:
-      if (record->event.pressed) {
-        reset_state();
-        layer_on(NAV);
-      }
-      break;
-    case DEFAULT:
-      if (record->event.pressed) {
-        reset_state();
-      }
-      break;
     }
     return true;
 }
@@ -319,22 +272,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
 
-  uint8_t layer = biton32(layer_state);
+    uint8_t layer = biton32(layer_state);
 
-  ergodox_board_led_off();
-  ergodox_right_led_1_off();
-  ergodox_right_led_2_off();
-  ergodox_right_led_3_off();
-  switch (layer) {
-    // TODO: Make this relevant to the ErgoDox EZ.
-      case 1:
-          ergodox_right_led_1_on();
-          break;
-      case 2:
-          ergodox_right_led_2_on();
-          break;
-      default:
-          // none
-          break;
-  }
+    ergodox_board_led_off();
+    ergodox_right_led_1_off();
+    ergodox_right_led_2_off();
+    ergodox_right_led_3_off();
+    switch (layer) {
+      // TODO: Make this relevant to the ErgoDox EZ.
+        case 1:
+            ergodox_right_led_1_on();
+            break;
+        case 2:
+            ergodox_right_led_2_on();
+            break;
+        default:
+            // none
+            break;
+    }
 };
