@@ -10,6 +10,8 @@ enum layers {
     MEDIA,
     FUNC,
     NAV,
+    WM_BASE1,
+    WM_NUM,
 };
 
 enum my_keycodes {
@@ -21,6 +23,11 @@ enum my_keycodes {
     UNDS_QUES, // _?
     EQ_DLR, // =$
     BSPC_ENT,
+    WM_A,
+    WM_S,
+    WM_D,
+    WM_F,
+    WM_G,
 };
 
 #define LS LSFT_T
@@ -64,10 +71,22 @@ enum my_keycodes {
 #define STEP_IN KC_F11
 #define STEP_OVER KC_F10
 
+#define WM_KEY(key) MT(MOD_LCTL | MOD_LALT, key)
+
+#define WFLEFT      WM_KEY(SV_H)
+#define WMFDOWN     WM_KEY(SV_J)
+#define WMFUP       WM_KEY(SV_K)
+#define WMFRIGHT    WM_KEY(SV_L)
+#define WM_UP       WM_KEY(SV_U)
+#define WMIGNORE    WM_KEY(SV_I)
+#define WMOPEN      WM_KEY(SV_O)
+#define WM_MIN      WM_KEY(SV_M)
+#define WM_CLOSE    WM_KEY(SV_MINS)
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Keymap 0: Basic layer
-[BASE] = KEYMAP(
+[BASE] = LAYOUT_ergodox(
         // left hand
         KC_NO,      KC_NO,      CTRL_BSPC,  KC_BSPACE,  KC_DEL,     KC_NO,      KC_NO,
         KC_TAB,     SV_Q,       SV_W,       SV_E,       SV_R,       SV_T,       KC_NO,
@@ -87,7 +106,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_NO,
         KC_NO,      MO(SYM),    KC_LSHIFT
     ),
-[SYM] = KEYMAP(
+[SYM] = LAYOUT_ergodox(
         // left hand
         KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
         KC_TAB,     SV_EXLM,    SV_LT,      SV_LBRC,    SV_RBRC,    SV_GT,      KC_NO,
@@ -107,7 +126,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_NO,
         KC_TRNS,    KC_TRNS,    KC_TRNS
     ),
-[MEDIA] = KEYMAP(
+[MEDIA] = LAYOUT_ergodox(
         // left hand
         KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
         KC_TAB,     SV_Q,       SV_W,       SV_E,       SV_R,       SV_T,       KC_NO,
@@ -127,7 +146,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_NO,
         KC_TRNS,    KC_TRNS,    KC_TRNS
     ),
-[FUNC] = KEYMAP(
+[FUNC] = LAYOUT_ergodox(
         // left hand
         KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
         KC_TAB,     KC_F1,      KC_F2,      KC_F3,      KC_F4,      KC_NO,      KC_NO,
@@ -147,11 +166,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_NO,
         KC_TRNS,    KC_TRNS,    KC_TRNS
     ),
-[NAV] = KEYMAP(
+[NAV] = LAYOUT_ergodox(
         // left hand
         KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
         KC_TAB,     KC_INS,     KC_HOME,    KC_UP,      KC_END,     KC_PGUP,    KC_NO,
-        KC_LSFT,    KC_NO,      KC_LEFT,    KC_DOWN,    KC_RIGHT,   KC_PGDOWN,
+        KC_LSFT,    WM_A,       WM_S,       WM_D,       WM_F,       WM_G,
         KC_ENT,     KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
         KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
                                                                     RESET,      DEBUG,
@@ -166,6 +185,46 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         DEBUG,      RESET,
         KC_PAUSE,
         KC_TRNS,    KC_TRNS,    KC_TRNS
+    ),
+[WM_BASE1] = KEYMAP(
+        // left hand
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                                                                    KC_NO,      KC_NO,
+                                                                                KC_NO,
+                                                        KC_NO,      KC_NO,      KC_NO,
+        // right hand
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      SV_Y,       SV_U,       SV_I,       SV_O,       SV_P,       SV_AA,
+                    SV_H,       SV_J,       SV_K,       SV_L,       SV_OE,      SV_AE,
+        KC_NO,      SV_N,       SV_M,       SV_COMM,    SV_DOT,     SV_UNDS,    KC_NO,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,
+        KC_NO,
+        KC_NO,      KC_NO,      KC_LSFT
+    ),
+[WM_NUM] = KEYMAP(
+        // left hand
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                                                                    KC_NO,      KC_NO,
+                                                                                KC_NO,
+                                                        KC_NO,      KC_NO,      KC_NO,
+        // right hand
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      SV_SLSH,    SV_7,       SV_8,       SV_9,       KC_NO,      KC_NO,
+                    SV_PLUS,    SV_4,       SV_5,       SV_6,       SV_0,       KC_NO,
+        KC_NO,      SV_ASTR,    SV_1,       SV_2,       SV_3,       SV_MINS,    KC_NO,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,
+        KC_NO,
+        KC_NO,      KC_NO,      KC_NO
     ),
 };
 
@@ -249,7 +308,83 @@ static bool wake_dead_key(uint16_t keycode, keyrecord_t* record) {
     return true;
 }
 
+static uint16_t current_wm_mode = KC_A;
+
+static bool process_wm_layer(uint16_t keycode, keyrecord_t* record) {
+    if (record->event.pressed) {
+        switch (keycode) {
+            case WM_A:
+                current_wm_mode = KC_A;
+                break;
+            case WM_S:
+                current_wm_mode = KC_S;
+                break;
+            case WM_D:
+                current_wm_mode = KC_D;
+                break;
+            case WM_F:
+                current_wm_mode = KC_F;
+                break;
+            case WM_G:
+                current_wm_mode = KC_G;
+                break;
+        }
+        current_wm_mode = KC_A;
+        layer_on(WM_BASE1);
+    switch (keycode) {
+        case WM_A:
+            current_wm_mode = KC_A;
+            break;
+        case WM_S:
+            current_wm_mode = KC_S;
+            break;
+        case WM_D:
+            current_wm_mode = KC_D;
+            break;
+        case WM_F:
+            current_wm_mode = KC_F;
+            break;
+        case WM_G:
+            current_wm_mode = KC_G;
+            break;
+    }
+    }
+    else {
+        layer_off(WM_BASE1);
+        layer_off(WM_NUM);
+    }
+    return false;
+}
+
+static bool process_wm_key(uint16_t keycode, keyrecord_t* record) {
+    uint16_t interesting_layers = WM_BASE1 | WM_NUM;
+    if (layer_state & interesting_layers) {
+        switch (keycode) {
+            case KC_NO:
+            case KC_LSFT:
+            case MO(WM_NUM):
+                return true;
+        }
+
+        if (record->event.pressed) {
+            uint16_t mods = MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT);
+            press_key_with_level_mods(current_wm_mode | mods);
+            register_code(keycode && 0xFF);
+            unregister_code(keycode && 0xFF);
+            register_code(KC_ESC);
+            unregister_code(KC_ESC);
+        }
+
+        return false;
+    }
+
+    return true;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!process_wm_key(keycode, record)) {
+        return false;
+    }
     switch(keycode) {
     case APQU:
         return override_key(record, SV_APOS, SV_QUOT);
@@ -265,6 +400,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return override_key(record, SV_UNDS, SV_QUES);
     case EQ_DLR:
         return override_key(record, SV_EQL, SV_DLR);
+    case WM_A ... WM_G:
+        return process_wm_layer(keycode, record);
     }
     return true;
 }
