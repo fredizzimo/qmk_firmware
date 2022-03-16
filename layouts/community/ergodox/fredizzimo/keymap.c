@@ -6,12 +6,11 @@
 
 enum layers {
     BASE,
-    SYM,
+    SYM1,
+    SYM2,
     MEDIA,
     FUNC,
     NAV,
-    WM_BASE1,
-    WM_NUM,
 };
 
 enum my_keycodes {
@@ -23,11 +22,8 @@ enum my_keycodes {
     UNDS_QUES, // _?
     EQ_DLR, // =$
     BSPC_ENT,
-    WM_A,
-    WM_S,
-    WM_D,
-    WM_F,
-    WM_G,
+    K_NAV,
+    K_WM,
 };
 
 #define LS LSFT_T
@@ -89,39 +85,59 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [BASE] = LAYOUT_ergodox(
         // left hand
         KC_NO,      KC_NO,      CTRL_BSPC,  KC_BSPACE,  KC_DEL,     KC_NO,      KC_NO,
-        KC_TAB,     SV_Q,       SV_W,       SV_E,       SV_R,       SV_T,       KC_NO,
-        KC_ESC,     SV_A,       SV_S,       SV_D,       SV_F,       SV_G,
-        KC_ENT,     SV_Z,       SV_X,       SV_C,       SV_V,       SV_B,       KC_NO,
-        KC_MENU,    KC_LCTL,    KC_LGUI,    KC_LALT,    MO(FUNC),
+        MO(SYM2),   SV_Q,       SV_W,       SV_E,       SV_R,       SV_T,       KC_NO,
+        MO(SYM1),   SV_A,       SV_S,       SV_D,       SV_F,       SV_G,
+        KC_LSFT,    SV_Z,       SV_X,       SV_C,       SV_V,       SV_B,       KC_NO,
+        KC_LCTL,    KC_LCTL,    KC_LGUI,    KC_LALT,    SV_AE,
                                                                     KC_NO,      KC_NO,
                                                                                 KC_NO,
-                                                        KC_SPACE,   MO(NAV),    KC_NO,
+                                                        KC_SPACE,   K_NAV,      KC_NO,
         // right hand
         KC_NO,      KC_NO,      CTRL_BSPC,  KC_BSPC,    KC_DEL,     KC_NO,      KC_NO,
-        KC_NO,      SV_Y,       SV_U,       SV_I,       SV_O,       SV_P,       SV_AA,
-                    SV_H,       SV_J,       SV_K,       SV_L,       SV_OE,      SV_AE,
-        KC_NO,      SV_N,       SV_M,       SV_COMM,    SV_DOT,     UNDS_QUES,  EQ_DLR,
-                    VS_CMD,     KC_LALT,    KC_LGUI,    KC_RCTL,    KC_NO,
+        KC_NO,      SV_Y,       SV_U,       SV_I,       SV_O,       SV_P,       MO(SYM2),
+                    SV_H,       SV_J,       SV_K,       SV_L,       SV_OE,      MO(SYM1),
+        KC_NO,      SV_N,       SV_M,       SV_COMM,    SV_DOT,     UNDS_QUES,  KC_RSFT,
+                    SV_AA,      KC_LALT,    KC_LGUI,    KC_RCTL,    KC_RCTL,
         KC_NO,      KC_NO,
         KC_NO,
-        KC_NO,      MO(SYM),    KC_LSHIFT
+        KC_NO,      KC_ESC,     KC_ENT
     ),
-[SYM] = LAYOUT_ergodox(
+[SYM1] = LAYOUT_ergodox(
         // left hand
         KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
-        KC_TAB,     SV_EXLM,    SV_LT,      SV_LBRC,    SV_RBRC,    SV_GT,      KC_NO,
-        SV_HASH,    SV_AT,      SV_APOS,    SV_LPRN,    SV_RPRN,    SV_QUOT,
-        KC_ENT,     SV_PERC,    SV_PIPE,    SV_LCBR,    SV_RCBR,    SV_AMPR,    KC_NO,
-        KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
+        KC_TRNS,    SV_EXLM,    SV_LT,      SV_LBRC,    SV_RBRC,    SV_GT,      KC_NO,
+        KC_TRNS,    SV_AT,      SV_APOS,    SV_LPRN,    SV_RPRN,    SV_QUOT,
+        KC_TRNS,    SV_PERC,    SV_PIPE,    SV_LCBR,    SV_RCBR,    SV_AMPR,    KC_NO,
+        KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,
                                                                     KC_NO,      KC_NO,
                                                                                 KC_NO,
                                                         KC_TRNS,    KC_TRNS,    KC_TRNS,
         // right hand
         KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
-        KC_NO,      SV_SLSH,    SV_7,       SV_8,       SV_9,       SV_BSLS,    TILD,
-                    SV_PLUS,    SV_4,       SV_5,       SV_6,       SV_0,       GRAV,
-        KC_NO,      SV_ASTR,    SV_1,       SV_2,       SV_3,       SV_MINS,    CIRC,
-                    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
+        KC_NO,      SV_SLSH,    SV_7,       SV_8,       SV_9,       SV_BSLS,    KC_TRNS,
+                    SV_PLUS,    SV_4,       SV_5,       SV_6,       SV_0,       KC_TRNS,
+        KC_NO,      SV_ASTR,    SV_1,       SV_2,       SV_3,       SV_MINS,    KC_TRNS,
+                    KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
+        KC_NO,      KC_NO,
+        KC_NO,
+        KC_TRNS,    KC_TRNS,    KC_TRNS
+    ),
+[SYM2] = LAYOUT_ergodox(
+        // left hand
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_TRNS,    SV_SECT,    KC_NO,      SV_EURO,    KC_NO,      KC_NO,      KC_NO,
+        KC_TRNS,    TILD,       GRAV,       CIRC,       SV_DLR,     ACUT,
+        KC_TRNS,    KC_NO,      KC_NO,      SV_CURR,    KC_NO,      KC_NO,      KC_NO,
+        KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,
+                                                                    KC_NO,      KC_NO,
+                                                                                KC_NO,
+                                                        KC_TRNS,    KC_TRNS,    KC_TRNS,
+        // right hand
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      SV_HASH,    KC_NO,      KC_NO,      KC_NO,      SV_PND,     KC_TRNS,
+                    SV_ACUT,    SV_EQL,     SV_CIRC,    SV_GRAV,    SV_TILD,    KC_TRNS,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,
+                    KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
         KC_NO,      KC_NO,
         KC_NO,
         KC_TRNS,    KC_TRNS,    KC_TRNS
@@ -169,62 +185,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [NAV] = LAYOUT_ergodox(
         // left hand
         KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
-        KC_TAB,     KC_INS,     KC_HOME,    KC_UP,      KC_END,     KC_PGUP,    KC_NO,
-        KC_LSFT,    WM_A,       WM_S,       WM_D,       WM_F,       WM_G,
-        KC_ENT,     KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_TRNS,    KC_NO,      K_WM,       KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_TRNS,    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_TRNS,    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
         KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
                                                                     RESET,      DEBUG,
                                                                                 KC_NO,
                                                         KC_TRNS,    KC_TRNS,    KC_TRNS,
         // right hand
         KC_NO,      KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_NO,      KC_NO,
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-                    KC_LEFT,    KC_DOWN,    KC_UP,      KC_RIGHT,   KC_NO,      KC_NO,
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,
+                    KC_LEFT,    KC_DOWN,    KC_UP,      KC_RIGHT,   KC_TAB,     KC_TRNS,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,
                     KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
         DEBUG,      RESET,
         KC_PAUSE,
         KC_TRNS,    KC_TRNS,    KC_TRNS
-    ),
-[WM_BASE1] = LAYOUT_ergodox(
-        // left hand
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_NO,      WM_A,       WM_S,       WM_D,       WM_F,       WM_G,
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-                                                                    KC_NO,      KC_NO,
-                                                                                KC_NO,
-                                                        KC_NO,      KC_TRNS,    KC_NO,
-        // right hand
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_NO,      SV_Y,       SV_U,       SV_I,       SV_O,       SV_P,       SV_AA,
-                    SV_H,       SV_J,       SV_K,       SV_L,       SV_OE,      SV_AE,
-        KC_NO,      SV_N,       SV_M,       SV_COMM,    SV_DOT,     SV_UNDS,    KC_NO,
-                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_NO,      KC_NO,
-        KC_NO,
-        KC_NO,      KC_NO,      KC_LSFT
-    ),
-[WM_NUM] = LAYOUT_ergodox(
-        // left hand
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-                                                                    KC_NO,      KC_NO,
-                                                                                KC_NO,
-                                                        KC_NO,      KC_NO,      KC_NO,
-        // right hand
-        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_NO,      SV_SLSH,    SV_7,       SV_8,       SV_9,       KC_NO,      KC_NO,
-                    SV_PLUS,    SV_4,       SV_5,       SV_6,       SV_0,       KC_NO,
-        KC_NO,      SV_ASTR,    SV_1,       SV_2,       SV_3,       SV_MINS,    KC_NO,
-                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-        KC_NO,      KC_NO,
-        KC_NO,
-        KC_NO,      KC_NO,      KC_NO
     ),
 };
 
@@ -308,40 +284,27 @@ static bool wake_dead_key(uint16_t keycode, keyrecord_t* record) {
     return true;
 }
 
-static uint16_t current_wm_mode = KC_A;
+static bool wm_active = false;
 
-static bool process_wm_layer(uint16_t keycode, keyrecord_t* record) {
-    uint16_t mode = 0;
-    switch (keycode) {
-        case WM_A:
-            mode = KC_A;
-            break;
-        case WM_S:
-            mode = KC_S;
-            break;
-        case WM_D:
-            mode = KC_D;
-            break;
-        case WM_F:
-            mode = KC_F;
-            break;
-        case WM_G:
-            mode = KC_G;
-            break;
-        default:
-            return true;
-    }
+static bool process_nav(keyrecord_t *record) {
     if (record->event.pressed) {
-        current_wm_mode = mode;
-        layer_on(WM_BASE1);
-        uint16_t mods = QK_LSFT | QK_LALT;
-        tap_code16(current_wm_mode | mods);
+        layer_on(NAV);
+    } else {
+        layer_off(NAV);
+        if (wm_active) {
+            tap_code16(KC_ESC);
+            wm_active = false;
+        }
     }
-    else {
-        layer_off(WM_BASE1);
-        layer_off(WM_NUM);
-        tap_code(KC_ESC);
-    }
+    return false;
+}
+
+static bool process_wm(keyrecord_t *record) {
+    if (record->event.pressed) {
+        layer_off(NAV);
+        tap_code16(KC_W | QK_LGUI | QK_LCTL);
+        wm_active = true;
+    };
     return false;
 }
 
@@ -361,8 +324,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return override_key(record, SV_UNDS, SV_QUES);
     case EQ_DLR:
         return override_key(record, SV_EQL, SV_DLR);
-    case WM_A ... WM_G:
-        return process_wm_layer(keycode, record);
+    case K_NAV:
+        return process_nav(record);
+    case K_WM:
+        return process_wm(record);
     }
     return true;
 }
@@ -389,3 +354,11 @@ void matrix_scan_user(void) {
             break;
     }
 };
+
+void keyboard_post_init_user(void) {
+  // Customise these values to desired behaviour
+  //debug_enable=true;
+  //debug_matrix=true;
+  //debug_keyboard=true;
+  //debug_mouse=true;
+}
