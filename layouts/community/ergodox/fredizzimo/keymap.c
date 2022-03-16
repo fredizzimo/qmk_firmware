@@ -180,7 +180,6 @@ void press_key_with_level_mods(uint16_t key) {
     // Save the state
     const uint8_t real_mods = get_mods();
     const uint8_t weak_mods = get_weak_mods();
-    const uint8_t macro_mods = get_macro_mods();
 
     uint8_t target_mods = (key >> 8) & (QK_MODS_MAX >> 8);
     // The 5th bit indicates that it's a right hand mod,
@@ -193,7 +192,6 @@ void press_key_with_level_mods(uint16_t key) {
     // Clear the mods that we are potentially going to modify,
     del_mods(interesting_mods);
     del_weak_mods(interesting_mods);
-    del_macro_mods(interesting_mods);
 
     // Enable the mods that we need
     add_mods(target_mods & interesting_mods);
@@ -205,7 +203,6 @@ void press_key_with_level_mods(uint16_t key) {
     // Restore the previous state
     set_mods(real_mods);
     set_weak_mods(weak_mods);
-    set_macro_mods(macro_mods);
     send_keyboard_report();
 }
 
