@@ -49,11 +49,10 @@ static inline bool IS_PRESSED(keyevent_t event) { return (!IS_NOEVENT(event) && 
 static inline bool IS_RELEASED(keyevent_t event) { return (!IS_NOEVENT(event) && !event.pressed); }
 
 /* Tick event */
-#define TICK                    (keyevent_t){    \
-    .key = (keypos_t){ .row = 255, .col = 255 }, \
-    .pressed = false,                            \
-    .time = (timer_read())                       \
-}
+#define TICK                                                                                    \
+    (keyevent_t) {                                                                              \
+        .key = (keypos_t){.row = 255, .col = 255}, .pressed = false, .time = (timer_read() | 1) \
+    }
 
 /* it runs once at early stage of startup before keyboard_init. */
 void keyboard_setup(void);
@@ -61,8 +60,6 @@ void keyboard_setup(void);
 void keyboard_init(void);
 /* it runs repeatedly in main loop */
 void keyboard_task(void);
-/* it runs when host LED status is updated */
-void keyboard_set_leds(uint8_t leds);
 /* it runs whenever code has to behave differently on a slave */
 bool is_keyboard_master(void);
 /* it runs whenever code has to behave differently on left vs right split */
@@ -73,18 +70,18 @@ void keyboard_pre_init_user(void);
 void keyboard_post_init_kb(void);
 void keyboard_post_init_user(void);
 
-void housekeeping_task(void);       // To be executed by the main loop in each backend TMK protocol
-void housekeeping_task_kb(void);    // To be overridden by keyboard-level code
-void housekeeping_task_user(void);  // To be overridden by user/keymap-level code
+void housekeeping_task(void);      // To be executed by the main loop in each backend TMK protocol
+void housekeeping_task_kb(void);   // To be overridden by keyboard-level code
+void housekeeping_task_user(void); // To be overridden by user/keymap-level code
 
-uint32_t last_input_activity_time(void);     // Timestamp of the last matrix or encoder activity
-uint32_t last_input_activity_elapsed(void);  // Number of milliseconds since the last matrix or encoder activity
+uint32_t last_input_activity_time(void);    // Timestamp of the last matrix or encoder activity
+uint32_t last_input_activity_elapsed(void); // Number of milliseconds since the last matrix or encoder activity
 
-uint32_t last_matrix_activity_time(void);     // Timestamp of the last matrix activity
-uint32_t last_matrix_activity_elapsed(void);  // Number of milliseconds since the last matrix activity
+uint32_t last_matrix_activity_time(void);    // Timestamp of the last matrix activity
+uint32_t last_matrix_activity_elapsed(void); // Number of milliseconds since the last matrix activity
 
-uint32_t last_encoder_activity_time(void);     // Timestamp of the last encoder activity
-uint32_t last_encoder_activity_elapsed(void);  // Number of milliseconds since the last encoder activity
+uint32_t last_encoder_activity_time(void);    // Timestamp of the last encoder activity
+uint32_t last_encoder_activity_elapsed(void); // Number of milliseconds since the last encoder activity
 
 uint32_t get_matrix_scan_rate(void);
 

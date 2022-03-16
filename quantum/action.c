@@ -23,7 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "led.h"
 #include "action_layer.h"
 #include "action_tapping.h"
-#include "action_macro.h"
 #include "action_util.h"
 #include "action.h"
 #include "wait.h"
@@ -54,14 +53,20 @@ int retro_tapping_counter = 0;
 #endif
 
 #ifdef IGNORE_MOD_TAP_INTERRUPT_PER_KEY
-__attribute__((weak)) bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) { return false; }
+__attribute__((weak)) bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
+    return false;
+}
 #endif
 
 #ifdef RETRO_TAPPING_PER_KEY
-__attribute__((weak)) bool get_retro_tapping(uint16_t keycode, keyrecord_t *record) { return false; }
+__attribute__((weak)) bool get_retro_tapping(uint16_t keycode, keyrecord_t *record) {
+    return false;
+}
 #endif
 
-__attribute__((weak)) bool pre_process_record_quantum(keyrecord_t *record) { return true; }
+__attribute__((weak)) bool pre_process_record_quantum(keyrecord_t *record) {
+    return true;
+}
 
 #ifdef LENIENT_LAYER_SWITCHING_ENABLE
 void process_lenient_layer(keyrecord_t* record);
@@ -172,10 +177,14 @@ void process_record_nocache(keyrecord_t *record) {
     disable_action_cache = false;
 }
 #else
-void process_record_nocache(keyrecord_t *record) { process_record(record); }
+void process_record_nocache(keyrecord_t *record) {
+    process_record(record);
+}
 #endif
 
-__attribute__((weak)) bool process_record_quantum(keyrecord_t *record) { return true; }
+__attribute__((weak)) bool process_record_quantum(keyrecord_t *record) {
+    return true;
+}
 
 __attribute__((weak)) void post_process_record_quantum(keyrecord_t *record) {}
 
@@ -642,12 +651,7 @@ void process_action(keyrecord_t *record, action_t action) {
             break;
 #    endif
 #endif
-            /* Extentions */
-#ifndef NO_ACTION_MACRO
-        case ACT_MACRO:
-            action_macro_play(action_get_macro(record, action.func.id, action.func.opt));
-            break;
-#endif
+
 #ifdef SWAP_HANDS_ENABLE
         case ACT_SWAP_HANDS:
             switch (action.swap.code) {
@@ -702,7 +706,7 @@ void process_action(keyrecord_t *record, action_t action) {
                     /* tap key */
                     if (tap_count > 0) {
                         if (swap_held) {
-                            swap_hands = !swap_hands;  // undo hold set up in _tap_hint
+                            swap_hands = !swap_hands; // undo hold set up in _tap_hint
                             swap_held  = false;
                         }
                         if (event.pressed) {
@@ -710,21 +714,16 @@ void process_action(keyrecord_t *record, action_t action) {
                         } else {
                             wait_ms(TAP_CODE_DELAY);
                             unregister_code(action.swap.code);
-                            *record = (keyrecord_t){};  // hack: reset tap mode
+                            *record = (keyrecord_t){}; // hack: reset tap mode
                         }
                     } else {
                         if (swap_held && !event.pressed) {
-                            swap_hands = !swap_hands;  // undo hold set up in _tap_hint
+                            swap_hands = !swap_hands; // undo hold set up in _tap_hint
                             swap_held  = false;
                         }
                     }
 #    endif
             }
-#endif
-#ifndef NO_ACTION_FUNCTION
-        case ACT_FUNCTION:
-            action_function(record, action.func.id, action.func.opt);
-            break;
 #endif
         default:
             break;
@@ -802,7 +801,7 @@ void process_action(keyrecord_t *record, action_t action) {
  *
  * FIXME: Needs documentation.
  */
-void register_code(uint8_t code) {
+__attribute__((weak)) void register_code(uint8_t code) {
     if (code == KC_NO) {
         return;
     }
@@ -895,7 +894,7 @@ void register_code(uint8_t code) {
  *
  * FIXME: Needs documentation.
  */
-void unregister_code(uint8_t code) {
+__attribute__((weak)) void unregister_code(uint8_t code) {
     if (code == KC_NO) {
         return;
     }
@@ -956,7 +955,7 @@ void unregister_code(uint8_t code) {
  * \param code The basic keycode to tap.
  * \param delay The amount of time in milliseconds to leave the keycode registered, before unregistering it.
  */
-void tap_code_delay(uint8_t code, uint16_t delay) {
+__attribute__((weak)) void tap_code_delay(uint8_t code, uint16_t delay) {
     register_code(code);
     for (uint16_t i = delay; i > 0; i--) {
         wait_ms(1);
@@ -968,13 +967,15 @@ void tap_code_delay(uint8_t code, uint16_t delay) {
  *
  * \param code The basic keycode to tap. If `code` is `KC_CAPS_LOCK`, the delay will be `TAP_HOLD_CAPS_DELAY`, otherwise `TAP_CODE_DELAY`, if defined.
  */
-void tap_code(uint8_t code) { tap_code_delay(code, code == KC_CAPS_LOCK ? TAP_HOLD_CAPS_DELAY : TAP_CODE_DELAY); }
+__attribute__((weak)) void tap_code(uint8_t code) {
+    tap_code_delay(code, code == KC_CAPS_LOCK ? TAP_HOLD_CAPS_DELAY : TAP_CODE_DELAY);
+}
 
 /** \brief Adds the given physically pressed modifiers and sends a keyboard report immediately.
  *
  * \param mods A bitfield of modifiers to register.
  */
-void register_mods(uint8_t mods) {
+__attribute__((weak)) void register_mods(uint8_t mods) {
     if (mods) {
         add_mods(mods);
         send_keyboard_report();
@@ -985,7 +986,7 @@ void register_mods(uint8_t mods) {
  *
  * \param mods A bitfield of modifiers to unregister.
  */
-void unregister_mods(uint8_t mods) {
+__attribute__((weak)) void unregister_mods(uint8_t mods) {
     if (mods) {
         del_mods(mods);
         send_keyboard_report();
@@ -996,7 +997,7 @@ void unregister_mods(uint8_t mods) {
  *
  * \param mods A bitfield of modifiers to register.
  */
-void register_weak_mods(uint8_t mods) {
+__attribute__((weak)) void register_weak_mods(uint8_t mods) {
     if (mods) {
         add_weak_mods(mods);
         send_keyboard_report();
@@ -1007,7 +1008,7 @@ void register_weak_mods(uint8_t mods) {
  *
  * \param mods A bitfield of modifiers to unregister.
  */
-void unregister_weak_mods(uint8_t mods) {
+__attribute__((weak)) void unregister_weak_mods(uint8_t mods) {
     if (mods) {
         del_weak_mods(mods);
         send_keyboard_report();
@@ -1042,7 +1043,6 @@ void clear_keyboard_but_mods_and_keys() {
     host_consumer_send(0);
 #endif
     clear_weak_mods();
-    clear_macro_mods();
     send_keyboard_report();
 #ifdef MOUSEKEY_ENABLE
     mousekey_clear();
@@ -1105,12 +1105,6 @@ bool is_tap_action(action_t action) {
                     return true;
             }
             return false;
-        case ACT_MACRO:
-        case ACT_FUNCTION:
-            if (action.func.opt & FUNC_TAP) {
-                return true;
-            }
-            return false;
     }
     return false;
 }
@@ -1119,7 +1113,9 @@ bool is_tap_action(action_t action) {
  *
  * FIXME: Needs documentation.
  */
-void debug_event(keyevent_t event) { dprintf("%04X%c(%u)", (event.key.row << 8 | event.key.col), (event.pressed ? 'd' : 'u'), event.time); }
+void debug_event(keyevent_t event) {
+    dprintf("%04X%c(%u)", (event.key.row << 8 | event.key.col), (event.pressed ? 'd' : 'u'), event.time);
+}
 /** \brief Debug print (FIXME: Needs better description)
  *
  * FIXME: Needs documentation.
@@ -1166,12 +1162,6 @@ void debug_action(action_t action) {
             break;
         case ACT_LAYER_TAP_EXT:
             dprint("ACT_LAYER_TAP_EXT");
-            break;
-        case ACT_MACRO:
-            dprint("ACT_MACRO");
-            break;
-        case ACT_FUNCTION:
-            dprint("ACT_FUNCTION");
             break;
         case ACT_SWAP_HANDS:
             dprint("ACT_SWAP_HANDS");
