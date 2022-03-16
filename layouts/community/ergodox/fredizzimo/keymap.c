@@ -151,7 +151,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
         KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
         KC_NO,      KC_LGUI,    KC_LALT,    KC_LSFT,    KC_LCTRL,   KC_MENU,    KC_NO,
-        KC_NO,      C_A,        C_BSPC,     KC_BSPC,    KC_DEL,     KC_ENT,
+        KC_NO,      C_A,        KC_ENT,     KC_BSPC,    KC_DEL,     KC_NO,
         KC_NO,      C_Z,        C_X,        C_C,        C_V,        KC_NO,      KC_NO,
         KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,
                                                                     RESET,      DEBUG,
