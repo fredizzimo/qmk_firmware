@@ -34,16 +34,16 @@ PA10 - D0 - USART 1 RX
 NRST - NRST
 GND  - GND
 PA12 - D2 - USB DP
-PB0  - D3 - COL1
+PB0  - D3   COL1
 PB7  - D4 - COL2
 PB6  - D5 - COL3
 PB1  - D6 - COL4
-PC14 - D7 - COL5
-PC15 - D8 - COL6
-PA8  - D9 
+PC14 - D7 - Oscillator
+PC15 - D8 - Oscillator
+PA8  - D9
 PA11 - D10 - USB DM
-PB5  - D11
-PB4  - D12
+PB5  - D11 - COL5
+PB4  - D12 - COL6
 
 Right Side
 VIN  - VIN
@@ -61,3 +61,4 @@ PA0  - A0
 AREF - AREF
 +3v3 - +3v3
 PB3  - PB3
+
