@@ -55,10 +55,15 @@ PA7  - A6 - ROW1
 PA6  - A5 - ROW2
 PA5  - A4 - ROW3
 PA4  - A3 - THUMB
-PA3  - A2
+PA3  - A2 - HAND ID
 PA1  - A1
 PA0  - A0
 AREF - AREF
 +3v3 - +3v3
 PB3  - PB3
+
+Remove
+SB9 - ST-LINK RESET
+SB18 - Connect D4 to A4
+SB16 - Connect D5 to A5
 
