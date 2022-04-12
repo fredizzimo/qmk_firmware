@@ -1,0 +1,56 @@
+units:
+  key_degrees: 25
+  key_radians: key_degrees * pi / 180.0
+  thumb_radius: (1/tan(key_radians) + 0.5)*U
+  thumb3_y: -1.5 * U
+  thumb2_y: thumb3_y - thumb_radius + thumb_radius * cos(key_radians)
+  thumb1_y: thumb3_y - thumb_radius + thumb_radius * cos(2*key_radians)
+  thumb3_x: 0
+  thumb2_x: thumb3_x - thumb_radius * sin(key_radians)
+  thumb1_x: thumb3_x - thumb_radius * sin(2*key_radians)
+points:
+  zones:
+    main:
+      key:
+        spread: cx
+        padding: cy
+      columns:
+        column1:
+        column2:
+          stagger: 0.25*U
+        column3:
+          stagger: 0.75*U
+        column4:
+          stagger: 0
+        column5:
+          stagger: -0.75*U
+        column6:
+          stagger: -0.25*U
+          row_overrides:
+            row1:
+            row2:
+      rows:
+        row1:
+        row2:
+        row3:
+    thumb:
+      anchor:
+        ref: main_column2_row1
+        shift: [thumb1_x, thumb1_y]
+      columns:
+        thumb1:
+          row_overrides:
+            row1:
+              rotate: 2*key_degrees
+        thumb2:
+          #stagger: thumb_radius*cos(key_radians)*U - thumb_radius*cos(key_radians*2)*U
+          stagger: thumb2_y - thumb1_y
+          spread: thumb2_x - thumb1_x
+          row_overrides:
+            row1:
+              rotate: key_degrees
+        thumb3:
+          stagger: thumb3_y - thumb2_y
+          spread: thumb3_x - thumb2_x
+          row_overrides:
+            row1:
