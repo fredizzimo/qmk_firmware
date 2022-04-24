@@ -6,8 +6,8 @@ units:
   column6: -5
   key_degrees: 25
   key_radians: key_degrees * pi / 180.0
-  thumb_radius: (1/tan(key_radians) + 0.5)*U
-  thumb3_y: -1.5 * U
+  thumb_radius: (1/tan(key_radians) + 0.5)*cx
+  thumb3_y: -1.5 * cy
   thumb2_y: thumb3_y - thumb_radius + thumb_radius * cos(key_radians)
   thumb1_y: thumb3_y - thumb_radius + thumb_radius * cos(2*key_radians)
   thumb3_x: 0
@@ -17,21 +17,25 @@ points:
   zones:
     main:
       key:
-        spread: U
-        padding: U
+        padding: cy
       columns:
         column1:
-          stagger: -U
+          spread: cx
         column2:
-          stagger: column2 - U
+          stagger: column2
+          spread: cx
         column3:
-          stagger: column3 - U
+          stagger: column3
+          spread: cx
         column4:
-          stagger: column4 - U
+          stagger: column4
+          spread: cx
         column5:
-          stagger: column5 - U
+          stagger: column5
+          spread: cx
         column6:
-          stagger: column6 - U
+          spread: cx
+          stagger: column6
           row_overrides:
             row1:
             row2:
@@ -60,3 +64,10 @@ points:
           spread: thumb3_x - thumb2_x
           row_overrides:
             row1:
+outlines:
+  exports:
+    switches:
+      - type: keys
+        side: left
+        size: [cx-0.5, cy-0.5]
+        corner: 1
