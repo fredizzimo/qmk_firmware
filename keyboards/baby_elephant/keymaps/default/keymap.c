@@ -8,6 +8,9 @@ enum layers {
     BASE,
     SYM1,
     NAV,
+    SHORT,
+    MOD_LEFT,
+    MOD_RIGHT,
 };
 
 enum my_keycodes {
@@ -18,6 +21,7 @@ enum my_keycodes {
     CIRC, // ^
     ACUT, // ´
     GRAV, // `
+    MOD,
 };
 
 #define OS_LSFT OSM(MOD_LSFT)
@@ -49,7 +53,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         APQU,       SV_Q,       SV_W,       SV_E,       SV_R,       SV_T,          SV_Y,        SV_U,       SV_I,       SV_O,       SV_P,       SV_AA,
         EXEU,       SV_A,       SV_S,       SV_D,       SV_F,       SV_G,          SV_H,        SV_J,       SV_K,       SV_L,       SV_OE,      SV_AE,
                     SV_Z,       SV_X,       SV_C,       SV_V,       SV_B,          SV_N,        SV_M,       SV_COMM,    SV_DOT,     QUUN,
-                                            MO(NAV),    KC_SPACE,   KC_BSPC,       KC_ESC,      KC_LSFT,    MO(SYM1)
+                                            MOD,        KC_SPACE,   MO(NAV),       MO(SYM1),    KC_LSFT,    MO(SHORT)
     ),
     [SYM1] = LAYOUT_split_3x5p2_3(
         GRAV,       SV_HASH,    SV_LT,      SV_LBRC,    SV_RBRC,    SV_GT,          SV_SLSH,    SV_7,       SV_8,       SV_9,       SV_BSLS,    SV_PERC,
@@ -58,11 +62,35 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                             KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_TRNS
     ),
     [NAV] = LAYOUT_split_3x5p2_3(
-        KC_NO,      KC_LGUI,    KC_LALT,    KC_LSFT,    KC_LCTRL,   KC_MENU,        KC_MENU,    KC_RCTRL,   KC_RSFT,    KC_LALT,    KC_RGUI,    KC_NO,
-        KC_NO,      C_A,        KC_NO,      KC_DEL,     KC_ENT,     C_BSPC,         KC_LEFT,    KC_DOWN,    KC_UP,      KC_RIGHT,   KC_TAB,     KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_ESC,     KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      C_A,        KC_NO,      KC_BSPC,    KC_ENT,     KC_DEL,         KC_LEFT,    KC_DOWN,    KC_UP,      KC_RIGHT,   KC_TAB,     KC_NO,
                     C_Z,        C_X,        C_C,        C_V,        C_B,            KC_HOME,    KC_PGDN,    KC_PGUP,    KC_END,     KC_NO,
                                             KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_TRNS
-    )
+    ),
+    [MOD_LEFT] = LAYOUT_split_3x5p2_3(
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
+        KC_NO,      KC_LGUI,    KC_LALT,    KC_LSFT,    KC_LCTRL,   KC_MENU,        KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
+                                            KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_TRNS
+    ),
+    [MOD_RIGHT] = LAYOUT_split_3x5p2_3(
+        KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_MENU,    KC_RCTRL,   KC_RSFT,    KC_LALT,    KC_RGUI,    KC_NO,
+                    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                                            KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_TRNS
+    ),
+    [SHORT] = LAYOUT_split_3x5p2_3(
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,     KC_NO,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                                            KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_TRNS
+    ),
+    // [SHORT] = LAYOUT_split_3x5p2_3(
+    //     KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+    //     KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,     KC_NO,
+    //                 KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+    //                                         KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_TRNS
+    // ),
 };
 
 
@@ -147,6 +175,13 @@ static bool wake_dead_key(uint16_t keycode, keyrecord_t* record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
+    if ( record->event.pressed ) {
+        if (layer_state_is(MOD_LEFT) && record->event.key.row>4) {
+            layer_off(MOD_LEFT);
+        } else if (layer_state_is(MOD_RIGHT)) {
+            layer_off(MOD_RIGHT);
+        }
+    }
     switch(keycode) {
     case APQU:
         return override_key(record, SV_APOS, SV_QUOT);
@@ -156,6 +191,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return override_key(record, SV_QUES, SV_UNDS);
     case GRAV:
         return wake_dead_key(SV_GRAV, record);
+    case TILD:
+        return wake_dead_key(SV_TILD, record);
+    case CIRC:
+        return wake_dead_key(SV_CIRC, record);
+    case MOD:
+        {
+            if (record->event.pressed) {
+                layer_on(MOD_LEFT);
+                layer_on(MOD_RIGHT);
+            } else {
+                layer_off(MOD_LEFT);
+                layer_on(MOD_RIGHT);
+            }
+            return false;
+        }
     }
     return true;
 }
