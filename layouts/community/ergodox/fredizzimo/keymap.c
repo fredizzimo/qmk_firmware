@@ -88,19 +88,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         EXEU,       SV_Q,       SV_W,       SV_E,       SV_R,       SV_T,       KC_NO,
         APQU,       SV_A,       SV_S,       SV_D,       SV_F,       SV_G,
         KC_LSFT,    SV_Z,       SV_X,       SV_C,       SV_V,       SV_B,       KC_NO,
-        KC_NO,      KC_LGUI,    KC_APP,     KC_LALT,    KC_LCTRL,
+        KC_LCTRL,   KC_LGUI,    KC_APP,     KC_NO,      KC_LALT,
                                                                     KC_NO,      KC_NO,
                                                                                 KC_NO,
-                                                        KC_SPACE,   KC_ENT,     KC_NO,
+                                                        KC_SPACE,   MO(NAV),    KC_NO,
         // right hand
         KC_NO,      KC_NO,      KC_NO,      KC_NO,      MO(SYM1),   KC_NO,      KC_NO,
         KC_NO,      SV_Y,       SV_U,       SV_I,       SV_O,       SV_P,       SV_AA,
                     SV_H,       SV_J,       SV_K,       SV_L,       SV_OE,      SV_AE,
         KC_NO,      SV_N,       SV_M,       SV_COMM,    SV_DOT,     QUUN,       KC_RSFT,
-                                KC_RCTL,    KC_LALT,    KC_APP,     KC_LGUI,    KC_NO,
+                                KC_LALT,    KC_NO,      KC_APP,     KC_LGUI,    KC_RCTRL,
         KC_NO,      KC_NO,
         KC_NO,
-        KC_NO,      MO(NAV),   KC_ESC
+        KC_NO,      KC_ESC,     KC_ENT
     ),
 [SYM1] = LAYOUT_ergodox(
         // left hand
