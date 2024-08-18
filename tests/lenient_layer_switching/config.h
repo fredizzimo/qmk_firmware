@@ -18,6 +18,3 @@
 
 #define MATRIX_ROWS 2
 #define MATRIX_COLS 5
-
-#define LLS_DELAY 5
-#define LLS_QUEUE 6
