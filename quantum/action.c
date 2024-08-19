@@ -68,10 +68,6 @@ __attribute__((weak)) bool pre_process_record_quantum(keyrecord_t *record) {
     return true;
 }
 
-#ifdef LENIENT_LAYER_SWITCHING_ENABLE
-void process_lenient_layer(keyrecord_t* record);
-#endif
-
 /** \brief Called to execute an action.
  *
  * FIXME: Needs documentation.
@@ -116,10 +112,6 @@ void action_exec(keyevent_t event) {
 #        endif
 #    endif
     }
-#endif
-
-#ifdef LENIENT_LAYER_SWITCHING_ENABLE
-    process_lenient_layer(&record);
 #endif
 
 #ifndef NO_ACTION_TAPPING
