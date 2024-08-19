@@ -466,9 +466,7 @@ bool matrix_scan_task(void) {
                 if (matrix_change & col_mask) {
                     if (should_process_keypress()) {
                         action_exec((keyevent_t){
-                            .key = (keypos_t){ .row = r, .col = c },
-                            .pressed = (matrix_row & ((matrix_row_t)1<<c)),
-                            .time = timer_read()
+                            .key = (keypos_t){.row = r, .col = c}, .pressed = (matrix_row & col_mask), .time = (timer_read() | 1) /* time should not be 0 */
                         });
                     }
                     // record a processed key

@@ -58,11 +58,7 @@ __attribute__((weak)) bool get_hold_on_other_key_press(uint16_t keycode, keyreco
 #        include "process_auto_shift.h"
 #    endif
 
-static keyrecord_t tapping_key = {.event={
-    .key = { .row = 255, .col = 255 },
-    .pressed = false,
-    .time = 0
-}};
+static keyrecord_t tapping_key                         = {};
 static keyrecord_t waiting_buffer[WAITING_BUFFER_SIZE] = {};
 static uint8_t     waiting_buffer_head                 = 0;
 static uint8_t     waiting_buffer_tail                 = 0;
@@ -93,7 +89,7 @@ void action_tapping_process(keyrecord_t record) {
             debug("OVERFLOW: CLEAR ALL STATES\n");
             clear_keyboard();
             waiting_buffer_clear();
-            tapping_key = (keyrecord_t){.event=TICK};
+            tapping_key = (keyrecord_t){};
         }
     }
 
@@ -229,7 +225,7 @@ bool process_tapping(keyrecord_t *keyp) {
                     // clang-format on
                     debug("Tapping: End. No tap. Interfered by typing key\n");
                     process_record(&tapping_key);
-                    tapping_key = (keyrecord_t){.event=TICK};
+                    tapping_key = (keyrecord_t){};
                     debug_tapping_key();
                     // enqueue
                     return false;
@@ -327,7 +323,7 @@ bool process_tapping(keyrecord_t *keyp) {
                 debug_event(event);
                 debug("\n");
                 process_record(&tapping_key);
-                tapping_key = (keyrecord_t){.event=TICK};
+                tapping_key = (keyrecord_t){};
                 debug_tapping_key();
                 return false;
             } else {
@@ -335,7 +331,7 @@ bool process_tapping(keyrecord_t *keyp) {
                     debug("Tapping: End. last timeout tap release(>0).");
                     keyp->tap = tapping_key.tap;
                     process_record(keyp);
-                    tapping_key = (keyrecord_t){.event=TICK};
+                    tapping_key = (keyrecord_t){};
                     return true;
                 } else if (is_tap_record(keyp) && event.pressed) {
                     if (tapping_key.tap.count > 1) {
@@ -428,7 +424,7 @@ bool process_tapping(keyrecord_t *keyp) {
             debug("Tapping: End(Timeout after releasing last tap): ");
             debug_event(event);
             debug("\n");
-            tapping_key = (keyrecord_t){.event=TICK};
+            tapping_key = (keyrecord_t){};
             debug_tapping_key();
             return false;
         }
