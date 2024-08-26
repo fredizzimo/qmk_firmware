@@ -88,7 +88,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         EXEU,       SV_Q,       SV_W,       SV_E,       SV_R,       SV_T,       KC_NO,
         APQU,       SV_A,       SV_S,       SV_D,       SV_F,       SV_G,
         KC_LSFT,    SV_Z,       SV_X,       SV_C,       SV_V,       SV_B,       KC_NO,
-        KC_LCTRL,   KC_LGUI,    KC_APP,     KC_NO,      KC_LALT,
+        KC_LCTL,    KC_LGUI,    KC_APP,     KC_NO,      KC_LALT,
                                                                     KC_NO,      KC_NO,
                                                                                 KC_NO,
                                                         KC_SPACE,   MO(NAV),    KC_NO,
@@ -97,7 +97,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_NO,      SV_Y,       SV_U,       SV_I,       SV_O,       SV_P,       SV_AA,
                     SV_H,       SV_J,       SV_K,       SV_L,       SV_OE,      SV_AE,
         KC_NO,      SV_N,       SV_M,       SV_COMM,    SV_DOT,     QUUN,       KC_RSFT,
-                                KC_LALT,    KC_NO,      KC_APP,     KC_LGUI,    KC_RCTRL,
+                                KC_LALT,    KC_NO,      KC_APP,     KC_LGUI,    KC_RCTL,
         KC_NO,      KC_NO,
         KC_NO,
         KC_NO,      KC_ESC,     KC_ENT
@@ -129,7 +129,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
         KC_LSFT,    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
         KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
-                                                                    RESET,      DEBUG,
+                                                                    QK_BOOT,    DB_TOGG,
                                                                                 KC_TRNS,
                                                         KC_TRNS,    KC_TRNS,    KC_TRNS,
         // right hand
@@ -138,7 +138,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                     KC_LEFT,    KC_DOWN,    KC_UP,      KC_RIGHT,   KC_TAB,     KC_NO,
         KC_NO,      KC_HOME,    KC_PGDN,    KC_PGUP,    KC_END,     KC_NO,      KC_RSFT,
                                 KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
-        DEBUG,      RESET,
+        DB_TOGG,    QK_BOOT,
         KC_TRNS,
         KC_TRNS,    KC_TRNS,    KC_TRNS
     ),
@@ -150,7 +150,7 @@ void matrix_init_user(void) {
 };
 
 void press_key_with_level_mods(uint16_t key) {
-    const uint8_t interesting_mods = MOD_BIT(KC_LSHIFT) | MOD_BIT(KC_RSHIFT) | MOD_BIT(KC_RALT);
+    const uint8_t interesting_mods = MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT) | MOD_BIT(KC_RALT);
 
     // Save the state
     const uint8_t real_mods = get_mods();
