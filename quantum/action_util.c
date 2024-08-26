@@ -264,8 +264,8 @@ bool is_oneshot_enabled(void) {
 #define KEYBOARD_GENERAL_PACKET_DELAY 0
 #endif
 
-
-
+static uint8_t get_mods_for_report(void) {
+    uint8_t mods = real_mods | weak_mods;
 #ifndef NO_ACTION_ONESHOT
     if (oneshot_mods) {
 #    if (defined(ONESHOT_TIMEOUT) && (ONESHOT_TIMEOUT > 0))
@@ -299,7 +299,7 @@ void send_6kro_report(void) {
     static report_keyboard_t last_report;
 
     // Keep track of the state of mods
-    uint8_t old_mods = last_report->mods;
+    uint8_t old_mods = last_report.mods;
 
     /* Only send the report if there are changes to propagate to the host. */
     if (memcmp(keyboard_report, &last_report, sizeof(report_keyboard_t)) != 0) {
@@ -307,7 +307,7 @@ void send_6kro_report(void) {
         host_keyboard_send(keyboard_report);
 #if (KEYBOARD_MOD_PACKET_DELAY > 0)
         // If the mods are changing...
-        if (last_report->mods != old_mods) {
+        if (last_report.mods != old_mods) {
             // Wait for a fixed amount of time to allow the host to process the report
             wait_ms(KEYBOARD_MOD_PACKET_DELAY);
         }
@@ -326,7 +326,7 @@ void send_nkro_report(void) {
 
     static report_nkro_t last_report;
     // Keep track of the state of mods
-    uint8_t old_mods = last_report->mods;
+    uint8_t old_mods = last_report.mods;
 
     /* Only send the report if there are changes to propagate to the host. */
     if (memcmp(nkro_report, &last_report, sizeof(report_nkro_t)) != 0) {
@@ -334,7 +334,7 @@ void send_nkro_report(void) {
         host_nkro_send(nkro_report);
 #if (KEYBOARD_MOD_PACKET_DELAY > 0)
         // If the mods are changing...
-        if (last_report->mods != old_mods) {
+        if (last_report.mods != old_mods) {
             // Wait for a fixed amount of time to allow the host to process the report
             wait_ms(KEYBOARD_MOD_PACKET_DELAY);
         }
