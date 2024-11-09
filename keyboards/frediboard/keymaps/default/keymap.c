@@ -1,0 +1,220 @@
+#include QMK_KEYBOARD_H
+#include "debug.h"
+#include "action_layer.h"
+#include "keymap_sv_fi.h"
+#include "quantum_keycodes.h"
+
+enum layers {
+    BASE,
+    SYM1,
+    NAV,
+    SHORT,
+    MOD_LEFT,
+    MOD_RIGHT,
+};
+
+enum my_keycodes {
+    APQU=SAFE_RANGE, // '"
+    EXEU, // !€
+    QUUN, // ?_
+    TILD, // ~
+    CIRC, // ^
+    ACUT, // ´
+    GRAV, // `
+    MOD,
+};
+
+#define OS_LSFT OSM(MOD_LSFT)
+#define OS_RSFT OSM(MOD_RSFT)
+#define OS_LCTL OSM(MOD_LCTL)
+#define OS_RCTL OSM(MOD_RCTL)
+#define OS_LALT OSM(MOD_LALT)
+#define OS_RALT OSM(MOD_RALT)
+#define OS_LGUI OSM(MOD_LGUI)
+#define OS_RGUI OSM(MOD_RGUI)
+#define OS_MEH OSM(MOD_MEH)
+#define OS_HYPR OSM(MOD_HYPR)
+#define OS_SYM1 OSL(SYM1)
+#define OS_SYM2 OSL(SYM2)
+#define LA_NAV TG(NAV)
+
+#define C_BSPC LCTL(KC_BSPC)
+
+#define C_A LCTL(SV_A)
+#define C_Z LCTL(SV_Z)
+#define C_X LCTL(SV_X)
+#define C_C LCTL(SV_C)
+#define C_V LCTL(SV_V)
+#define C_B LCTL(SV_B)
+
+
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+    [BASE] = LAYOUT_split_3x5p2_3(
+        APQU,       SV_Q,       SV_W,       SV_E,       SV_R,       SV_T,          SV_Y,        SV_U,       SV_I,       SV_O,       SV_P,       SV_AA,
+        EXEU,       SV_A,       SV_S,       SV_D,       SV_F,       SV_G,          SV_H,        SV_J,       SV_K,       SV_L,       SV_OE,      SV_AE,
+                    SV_Z,       SV_X,       SV_C,       SV_V,       SV_B,          SV_N,        SV_M,       SV_COMM,    SV_DOT,     QUUN,
+                                            MOD,        KC_SPACE,   MO(NAV),       MO(SYM1),    KC_LSFT,    MO(SHORT)
+    ),
+    [SYM1] = LAYOUT_split_3x5p2_3(
+        GRAV,       SV_HASH,    SV_LT,      SV_LBRC,    SV_RBRC,    SV_GT,          SV_SLSH,    SV_7,       SV_8,       SV_9,       SV_BSLS,    SV_PERC,
+        SV_PND,     SV_AT,      SV_PIPE,    SV_LPRN,    SV_RPRN,    SV_AMPR,        SV_PLUS,    SV_4,       SV_5,       SV_6,       SV_0,       SV_EQL,
+                    TILD,       CIRC,       SV_LCBR,    SV_RCBR,    SV_DLR,         SV_ASTR,    SV_1,       SV_2,       SV_3,       SV_MINS,
+                                            KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_TRNS
+    ),
+    [NAV] = LAYOUT_split_3x5p2_3(
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_ESC,     KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      C_A,        KC_NO,      KC_BSPC,    KC_ENT,     KC_DEL,         KC_LEFT,    KC_DOWN,    KC_UP,      KC_RIGHT,   KC_TAB,     KC_NO,
+                    C_Z,        C_X,        C_C,        C_V,        C_B,            KC_HOME,    KC_PGDN,    KC_PGUP,    KC_END,     KC_NO,
+                                            KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_TRNS
+    ),
+    [MOD_LEFT] = LAYOUT_split_3x5p2_3(
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
+        KC_NO,      KC_LGUI,    KC_LALT,    KC_LSFT,    KC_LCTL,    KC_MENU,        KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
+                                            KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_TRNS
+    ),
+    [MOD_RIGHT] = LAYOUT_split_3x5p2_3(
+        KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_MENU,    KC_RCTL,    KC_RSFT,    KC_LALT,    KC_RGUI,    KC_NO,
+                    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                                            KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_TRNS
+    ),
+    [SHORT] = LAYOUT_split_3x5p2_3(
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+        KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,     KC_NO,
+                    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                                            KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_TRNS
+    ),
+    // [SHORT] = LAYOUT_split_3x5p2_3(
+    //     KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+    //     KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,     KC_NO,
+    //                 KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+    //                                         KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_TRNS
+    // ),
+};
+
+
+// Runs just one time when the keyboard initializes.
+void matrix_init_user(void) {
+
+};
+
+void press_key_with_level_mods(uint16_t key) {
+    const uint8_t interesting_mods = MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT) | MOD_BIT(KC_RALT);
+
+    // Save the state
+    const uint8_t real_mods = get_mods();
+    const uint8_t weak_mods = get_weak_mods();
+
+    uint8_t target_mods = (key >> 8) & (QK_MODS_MAX >> 8);
+    // The 5th bit indicates that it's a right hand mod,
+    // which needs some fixup
+    if (target_mods & 0x10) {
+        target_mods &= 0xF;
+        target_mods <<= 4;
+    }
+
+    // Clear the mods that we are potentially going to modify,
+    del_mods(interesting_mods);
+    del_weak_mods(interesting_mods);
+
+    // Enable the mods that we need
+    add_mods(target_mods & interesting_mods);
+
+    // Press and release the key
+    register_code(key & 0xFF);
+    unregister_code(key & 0xFF);
+
+
+    // Restore the previous state
+    set_mods(real_mods);
+    set_weak_mods(weak_mods);
+    send_keyboard_report();
+}
+
+bool override_key(keyrecord_t* record, uint16_t normal, uint16_t shifted) {
+    const uint8_t shift = MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT);
+    // Todo, should maybe also check at least the weak mods
+    uint8_t current_mods = get_mods();
+    if (record->event.pressed) {
+        // Todo share this code with send keyboard report
+#ifndef NO_ACTION_ONESHOT
+        if (get_oneshot_mods()) {
+#if (defined(ONESHOT_TIMEOUT) && (ONESHOT_TIMEOUT > 0))
+            if (has_oneshot_mods_timed_out()) {
+                dprintf("Oneshot: timeout\n");
+                clear_oneshot_mods();
+            }
+#endif
+            current_mods |= get_oneshot_mods();
+            clear_oneshot_mods();
+        }
+#endif
+        bool shift_pressed = current_mods & shift;
+        const uint16_t target = shift_pressed ? shifted : normal;
+        uint8_t keycode = target & 0xFF;
+        if (keycode == KC_NO) {
+            return false;
+        }
+        press_key_with_level_mods(target);
+    }
+    return false;
+}
+
+static bool wake_dead_key(uint16_t keycode, keyrecord_t* record) {
+    if (record->event.pressed) {
+        register_code16(keycode);
+        unregister_code16(keycode);
+        register_code16(KC_SPACE);
+        unregister_code16(KC_SPACE);
+    }
+    // Let QMK handle onshots
+    return true;
+}
+
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+    if ( record->event.pressed ) {
+        if (layer_state_is(MOD_LEFT) && record->event.key.row>4) {
+            layer_off(MOD_LEFT);
+        } else if (layer_state_is(MOD_RIGHT)) {
+            layer_off(MOD_RIGHT);
+        }
+    }
+    switch(keycode) {
+    case APQU:
+        return override_key(record, SV_APOS, SV_QUOT);
+    case EXEU:
+        return override_key(record, SV_EXLM, SV_EURO);
+    case QUUN:
+        return override_key(record, SV_QUES, SV_UNDS);
+    case GRAV:
+        return wake_dead_key(SV_GRAV, record);
+    case TILD:
+        return wake_dead_key(SV_TILD, record);
+    case CIRC:
+        return wake_dead_key(SV_CIRC, record);
+    case MOD:
+        {
+            if (record->event.pressed) {
+                layer_on(MOD_LEFT);
+                layer_on(MOD_RIGHT);
+            } else {
+                layer_off(MOD_LEFT);
+                layer_on(MOD_RIGHT);
+            }
+            return false;
+        }
+    }
+    return true;
+}
+
+void keyboard_post_init_user(void) {
+  // Customise these values to desired behaviour
+  //debug_enable=true;
+  //debug_matrix=true;
+  //debug_keyboard=true;
+  //debug_mouse=true;
+}
+
