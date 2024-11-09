@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+from copy import copy
 from build123d import *
 from ocp_vscode import *
+
 
 @dataclass
 class SwitchHolderConfig:
@@ -14,6 +16,7 @@ class SwitchHolderConfig:
     # This should be near the bottom of the keycap, where the keys are the cloest to each other
     plate_to_keycap_height: float
 
+
 cherry_mx_switch_holder_cfg = SwitchHolderConfig(
     width=19.05,
     length=19.05,
@@ -23,6 +26,40 @@ cherry_mx_switch_holder_cfg = SwitchHolderConfig(
     slot_top=1.3,
     slot_depth=0.5,
     plate_to_keycap_height=6.7,
+)
+
+
+@dataclass
+class ColumnConfig:
+    num_keys: int
+    middle_key: int
+    offset: float
+
+
+@dataclass
+class KeyboardConfig:
+    switch_holder: SwitchHolderConfig
+    columns: list[ColumnConfig]
+
+
+# Ergodox
+# -4.75
+# -4.75
+# 0
+# 2.4
+# 0
+# -2.4
+
+keyboard = KeyboardConfig(
+    switch_holder=cherry_mx_switch_holder_cfg,
+    columns=[
+        ColumnConfig(num_keys=3, middle_key=1, offset=-4.75),
+        ColumnConfig(num_keys=3, middle_key=1, offset=-4.75),
+        ColumnConfig(num_keys=3, middle_key=1, offset=0),
+        ColumnConfig(num_keys=3, middle_key=1, offset=2.4),
+        ColumnConfig(num_keys=3, middle_key=1, offset=0.0),
+        ColumnConfig(num_keys=3, middle_key=1, offset=-2.4),
+    ],
 )
 
 
@@ -41,9 +78,32 @@ class SwitchHolder(Part):
         super().__init__(shapes=[holder])
 
 
-switch_hoder = SwitchHolder(cherry_mx_switch_holder_cfg, 3)
+class Column(Part):
+    def __init__(self, config: ColumnConfig, switch_holder_config: SwitchHolderConfig, plate_thickness):
+        switch_holder = SwitchHolder(switch_holder_config, plate_thickness)
+        length = switch_holder_config.length
+        start = config.offset - config.middle_key * length
+        locations = [Pos(Y=start + i * length) for i in range(config.num_keys)]
+        switches = [copy(switch_holder).move(loc) for loc in locations]
+
+        super().__init__(shapes=Part() + switches)
+
+
+class Plate(Part):
+    def __init__(self, config: KeyboardConfig, plate_thickness):
+        width = config.switch_holder.width
+        switch_holder_config = config.switch_holder
+        columns = [
+            Pos(X=i * width) * Column(column_config, switch_holder_config, plate_thickness)
+            for i, column_config in enumerate(config.columns)
+        ]
+        super().__init__(shapes=columns)
+
+
+plate_thickness = 3
+plate = Plate(keyboard, plate_thickness)
 
 show(
-    switch_hoder,
+    plate,
     reset_camera=Camera.KEEP,
 )
