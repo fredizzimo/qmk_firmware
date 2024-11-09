@@ -62,6 +62,14 @@ void sleep_led_timer_callback(void) {
 
 #if defined(KL2x) || defined(K20x) /* platform selection: familiar Kinetis chips */
 
+#ifndef SLEEP_LED_IRQ_PRIORITY
+#define SLEEP_LED_IRQ_PRIORITY 10
+#endif
+
+#if !OSAL_IRQ_IS_VALID_PRIORITY(SLEEP_LED_IRQ_PRIORITY)
+#error "Invalid IRQ priority assigned to SLEEP_LED_IRQ_PRIORITY"
+#endif
+
 /* Use Low Power Timer (LPTMR) */
 #    define TIMER_INTERRUPT_VECTOR KINETIS_LPTMR0_IRQ_VECTOR
 #    define RESET_COUNTER LPTMR0->CSR |= LPTMRx_CSR_TCF
@@ -143,7 +151,7 @@ void sleep_led_init(void) {
     /* === END OPTIONS === */
 
     /* Interrupt on TCF set (compare flag) */
-    nvicEnableVector(LPTMR0_IRQn, 2); // vector, priority
+    nvicEnableVector(LPTMR0_IRQn, SLEEP_LED_IRQ_PRIORITY); // vector, priority
     LPTMR0->CSR |= LPTMRx_CSR_TIE;
 }
 
