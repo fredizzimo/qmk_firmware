@@ -1,0 +1,28 @@
+[project]
+name = "frediboard"
+version = "0.1.0"
+description = "Keyboard designed to fit my hands"
+readme = "README.md"
+dependencies = [
+    "black==24.2",
+    "build123d~=0.6.0",
+    "numpy~=1.26",
+    "ocp_vscode~=2.4.1",
+    "pylint==3.0",
+    "scipy~=1.12",
+]
+requires-python = "==3.11.9"
+
+[project.scripts]
+plate = "ergo_unbounded.plate:plate"
+palmrest = "ergo_unbounded.palmrest:palmrest"
+
+[tool.setuptools.package-data]
+ergo_unbounded = ["assets/*"]
+
+[tool.uv]
+python-preference = "only-managed"
+python-downloads = "automatic"
+
+[tool.black]
+line-length = 120
