@@ -31,6 +31,7 @@
 #include "usb_descriptor.h"
 #include "usb_driver.h"
 #include "usb_types.h"
+#include "debug.h"
 
 #ifdef NKRO_ENABLE
 #    include "keycode_config.h"
@@ -180,9 +181,11 @@ void usb_event_queue_task(void) {
 static void usb_event_cb(USBDriver *usbp, usbevent_t event) {
     switch (event) {
         case USB_EVENT_ADDRESS:
+            dprintln("USB_EVENT_ADDRESS");
             return;
 
         case USB_EVENT_CONFIGURED:
+            dprintln("USB_EVENT_CONFIGURED");
             osalSysLockFromISR();
             for (int i = 0; i < USB_ENDPOINT_IN_COUNT; i++) {
                 usb_endpoint_in_configure_cb(&usb_endpoints_in[i]);
@@ -197,10 +200,13 @@ static void usb_event_cb(USBDriver *usbp, usbevent_t event) {
             usb_event_queue_enqueue(USB_EVENT_CONFIGURED);
             return;
         case USB_EVENT_SUSPEND:
+            dprintln("USB_EVENT_SUSPEND");
             /* Falls into.*/
         case USB_EVENT_UNCONFIGURED:
+            dprintln("USB_EVENT_UNCONFIGURED");
             /* Falls into.*/
         case USB_EVENT_RESET:
+            dprintln("USB_EVENT_RESET");
             usb_event_queue_enqueue(event);
             chSysLockFromISR();
             for (int i = 0; i < USB_ENDPOINT_IN_COUNT; i++) {
@@ -213,6 +219,7 @@ static void usb_event_cb(USBDriver *usbp, usbevent_t event) {
             return;
 
         case USB_EVENT_WAKEUP:
+            dprintln("USB_EVENT_WAKEUP");
             chSysLockFromISR();
             for (int i = 0; i < USB_ENDPOINT_IN_COUNT; i++) {
                 usb_endpoint_in_wakeup_cb(&usb_endpoints_in[i]);
@@ -225,6 +232,7 @@ static void usb_event_cb(USBDriver *usbp, usbevent_t event) {
             return;
 
         case USB_EVENT_STALLED:
+            dprintln("USB_EVENT_STALLED");
             return;
     }
 }

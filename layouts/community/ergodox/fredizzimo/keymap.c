@@ -130,7 +130,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LSFT,    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
         KC_NO,      KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
                                                                     QK_BOOT,    DB_TOGG,
-                                                                                KC_TRNS,
+                                                                                QK_RBT,
                                                         KC_TRNS,    KC_TRNS,    KC_TRNS,
         // right hand
         KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
@@ -290,8 +290,13 @@ void matrix_scan_user(void) {
 
 void keyboard_post_init_user(void) {
   // Customise these values to desired behaviour
-  //debug_enable=true;
-  //debug_matrix=true;
-  //debug_keyboard=true;
-  //debug_mouse=true;
+  debug_enable=true;
+  debug_matrix=true;
+  debug_keyboard=true;
+  debug_mouse=true;
+}
+
+void suspend_power_down_user(void) {
+    dprintln("Suspended");
+    // code will run multiple times while keyboard is suspended
 }

@@ -34,6 +34,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SERIAL_USART_CONFIG { (SERIAL_USART_SPEED), } // Only field is speed
 #define SERIAL_USART_FULL_DUPLEX
 
+#define UART_DRIVER SD3
+#define UART_TX_PIN D3
+#define UART_TX_PAL_MODE PAL_MODE_ALTERNATIVE_3
+#define UART_RX_PIN D2
+#define UART_RX_PAL_MODE PAL_MODE_ALTERNATIVE_3
+
 #define LED_BRIGHTNESS_LO       100
 #define LED_BRIGHTNESS_HI       255
 

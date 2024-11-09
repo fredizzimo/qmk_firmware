@@ -54,6 +54,7 @@
  */
 #define KINETIS_SERIAL_USE_UART0            TRUE
 #define KINETIS_SERIAL_USE_UART1            TRUE
+#define KINETIS_SERIAL_USE_UART2            TRUE
 
 /*
  * USB driver settings

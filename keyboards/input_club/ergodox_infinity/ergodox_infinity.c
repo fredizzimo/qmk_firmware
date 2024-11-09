@@ -3,6 +3,7 @@
 #include <hal.h>
 #include <string.h>
 #include "eeconfig.h"
+#include "uart.h"
 
 #define RED_PIN 1
 #define GREEN_PIN 2
@@ -94,7 +95,18 @@ __attribute__ ((weak)) void matrix_init_user(void) {}
 __attribute__ ((weak)) void matrix_scan_user(void) {}
 
 
+int8_t sendchar_uart(uint8_t c) {
+    uart_write(c);
+    return 0;
+}
+
 void keyboard_pre_init_kb(void) {
+    uart_init(115200);
+    print_set_sendchar(sendchar_uart);
+    for(uint8_t i=0;i<255;i++) {
+        uart_write(i);
+    }
+    printf("Hello World!\n");
     // The backlight always has to be initialized, otherwise it will stay lit
     lcd_backlight_hal_init();
 #ifdef ST7565_ENABLE
