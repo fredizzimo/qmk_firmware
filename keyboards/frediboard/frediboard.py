@@ -57,8 +57,8 @@ keyboard = KeyboardConfig(
     columns=[
         ColumnConfig(num_keys=3, middle_key=1, offset=-4.75),
         ColumnConfig(num_keys=3, middle_key=1, offset=-4.75),
-        ColumnConfig(num_keys=3, middle_key=1, offset=0),
-        ColumnConfig(num_keys=3, middle_key=1, offset=2.4),
+        ColumnConfig(num_keys=3, middle_key=1, offset=3.0),
+        ColumnConfig(num_keys=3, middle_key=1, offset=5.4),
         ColumnConfig(num_keys=3, middle_key=1, offset=0.0),
         ColumnConfig(num_keys=3, middle_key=1, offset=-2.4),
     ],
