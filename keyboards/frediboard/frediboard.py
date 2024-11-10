@@ -64,6 +64,7 @@ keyboard = KeyboardConfig(
     ],
 )
 
+
 def draw_pdf(name):
     def to_points(mm):
         inches = mm / 25.4
@@ -82,16 +83,16 @@ def draw_pdf(name):
         for i, column_config in enumerate(columns):
             x = left + i * keyboard.switch_holder.width
             for j in range(column_config.num_keys):
-
                 offset = column_config.offset - column_config.middle_key * keyboard.switch_holder.length
                 y = top + j * keyboard.switch_holder.length - offset
                 shape.draw_rect(
-                        pymupdf.Rect(to_points(x + left_offset),
-                                     to_points(y + top_offset),
-                                     to_points(x + right_offset),
-                                     to_points(y + bottom_offset)))
-
-
+                    pymupdf.Rect(
+                        to_points(x + left_offset),
+                        to_points(y + top_offset),
+                        to_points(x + right_offset),
+                        to_points(y + bottom_offset),
+                    )
+                )
 
     draw_keyboard_shape(shape, 30, 30, False)
     draw_keyboard_shape(shape, 30 + 3 * keyboard.switch_holder.length + 30, 30, True)
@@ -99,6 +100,7 @@ def draw_pdf(name):
 
     shape.commit()
     doc.save(Path.cwd() / name)
+
 
 draw_pdf("keyboard.pdf")
 
