@@ -9,6 +9,7 @@ dependencies = [
     "numpy~=1.26",
     "ocp_vscode~=2.4.1",
     "pylint==3.0",
+    "pymupdf~=1.24",
     "scipy~=1.12",
 ]
 requires-python = "==3.11.9"

@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from copy import copy
+from pathlib import Path
 from build123d import *
 from ocp_vscode import *
+import pymupdf
 
 
 @dataclass
@@ -61,6 +63,44 @@ keyboard = KeyboardConfig(
         ColumnConfig(num_keys=3, middle_key=1, offset=-2.4),
     ],
 )
+
+def draw_pdf(name):
+    def to_points(mm):
+        inches = mm / 25.4
+        return inches * 72.0
+
+    doc = pymupdf.open()
+    page = doc.new_page(width=to_points(210), height=to_points(297))
+    shape = page.new_shape()
+
+    def draw_keyboard_shape(shape, top, left, mirror):
+        left_offset = (keyboard.switch_holder.width - keyboard.switch_holder.hole_width) * 0.5
+        right_offset = left_offset + keyboard.switch_holder.hole_width
+        top_offset = (keyboard.switch_holder.length - keyboard.switch_holder.hole_length) * 0.5
+        bottom_offset = top_offset + keyboard.switch_holder.hole_length
+        columns = reversed(keyboard.columns) if mirror else keyboard.columns
+        for i, column_config in enumerate(columns):
+            x = left + i * keyboard.switch_holder.width
+            for j in range(column_config.num_keys):
+
+                offset = column_config.offset - column_config.middle_key * keyboard.switch_holder.length
+                y = top + j * keyboard.switch_holder.length - offset
+                shape.draw_rect(
+                        pymupdf.Rect(to_points(x + left_offset),
+                                     to_points(y + top_offset),
+                                     to_points(x + right_offset),
+                                     to_points(y + bottom_offset)))
+
+
+
+    draw_keyboard_shape(shape, 30, 30, False)
+    draw_keyboard_shape(shape, 30 + 3 * keyboard.switch_holder.length + 30, 30, True)
+    shape.finish()
+
+    shape.commit()
+    doc.save(Path.cwd() / name)
+
+draw_pdf("keyboard.pdf")
 
 
 class SwitchHolder(Part):
