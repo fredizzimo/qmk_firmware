@@ -55,9 +55,9 @@ class KeyboardConfig:
 keyboard = KeyboardConfig(
     switch_holder=cherry_mx_switch_holder_cfg,
     columns=[
-        ColumnConfig(num_keys=3, middle_key=1, offset=-12),
-        ColumnConfig(num_keys=3, middle_key=1, offset=-12),
-        ColumnConfig(num_keys=3, middle_key=1, offset=1.0),
+        ColumnConfig(num_keys=3, middle_key=1, offset=-8.0),
+        ColumnConfig(num_keys=3, middle_key=1, offset=-8.0),
+        ColumnConfig(num_keys=3, middle_key=1, offset=2.0),
         ColumnConfig(num_keys=3, middle_key=1, offset=5.4),
         ColumnConfig(num_keys=3, middle_key=1, offset=0.0),
         ColumnConfig(num_keys=3, middle_key=1, offset=-2.4),
