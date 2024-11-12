@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from copy import copy
 from pathlib import Path
+import math
+from math import atan
 from build123d import *
 from ocp_vscode import *
 import pymupdf
@@ -30,18 +32,39 @@ cherry_mx_switch_holder_cfg = SwitchHolderConfig(
     plate_to_keycap_height=6.7,
 )
 
+# TODO: Fix this
+choc_switch_holder_cfg = SwitchHolderConfig(
+    width=18.0,
+    length=17.0,
+    hole_width=13.9,
+    hole_length=13.9,
+    slot_width=5.0,
+    slot_top=1.3,
+    slot_depth=0.5,
+    plate_to_keycap_height=6.7,
+)
+
 
 @dataclass
 class ColumnConfig:
     num_keys: int
-    middle_key: int
     offset: float
+
+
+@dataclass
+class ThumbConfig:
+    switch_holder: SwitchHolderConfig
+    num_keys: int
+    angle: float
+    x: float
+    y: float
 
 
 @dataclass
 class KeyboardConfig:
     switch_holder: SwitchHolderConfig
     columns: list[ColumnConfig]
+    thumb: ThumbConfig
 
 
 # Ergodox
@@ -52,16 +75,29 @@ class KeyboardConfig:
 # 0
 # -2.4
 
+columns = [
+    ColumnConfig(num_keys=3, offset=-8.0),
+    ColumnConfig(num_keys=3, offset=-8.0),
+    ColumnConfig(num_keys=3, offset=2.0),
+    ColumnConfig(num_keys=3, offset=5.4),
+    ColumnConfig(num_keys=3, offset=0.0),
+    ColumnConfig(num_keys=3, offset=-2.4),
+]
+
+thumb = ThumbConfig(
+    switch_holder=choc_switch_holder_cfg,
+    num_keys=3,
+    angle=30,
+    x=cherry_mx_switch_holder_cfg.width * (len(columns) - 1)
+    + (cherry_mx_switch_holder_cfg.width - choc_switch_holder_cfg.width) / 2.0
+    - 5.0,
+    y=columns[5].offset - choc_switch_holder_cfg.length,
+)
+
 keyboard = KeyboardConfig(
     switch_holder=cherry_mx_switch_holder_cfg,
-    columns=[
-        ColumnConfig(num_keys=3, middle_key=1, offset=-8.0),
-        ColumnConfig(num_keys=3, middle_key=1, offset=-8.0),
-        ColumnConfig(num_keys=3, middle_key=1, offset=2.0),
-        ColumnConfig(num_keys=3, middle_key=1, offset=5.4),
-        ColumnConfig(num_keys=3, middle_key=1, offset=0.0),
-        ColumnConfig(num_keys=3, middle_key=1, offset=-2.4),
-    ],
+    columns=columns,
+    thumb=thumb,
 )
 
 
@@ -74,28 +110,49 @@ def draw_pdf(name):
     page = doc.new_page(width=to_points(210), height=to_points(297))
     shape = page.new_shape()
 
+    def draw_switch(shape, config: SwitchHolderConfig, m: pymupdf.Matrix):
+        x_offset = (config.width - config.hole_width) * 0.5
+        y_offset = (config.length - config.hole_length) * 0.5
+        shape.draw_quad(
+            pymupdf.Rect(
+                to_points(x_offset),
+                to_points(-y_offset),
+                to_points(config.width - x_offset),
+                to_points(-config.length + y_offset),
+            ).quad.transform(m)
+        )
+
     def draw_keyboard_shape(shape, top, left, mirror):
-        left_offset = (keyboard.switch_holder.width - keyboard.switch_holder.hole_width) * 0.5
-        right_offset = left_offset + keyboard.switch_holder.hole_width
-        top_offset = (keyboard.switch_holder.length - keyboard.switch_holder.hole_length) * 0.5
-        bottom_offset = top_offset + keyboard.switch_holder.hole_length
-        columns = reversed(keyboard.columns) if mirror else keyboard.columns
-        for i, column_config in enumerate(columns):
+        if mirror:
+            mirror_matrix = pymupdf.Matrix(1, 0, 0, 1, 0, 0)
+        else:
+            mirror_matrix = pymupdf.Matrix(-1, 0, 0, 1, 0, 0)
+            m = pymupdf.Matrix(pymupdf.Identity).pretranslate(to_points(210), to_points(0))
+            mirror_matrix = mirror_matrix.concat(mirror_matrix, m)
+        for i, column_config in enumerate(keyboard.columns):
             x = left + i * keyboard.switch_holder.width
             for j in range(column_config.num_keys):
-                offset = column_config.offset - column_config.middle_key * keyboard.switch_holder.length
-                y = top + j * keyboard.switch_holder.length - offset
-                shape.draw_rect(
-                    pymupdf.Rect(
-                        to_points(x + left_offset),
-                        to_points(y + top_offset),
-                        to_points(x + right_offset),
-                        to_points(y + bottom_offset),
-                    )
-                )
+                offset = column_config.offset
+                y = top - j * keyboard.switch_holder.length - offset
+                m = pymupdf.Matrix(pymupdf.Identity).pretranslate(to_points(x), to_points(y))
+                m = m.concat(m, mirror_matrix)
+                draw_switch(shape, keyboard.switch_holder, m)
+        # Thumb
+        y = top - keyboard.thumb.y
+        for i in range(keyboard.thumb.num_keys):
+            x = i * keyboard.thumb.switch_holder.width
+            m1 = pymupdf.Matrix(pymupdf.Identity).pretranslate(to_points(x), to_points(0.0))
+            m2 = pymupdf.Matrix(keyboard.thumb.angle)
+            m3 = pymupdf.Matrix(pymupdf.Identity).pretranslate(
+                to_points(left + keyboard.thumb.x), to_points(top - keyboard.thumb.y)
+            )
+            m = pymupdf.Matrix().concat(m1, m2)
+            m = m.concat(m, m3)
+            m = m.concat(m, mirror_matrix)
+            draw_switch(shape, keyboard.thumb.switch_holder, m)
 
-    draw_keyboard_shape(shape, 30, 30, False)
-    draw_keyboard_shape(shape, 30 + 3 * keyboard.switch_holder.length + 30, 30, True)
+    draw_keyboard_shape(shape, 4 * keyboard.switch_holder.length, 30, False)
+    draw_keyboard_shape(shape, 10 * keyboard.switch_holder.length, 30, True)
     shape.finish()
 
     shape.commit()
@@ -124,9 +181,28 @@ class Column(Part):
     def __init__(self, config: ColumnConfig, switch_holder_config: SwitchHolderConfig, plate_thickness):
         switch_holder = SwitchHolder(switch_holder_config, plate_thickness)
         length = switch_holder_config.length
-        start = config.offset - config.middle_key * length
-        locations = [Pos(Y=start + i * length) for i in range(config.num_keys)]
+        start = config.offset
+        locations = [
+            Pos(X=switch_holder_config.length / 2.0, Y=start + i * length + switch_holder_config.width / 2.0)
+            for i in range(config.num_keys)
+        ]
         switches = [copy(switch_holder).move(loc) for loc in locations]
+
+        super().__init__(shapes=Part() + switches)
+
+
+class ThumbCluster(Part):
+    def __init__(self, config: ThumbConfig, plate_thickness):
+        switch_holder = SwitchHolder(config.switch_holder, plate_thickness)
+        width = config.switch_holder.width
+        offset = Pos(X=config.switch_holder.width / 2.0, Y=config.switch_holder.length / 2.0)
+        locations = [
+            Pos(X=i * width + config.switch_holder.width / 2.0, Y=config.switch_holder.length / 2.0)
+            for i in range(config.num_keys)
+        ]
+        switches = [
+            copy(switch_holder).move(loc).rotate(Axis.Z, -25).move(Pos(X=config.x, Y=config.y)) for loc in locations
+        ]
 
         super().__init__(shapes=Part() + switches)
 
@@ -139,7 +215,8 @@ class Plate(Part):
             Pos(X=i * width) * Column(column_config, switch_holder_config, plate_thickness)
             for i, column_config in enumerate(config.columns)
         ]
-        super().__init__(shapes=columns)
+        thumb_cluster = ThumbCluster(config.thumb, plate_thickness)
+        super().__init__(shapes=columns + [thumb_cluster])
 
 
 plate_thickness = 3
