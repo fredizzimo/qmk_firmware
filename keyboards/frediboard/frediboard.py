@@ -7,6 +7,8 @@ from build123d import *
 from ocp_vscode import *
 import pymupdf
 
+show_clear()
+
 
 @dataclass
 class SwitchHolderConfig:
@@ -201,7 +203,8 @@ class ThumbCluster(Part):
             for i in range(config.num_keys)
         ]
         switches = [
-            copy(switch_holder).move(loc).rotate(Axis.Z, -25).move(Pos(X=config.x, Y=config.y)) for loc in locations
+            copy(switch_holder).move(loc).rotate(Axis.Z, -config.angle).move(Pos(X=config.x, Y=config.y))
+            for loc in locations
         ]
 
         super().__init__(shapes=Part() + switches)
@@ -219,10 +222,83 @@ class Plate(Part):
         super().__init__(shapes=columns + [thumb_cluster])
 
 
+def find_line_common_point(line1: Wire, line2: Wire) -> tuple[int, int]:
+    for p1 in (0, 1):
+        for p2 in (0, 1):
+            if ((line1 @ p1) - (line2 @ p2)).length < 0.0001:
+                return p1, p2
+
+    raise ValueError("No common point found")
+
+
+def trim(line, p1, p2):
+    if p1 < p2:
+        return line.trim(p1, p2)
+    else:
+        return line.trim(p2, p1)
+
+
+def line_fillet(line1, line2, radius) -> tuple[BaseLineObject, TangentArc, BaseLineObject]:
+    p1, p2 = find_line_common_point(line1, line2)
+    tangent1 = line1 % p1
+    tangent2 = line2 % p2
+    if p1 == 1:
+        tangent1 = -tangent1
+    if p2 == 1:
+        tangent2 = -tangent2
+    angle = tangent1.get_angle(tangent2)
+    half_angle = angle / 2.0
+    side_length = radius / math.tan(math.radians(half_angle))
+    end_point1 = line1 @ p1 + tangent1 * side_length
+    end_point2 = line2 @ p2 + tangent2 * side_length
+    fillet_arc = TangentArc(end_point1, end_point2, tangent=-tangent1)
+    line1 = trim(line1, 1 - p1, line1.param_at_point(end_point1))
+    line2 = trim(line2, 1 - p2, line2.param_at_point(end_point2))
+    return line1, fillet_arc, line2
+
+
+def make_plate_shape(config: KeyboardConfig) -> Curve:
+    border = 10
+    shape = []
+    e1 = Line(
+        (-border, config.columns[0].offset),
+        (-border, columns[3].offset + columns[3].num_keys * config.switch_holder.length),
+    )
+    e2 = JernArc(e1 @ 1, e1 % 1, border, -90)
+    e3 = Line(e2 @ 1, e2 @ 1 + (6 * config.switch_holder.width, 0))
+    e4 = JernArc(e3 @ 1, e3 % 1, border, -90)
+
+    e7 = PolarLine(
+        (0, config.thumb.switch_holder.length + border), config.thumb.num_keys * config.thumb.switch_holder.width, 0
+    )
+    e8 = JernArc(e7 @ 1, e7 % 1, border, -90)
+    e9 = PolarLine(e8 @ 1, config.thumb.switch_holder.length, -90)
+    e10 = JernArc(e9 @ 1, e9 % 1, border, -90)
+    e11 = PolarLine(e10 @ 1, e7.length, -180)
+
+    thumb_location = Pos(config.thumb.x, config.thumb.y) * Rotation(Z=-config.thumb.angle)
+    for e in (e7, e8, e9, e10, e11):
+        e.move(thumb_location)
+
+    e5 = IntersectingLine(e4 @ 1, (0, -1), e7)
+    e7 = e7.trim(e7.param_at_point(e5 @ 1), 1)
+    e5, e6, e7 = line_fillet(e5, e7, border)
+
+    e14 = JernArc(e1 @ 0, -(e1 % 0), border, 90)
+    e13 = Line(e14 @ 1, ((e11 @ 1).X, (e14 @ 1).Y))
+    e11 = IntersectingLine(e10 @ 1, e11 % 0, e13)
+    e13 = e13.trim(0, e13.param_at_point(e11 @ 1))
+
+    e11, e12, e13 = line_fillet(e11, e13, border)
+
+    return Wire() + [e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14]
+
+
 plate_thickness = 3
 plate = Plate(keyboard, plate_thickness)
+plate_shape = make_plate_shape(keyboard)
 
-show(
-    plate,
+show_object(
+    [plate, plate_shape],
     reset_camera=Camera.KEEP,
 )
