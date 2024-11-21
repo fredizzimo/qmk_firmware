@@ -5,12 +5,10 @@ description = "Keyboard designed to fit my hands"
 readme = "README.md"
 dependencies = [
     "black==24.2",
-    "build123d~=0.6.0",
-    "numpy~=1.26",
-    "ocp_vscode~=2.4.1",
+    "build123d~=0.8.0",
+    "ocp_vscode~=2.6.1",
     "pylint==3.0",
     "pymupdf~=1.24",
-    "scipy~=1.12",
 ]
 requires-python = "==3.11.9"
 
