@@ -29,7 +29,7 @@ cherry_mx_switch_holder_cfg = SwitchHolderConfig(
     hole_width=13.9,
     hole_length=13.9,
     slot_width=5.0,
-    slot_top=1.3,
+    slot_top=1.4,
     slot_depth=0.5,
     plate_to_keycap_height=6.7,
 )
@@ -41,7 +41,7 @@ choc_switch_holder_cfg = SwitchHolderConfig(
     hole_width=13.9,
     hole_length=13.9,
     slot_width=5.0,
-    slot_top=1.3,
+    slot_top=1.4,
     slot_depth=0.5,
     plate_to_keycap_height=6.7,
 )
@@ -67,6 +67,19 @@ class KeyboardConfig:
     switch_holder: SwitchHolderConfig
     columns: list[ColumnConfig]
     thumb: ThumbConfig
+
+
+@dataclass
+class PlateConfig:
+    thickness: float
+    border: float
+
+
+@dataclass
+class DraftConfig:
+    plate: PlateConfig
+    wall_thickness: float
+    total_height: float
 
 
 # Ergodox
@@ -101,6 +114,8 @@ keyboard = KeyboardConfig(
     columns=columns,
     thumb=thumb,
 )
+
+draft_config = DraftConfig(plate=PlateConfig(thickness=1.5, border=3), total_height=8, wall_thickness=1)
 
 
 def draw_pdf(name):
@@ -164,62 +179,64 @@ def draw_pdf(name):
 draw_pdf("keyboard.pdf")
 
 
-class SwitchHolder(Part):
-    def __init__(self, config: SwitchHolderConfig, plate_thickness):
-        holder = Box(config.width, config.length, plate_thickness) - [
+def make_switch_cutout(config: SwitchHolderConfig, plate_thickness):
+    return (
+        Part()
+        + (
             Box(config.hole_width, config.hole_length, plate_thickness),
-            Box(config.slot_width, config.hole_length, plate_thickness),
             Box(config.slot_width, config.hole_length + 2 * config.slot_depth, plate_thickness).move(
                 Pos(Z=-config.slot_top)
             ),
-        ]
+        )
+    ).moved(
+        Pos(Z=plate_thickness / 2.0),
+    )
+
+
+class SwitchHolder(Part):
+    def __init__(self, config: SwitchHolderConfig, plate_thickness):
+        holder = Box(config.width, config.length, plate_thickness) - make_switch_cutout(config, plate_thickness)
         self.top_middle_joint = RigidJoint(
             label="top_middle", to_part=holder, joint_location=Location((0.0, 0.0, plate_thickness / 2.0))
         )
         super().__init__(shapes=[holder])
 
 
-class Column(Part):
-    def __init__(self, config: ColumnConfig, switch_holder_config: SwitchHolderConfig, plate_thickness):
-        switch_holder = SwitchHolder(switch_holder_config, plate_thickness)
-        length = switch_holder_config.length
-        start = config.offset
-        locations = [
-            Pos(X=switch_holder_config.length / 2.0, Y=start + i * length + switch_holder_config.width / 2.0)
-            for i in range(config.num_keys)
-        ]
-        switches = [copy(switch_holder).move(loc) for loc in locations]
-
-        super().__init__(shapes=Part() + switches)
+def make_column_cutout(cutout: Part, config: ColumnConfig, switch_holder_config: SwitchHolderConfig, plate_thickness):
+    length = switch_holder_config.length
+    start = config.offset
+    locations = [
+        Pos(X=switch_holder_config.length / 2.0, Y=start + i * length + switch_holder_config.width / 2.0)
+        for i in range(config.num_keys)
+    ]
+    return Part() + [copy(cutout).move(loc) for loc in locations]
 
 
-class ThumbCluster(Part):
-    def __init__(self, config: ThumbConfig, plate_thickness):
-        switch_holder = SwitchHolder(config.switch_holder, plate_thickness)
-        width = config.switch_holder.width
-        offset = Pos(X=config.switch_holder.width / 2.0, Y=config.switch_holder.length / 2.0)
-        locations = [
-            Pos(X=i * width + config.switch_holder.width / 2.0, Y=config.switch_holder.length / 2.0)
-            for i in range(config.num_keys)
-        ]
-        switches = [
-            copy(switch_holder).move(loc).rotate(Axis.Z, -config.angle).move(Pos(X=config.x, Y=config.y))
-            for loc in locations
-        ]
-
-        super().__init__(shapes=Part() + switches)
+def make_thumb_cutout(config: ThumbConfig, plate_thickness):
+    switch_cutout = make_switch_cutout(config.switch_holder, plate_thickness)
+    width = config.switch_holder.width
+    offset = Pos(X=config.switch_holder.width / 2.0, Y=config.switch_holder.length / 2.0)
+    locations = [
+        Pos(X=i * width + config.switch_holder.width / 2.0, Y=config.switch_holder.length / 2.0)
+        for i in range(config.num_keys)
+    ]
+    return Part() + [
+        copy(switch_cutout).move(loc).rotate(Axis.Z, -config.angle).move(Pos(X=config.x, Y=config.y))
+        for loc in locations
+    ]
 
 
-class Plate(Part):
-    def __init__(self, config: KeyboardConfig, plate_thickness):
-        width = config.switch_holder.width
-        switch_holder_config = config.switch_holder
-        columns = [
-            Pos(X=i * width) * Column(column_config, switch_holder_config, plate_thickness)
-            for i, column_config in enumerate(config.columns)
-        ]
-        thumb_cluster = ThumbCluster(config.thumb, plate_thickness)
-        super().__init__(shapes=columns + [thumb_cluster])
+def make_plate_cutout(config: KeyboardConfig, plate_thickness):
+    column_width = config.switch_holder.width
+    switch_holder_config = config.switch_holder
+    switch_cutout = make_switch_cutout(keyboard.switch_holder, plate_thickness)
+    column_cutouts = [
+        Pos(X=i * column_width)
+        * make_column_cutout(switch_cutout, column_config, switch_holder_config, plate_thickness)
+        for i, column_config in enumerate(config.columns)
+    ]
+    thumb_cutouts = make_thumb_cutout(config.thumb, plate_thickness)
+    return Part() + column_cutouts + thumb_cutouts
 
 
 def find_line_common_point(line1: Wire, line2: Wire) -> tuple[int, int]:
@@ -257,8 +274,8 @@ def line_fillet(line1, line2, radius) -> tuple[BaseLineObject, TangentArc, BaseL
     return line1, fillet_arc, line2
 
 
-def make_plate_shape(config: KeyboardConfig) -> Curve:
-    border = 10
+def make_plate_shape(config: KeyboardConfig, plate_config: PlateConfig) -> Curve:
+    border = plate_config.border
     shape = []
     e1 = Line(
         (-border, config.columns[0].offset),
@@ -284,21 +301,37 @@ def make_plate_shape(config: KeyboardConfig) -> Curve:
     e7 = e7.trim(e7.param_at_point(e5 @ 1), 1)
     e5, e6, e7 = line_fillet(e5, e7, border)
 
-    e14 = JernArc(e1 @ 0, -(e1 % 0), border, 90)
-    e13 = Line(e14 @ 1, ((e11 @ 1).X, (e14 @ 1).Y))
+    e14 = JernArc(e1 @ 0, -(e1 % 0), border, 90).reversed()
+    e13 = Line(((e11 @ 1).X, (e14 @ 0).Y), e14 @ 0)
     e11 = IntersectingLine(e10 @ 1, e11 % 0, e13)
-    e13 = e13.trim(0, e13.param_at_point(e11 @ 1))
+    e13 = e13.trim(e13.param_at_point(e11 @ 1), 1)
 
     e11, e12, e13 = line_fillet(e11, e13, border)
 
     return Wire() + [e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14]
 
 
-plate_thickness = 3
-plate = Plate(keyboard, plate_thickness)
-plate_shape = make_plate_shape(keyboard)
+def make_test_plate(keyboard_config: KeyboardConfig, draft_config: DraftConfig):
+    plate_config = draft_config.plate
+    cutout = make_plate_cutout(keyboard, plate_config.thickness)
+    shape = make_plate_shape(keyboard, plate_config)
+    sketch = make_face(shape.edges())
+    plate = extrude(sketch, plate_config.thickness, Axis.Z.direction)
+    shell = Shell() + [
+        Shell.extrude(edge, (0, 0, -draft_config.total_height + plate_config.thickness)) for edge in shape.edges()
+    ]
+    walls = thicken(shell, draft_config.wall_thickness)
+    return (plate - cutout) + walls
+
+
+test_plate = make_test_plate(keyboard, draft_config)
+
+test_plate.export_step("test_left.step")
+test_plate.mirror(Plane.ZY).export_step("test_right.step")
 
 show_object(
-    [plate, plate_shape],
+    test_plate,
     reset_camera=Camera.KEEP,
 )
+
+
