@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum, auto
 from copy import copy
 from pathlib import Path
 import math
@@ -9,9 +10,13 @@ import pymupdf
 
 show_clear()
 
+class SwitchHolderType(Enum):
+    MX = auto(),
+    CHOC = auto()
 
 @dataclass
 class SwitchHolderConfig:
+    switch_type: SwitchHolderType
     width: float
     length: float
     hole_width: float
@@ -24,6 +29,7 @@ class SwitchHolderConfig:
 
 
 cherry_mx_switch_holder_cfg = SwitchHolderConfig(
+    switch_type=SwitchHolderType.MX,
     width=19.05,
     length=19.05,
     hole_width=13.9,
@@ -36,12 +42,13 @@ cherry_mx_switch_holder_cfg = SwitchHolderConfig(
 
 # TODO: Fix this
 choc_switch_holder_cfg = SwitchHolderConfig(
+    switch_type=SwitchHolderType.CHOC,
     width=18.0,
     length=17.0,
-    hole_width=13.9,
-    hole_length=13.9,
-    slot_width=5.0,
-    slot_top=1.4,
+    hole_width=13.8,
+    hole_length=13.8,
+    slot_width=11.5,
+    slot_top=1.2,
     slot_depth=0.5,
     plate_to_keycap_height=6.7,
 )
@@ -116,6 +123,7 @@ keyboard = KeyboardConfig(
 )
 
 draft_config = DraftConfig(plate=PlateConfig(thickness=1.5, border=3), total_height=8, wall_thickness=1)
+plate_config = PlateConfig(thickness = 0.32 + 10 * 0.2, border=3)
 
 
 def draw_pdf(name):
@@ -180,27 +188,20 @@ draw_pdf("keyboard.pdf")
 
 
 def make_switch_cutout(config: SwitchHolderConfig, plate_thickness):
-    return (
-        Part()
-        + (
-            Box(config.hole_width, config.hole_length, plate_thickness),
-            Box(config.slot_width, config.hole_length + 2 * config.slot_depth, plate_thickness).move(
-                Pos(Z=-config.slot_top)
-            ),
-        )
-    ).moved(
-        Pos(Z=plate_thickness / 2.0),
-    )
+    if config.switch_type == SwitchHolderType.MX:
+        holder = Part() + (
+                Box(config.hole_width, config.hole_length, plate_thickness),
+                Box(config.slot_width, config.hole_length + 2 * config.slot_depth, plate_thickness).move(Pos(Z=-config.slot_top)),
+            )
+    else:
+        holder = Part() + (
+                Box(config.hole_width, config.hole_length, plate_thickness),
+                Box(config.hole_width + 2 * config.slot_depth, config.slot_width, plate_thickness).move(Pos(Z=-config.slot_top)),
+            )
+    return holder.moved(Pos(Z=plate_thickness / 2.0))
 
-
-class SwitchHolder(Part):
-    def __init__(self, config: SwitchHolderConfig, plate_thickness):
-        holder = Box(config.width, config.length, plate_thickness) - make_switch_cutout(config, plate_thickness)
-        self.top_middle_joint = RigidJoint(
-            label="top_middle", to_part=holder, joint_location=Location((0.0, 0.0, plate_thickness / 2.0))
-        )
-        super().__init__(shapes=[holder])
-
+def make_switch_holder(config: SwitchHolderConfig, plate_thickness):
+        return Box(config.width, config.length, plate_thickness, align=(Align.CENTER, Align.CENTER, Align.MIN)) - make_switch_cutout(config, plate_thickness)
 
 def make_column_cutout(cutout: Part, config: ColumnConfig, switch_holder_config: SwitchHolderConfig, plate_thickness):
     length = switch_holder_config.length
@@ -323,6 +324,10 @@ def make_test_plate(keyboard_config: KeyboardConfig, draft_config: DraftConfig):
     walls = thicken(shell, draft_config.wall_thickness)
     return (plate - cutout) + walls
 
+mx_switch_holder = make_switch_holder(cherry_mx_switch_holder_cfg, plate_config.thickness)
+choc_switch_holder = make_switch_holder(choc_switch_holder_cfg, plate_config.thickness)
+mx_switch_holder.export_step("mx_holder.step")
+choc_switch_holder.export_step("choc_holder.step")
 
 test_plate = make_test_plate(keyboard, draft_config)
 
