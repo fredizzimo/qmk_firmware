@@ -100,8 +100,8 @@ class DraftConfig:
 columns = [
     ColumnConfig(num_keys=3, offset=-8.0),
     ColumnConfig(num_keys=3, offset=-8.0),
-    ColumnConfig(num_keys=3, offset=2.0),
-    ColumnConfig(num_keys=3, offset=5.4),
+    ColumnConfig(num_keys=3, offset=5.0),
+    ColumnConfig(num_keys=3, offset=8.0),
     ColumnConfig(num_keys=3, offset=0.0),
     ColumnConfig(num_keys=3, offset=-2.4),
 ]
