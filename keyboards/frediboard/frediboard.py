@@ -74,11 +74,13 @@ class KeyboardConfig:
     switch_holder: SwitchHolderConfig
     columns: list[ColumnConfig]
     thumb: ThumbConfig
+    inner_wall_thickness: float
 
 
 @dataclass
 class PlateConfig:
     thickness: float
+    top_thickness: float
     border: float
 
 
@@ -87,6 +89,12 @@ class DraftConfig:
     plate: PlateConfig
     wall_thickness: float
     total_height: float
+
+@dataclass
+class ControllerConfig:
+    width: float
+    length: float
+    side_clearance: float
 
 
 # Ergodox
@@ -120,10 +128,12 @@ keyboard = KeyboardConfig(
     switch_holder=cherry_mx_switch_holder_cfg,
     columns=columns,
     thumb=thumb,
+    inner_wall_thickness=1,
 )
 
-draft_config = DraftConfig(plate=PlateConfig(thickness=1.5, border=3), total_height=8, wall_thickness=1)
-plate_config = PlateConfig(thickness = 0.32 + 10 * 0.2, border=3)
+draft_config = DraftConfig(plate=PlateConfig(thickness=1.5, top_thickness=0, border=3), total_height=8, wall_thickness=1)
+plate_config = PlateConfig(thickness = 0.32 + 10 * 0.2, top_thickness=6, border=3)
+controller_config = ControllerConfig(width=18.60, length=20, side_clearance=0.5)
 
 
 def draw_pdf(name):
@@ -198,6 +208,7 @@ def make_switch_cutout(config: SwitchHolderConfig, plate_thickness):
                 Box(config.hole_width, config.hole_length, plate_thickness),
                 Box(config.hole_width + 2 * config.slot_depth, config.slot_width, plate_thickness).move(Pos(Z=-config.slot_top)),
             )
+    holder = holder + Box(config.width, config.length, 20.0, align=(Align.CENTER, Align.CENTER, Align.MIN)).moved(Pos(Z=plate_thickness / 2.0))
     return holder.moved(Pos(Z=plate_thickness / 2.0))
 
 def make_switch_holder(config: SwitchHolderConfig, plate_thickness):
@@ -275,12 +286,15 @@ def line_fillet(line1, line2, radius) -> tuple[BaseLineObject, TangentArc, BaseL
     return line1, fillet_arc, line2
 
 
-def make_plate_shape(config: KeyboardConfig, plate_config: PlateConfig) -> Curve:
+def make_plate_shape(config: KeyboardConfig, plate_config: PlateConfig, controller_config: ControllerConfig|None) -> Curve:
     border = plate_config.border
     shape = []
+    controller_reserved = 0.0
+    if controller_config is not None:
+        controller_reserved = controller_config.width + 2 * controller_config.side_clearance + config.inner_wall_thickness
     e1 = Line(
         (-border, config.columns[0].offset),
-        (-border, columns[3].offset + columns[3].num_keys * config.switch_holder.length),
+        (-border, columns[3].offset + columns[3].num_keys * config.switch_holder.length + controller_reserved),
     )
     e2 = JernArc(e1 @ 1, e1 % 1, border, -90)
     e3 = Line(e2 @ 1, e2 @ 1 + (6 * config.switch_holder.width, 0))
@@ -314,8 +328,8 @@ def make_plate_shape(config: KeyboardConfig, plate_config: PlateConfig) -> Curve
 
 def make_test_plate(keyboard_config: KeyboardConfig, draft_config: DraftConfig):
     plate_config = draft_config.plate
-    cutout = make_plate_cutout(keyboard, plate_config.thickness)
-    shape = make_plate_shape(keyboard, plate_config)
+    cutout = make_plate_cutout(keyboard_config, plate_config.thickness)
+    shape = make_plate_shape(keyboard_config, plate_config, None)
     sketch = make_face(shape.edges())
     plate = extrude(sketch, plate_config.thickness, Axis.Z.direction)
     shell = Shell() + [
@@ -323,6 +337,16 @@ def make_test_plate(keyboard_config: KeyboardConfig, draft_config: DraftConfig):
     ]
     walls = thicken(shell, draft_config.wall_thickness)
     return (plate - cutout) + walls
+
+def make_top(keyboard_config: KeyboardConfig, plate_config: PlateConfig, controller_config: ControllerConfig):
+    shape = make_plate_shape(keyboard_config, plate_config, controller_config)
+    sketch = make_face(shape.edges())
+    plate = extrude(sketch, plate_config.thickness + plate_config.top_thickness, Axis.Z.direction)
+    cutout = make_plate_cutout(keyboard_config, plate_config.thickness)
+    plate = plate - cutout
+    pass
+
+top = make_top(keyboard, plate_config, controller_config)
 
 mx_switch_holder = make_switch_holder(cherry_mx_switch_holder_cfg, plate_config.thickness)
 choc_switch_holder = make_switch_holder(choc_switch_holder_cfg, plate_config.thickness)
